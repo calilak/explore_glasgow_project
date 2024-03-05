@@ -1,3 +1,5 @@
+# comment
+
 """
 Django settings for explore_glasgow project.
 
@@ -55,7 +57,7 @@ ROOT_URLCONF = "explore_glasgow.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [], 
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
