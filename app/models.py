@@ -11,7 +11,7 @@ class UserProfile(models.Model):
     # count of public plans
     # average stars calculated
     # count of reviews
-    account_created = models.DateTimeField(auto_now_add=True)
+    account_created = models.DateTimeField()
     picture = models.ImageField(upload_to='profile_images', blank=True)
     
     def __str__(self):
