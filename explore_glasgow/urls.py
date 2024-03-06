@@ -25,4 +25,5 @@ urlpatterns = [
     path("app/", include("app.urls")),
     path("admin/", admin.site.urls),
     path('register/', views.register, name='register'),
+    path('login/',views.user_login,name='login'),
 ]

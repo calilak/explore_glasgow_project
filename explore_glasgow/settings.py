@@ -1,3 +1,5 @@
+# comment
+
 """
 Django settings for explore_glasgow project.
 

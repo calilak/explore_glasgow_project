@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.shortcuts import redirect
 
 def index(request):
-    return HttpResponse("This is the home page of Explore Glasgow")
+    return render(request,'index.html')
 
 def register(request):
     registered = False
