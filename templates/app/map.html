@@ -87,7 +87,6 @@ body {
   font-size:12px;
   min-width: 160px;
   overflow: auto;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
 
@@ -119,20 +118,31 @@ body {
   <p>Find a Place or Event.</p>
 
   <div>
-    <button class="button">Places</button>
-    <button class="button">Events</button>
+    <button class="button">Find Places</button>
+    <button class="button">Find Events</button>
     <div class="dropdown">
       <button onclick="showDropdown()" class="dropbtn">Filter by category</button>
-      <div id="categoryDropdown" class="dropdown-content">
-        <a href="#">Restaurants</a>
-        <a href="#">Pubs</a>
-        <a href="#">Caf&eacutes</a>
-        <a href="#">Cinemas and Theatres</a>
-        <a href="#">Nature</a>
-        <a href="#">Sport</a>
-        <a href="#">Landmarks</a>
-        <a href="#">Art and Museums</a>
-        <a href="#">Nightclubs</a>
+      <div id="categoryDropdown">
+        <div id="place" class="dropdown-content">
+          <a href="#">Restaurants</a>
+          <a href="#">Pubs</a>
+          <a href="#">Caf&eacutes</a>
+          <a href="#">Cinemas and Theatres</a>
+          <a href="#">Nature</a>
+          <a href="#">Sport</a>
+          <a href="#">Landmarks</a>
+          <a href="#">Art and Museums</a>
+        </div>
+
+        <div id="event" class="dropdown-content">
+          <a href="#">Food and Drink</a>
+          <a href="#">Arts and Culture</a>
+          <a href="#">Music</a>
+          <a href="#">Nature</a>
+          <a href="#">Sport</a>
+          <a href="#">Tours</a>
+          <a href="#">Nightlife</a>
+        </div>
       </div>
     </div>
   </div>
@@ -148,12 +158,33 @@ body {
   /* When the user clicks on the button, 
   toggle between hiding and showing the dropdown content */
   function showDropdown() {
-    document.getElementById("categoryDropdown").classList.toggle("show");
+    showPlaces();
+  }
+  
+  function showPlaces() {
+    document.getElementById("place").classList.toggle("show");
+  }
+  
+  function showEvents() {
+    document.getElementById("place").classList.toggle("show");
   }
   
   // Close the dropdown if the user clicks outside of it
   window.onclick = function(event) {
     if (!event.target.matches('.dropbtn')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+
+    //If Find Places button is clicked
+    if (!event.target.matches('.button')) {
+      
       var dropdowns = document.getElementsByClassName("dropdown-content");
       var i;
       for (i = 0; i < dropdowns.length; i++) {
