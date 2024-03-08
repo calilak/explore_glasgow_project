@@ -1,92 +1,85 @@
-<!DOCTYPE html>
-
+{% extends 'app/base.html' %}
 {% load static %}
-<head>
-<meta charset="UTF-8">
-<style>
-  section, footer {
-    margin: 25px;
-    padding: 10px;
-    border: 1px 
-  }
-  .plan-card {
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-  }
-  .plan-card img {
-    max-width: 100%;
-    height: auto;
-  }
-  .plan-card .details {
-    padding: 5px;
-  }
 
-  nav {
-  display: flex;
-  justify-content: space-between;
-  }
+{% block title_block %}
+    Home Page
+{% endblock %}
 
-.left-links,
-.right-links {
-  display: flex;
-  }
+{% block body_block %}
+<header>
+  <nav>
+    <div class="left-links">
+      <a href="/home">Home</a> |
+      <a href="/places">Places</a> |
+      <a href="/events">Events</a> |
+      <a href="/activities">Activities</a> |
+      <a href="/about-us">About Us</a>
+    </div>
+    <div class="right-links">
+      <a href="/maps"><img src="{% static 'images/maps.png' %}" alt="maps"></a> |
+      <a href="/language"><img src="{% static 'images/language.png' %}" alt="language"></a> |
+      <a href="/login"><img src="{% static 'images/account.jpg' %}" alt="account"></a>
+  </div>
+  </nav>
+</header>
 
-.left-links a,
-.right-links a {
-  margin-right: 10px; /* Adjust spacing between links */
-  }
+<div id="overlay">
+  <h1 id="inputted-title">New Plan</h1>
+  <h4 id="inputted-date">Today</h4>
+  <div class="columns">
+    <div class="column">
+      <input type="text" class="search-database" id="search-events" name="add-events-to-plan" placeholder="Search events...">
+      <button>Add</button>
+      <input type="text" class="search-database" id="search-activities" name="add-activities-to-plan" placeholder="Search activities...">
+      <button>Add</button>
+    </div>
+    <div class="column">
+      <div class="calendar">
+        <div class="timeline">
+            <!-- Removed the spacer div as it's not necessary -->
+            <div class="time-marker">9 AM</div>
+            <div class="time-marker">10 AM</div>
+            <div class="time-marker">11 AM</div>
+            <div class="time-marker">12 PM</div>
+            <div class="time-marker">1 PM</div>
+            <div class="time-marker">2 PM</div>
+            <div class="time-marker">3 PM</div>
+            <div class="time-marker">4 PM</div>
+            <div class="time-marker">5 PM</div>
+            <div class="time-marker">6 PM</div>
+        </div>
+        <div class="events">
+            <!-- Your event divs will go here -->
+        </div>
+    </div>
+    </div>
+  </div>
+</div>
+  <section>
+    <div>
+      <label for="new-plan-title">Plan Title</label>
+      <input type="text" id="new-plan-title" name="new-plan-title">
+      <labal for="new-plan-date">Plan Date</labal>
+      <input type ="date" id="new-plan-date" name="new-plan-date">
+      <button onClick="addNewPlan()">Add New Plan</button>
+    </div>
+  </section>
 
-.right-links a:last-child {
-  margin-right: 0; /* Remove margin from the last link */
-  }
-
-</style>
-</head>
-<body>
-
-  <header>
-    <nav>
-      <div class="left-links">
-        <a href="/home">Home</a> |
-        <a href="/places">Places</a> |
-        <a href="/events">Events</a> |
-        <a href="/activities">Activities</a> |
-        <a href="/about-us">About Us</a>
+  <section>
+    <h2>Browse Plans</h2>
+    <div class="plan-card">
+      <img src="path-to-your-image.jpg" alt="Plan Image">
+      <div class="details">
+        <h3>Plan Title</h3>
+        <p>Brief description</p>
+        <p>4h:30m - £15 @username</p>
       </div>
-      <div class="right-links">
-        <a href="/maps"><img src="{% static 'images/maps.png' %}" alt="maps"></a> |
-        <a href="/language"><img src="{% static 'images/language.png' %}" alt="language"></a> |
-        <a href="/login"><img src="{% static 'images/account.jpg' %}" alt="account"></a>
     </div>
-    </nav>
-  </header>
-  
-<section>
-  <div>
-    <label for="new-plan-title">Plan Title</label>
-    <input type="text" id="new-plan-title" name="new-plan-title">
-    <button>Add New Plan</button>
-  </div>
-</section>
-
-<section>
-  <h2>Browse Plans</h2>
-  <div class="plan-card">
-    <img src="path-to-your-image.jpg" alt="Plan Image">
-    <div class="details">
-      <h3>Plan Title</h3>
-      <p>Brief description</p>
-      <p>4h:30m - £15 @username</p>
-    </div>
-  </div>
   <!--plan models will exist here -->
-</section>
+  </section>
 
 <footer>
-  <p>Top 20 Plans</p>
-  <!--actual plans yet to be added -->
+<p>Top 20 Plans</p>
+<!--actual plans yet to be added -->
 </footer>
-
-</body>
-</html>
-
+{% endblock %}

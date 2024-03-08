@@ -17,6 +17,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+STATIC_DIR = BASE_DIR / 'static'
 
 
 # Quick-start development settings - unsuitable for production
@@ -92,14 +93,22 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-        'OPTIONS': { 'min_length': 6, }
+        "OPTIONS": {}
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-     "OPTIONS": {"min_length" : 7},
-     },
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 7}
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "OPTIONS": {}
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "OPTIONS": {}
+    },
 ]
+
 
 
 # Internationalization
