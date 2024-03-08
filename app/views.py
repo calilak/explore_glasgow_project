@@ -67,3 +67,7 @@ def restricted(request):
 def user_logout(request):
     logout(request)
     return redirect(reverse('app:index'))
+
+
+def map(request):
+    return render(request, "app/map.html")
