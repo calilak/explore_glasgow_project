@@ -10,11 +10,30 @@
                 Explore Glasgow Now!
             {% endblock %}
         </title>
-        <link rel = "stylesheet" href="{% static 'styles.css' %}">
-        <script src = "{% static 'main.js' %}"></script>
+        <link rel = "stylesheet" href="{% static 'styling/base.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- for icons --> 
+        {% block additional_styles %}{% endblock %}
+        {% block additional_js %}{% endblock %}
+        <script src = "{% static 'javascript/main.js' %}"></script>
     </head>
 
     <body>
+        <header>
+            <nav>
+              <div class="left-links">
+                <a href="/home">Index</a> |
+                <a href="/places">Places</a> |
+                <a href="/events">Events</a> |
+                <a href="/activities">Activities</a> |
+                <a href="/about-us">About Us</a>
+              </div>
+              <div class="right-links">
+                <a href="/maps"><i class="fas fa-map-marked-alt" aria-hidden="true"></i></a> |
+                <a href="/language"><i class="fas fa-language" aria-hidden="true"></i></a> |
+                <a href="/login"><i class="fas fa-user-circle" aria-hidden="true"></i></a> 
+            </div>
+            </nav>
+          </header>
         <div>
             {% block body_block %}
             {% endblock %}
