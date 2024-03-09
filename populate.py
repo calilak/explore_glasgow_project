@@ -1,6 +1,5 @@
 import os
 import datetime
-import random
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'explore_glasgow.settings')
 
 import django
@@ -12,6 +11,14 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from app.models import UserProfile, Category, Tag, Place, Event, Activity, Plan, PlanEvent, PlanActivity, Review
 
 def populate():
+    User.objects.all().delete()
+    Category.objects.all().delete()
+    Tag.objects.all().delete()
+    Place.objects.all().delete()
+    Event.objects.all().delete()
+    Activity.objects.all().delete()
+    Plan.objects.all().delete()
+    Review.objects.all().delete()
     create_users()
     create_categories_and_tags()
     create_places()
@@ -22,26 +29,26 @@ def populate():
 
 def create_users():
     users_data = [
-        {'username': 'Oli', 'email': 'user1@example.com', 'password': 'password'},
-        {'username': 'Ollie', 'email': 'user2@example.com', 'password': 'password'},
-        {'username': 'Matty', 'email': 'user3@example.com', 'password': 'password'},
-        {'username': 'Kalila', 'email': 'user4@example.com', 'password': 'password'},
-        {'username': 'Liao', 'email': 'user5@example.com', 'password': 'password'},
-        {'username': 'Max', 'email': 'user6@example.com', 'password': 'password'},
-        {'username': 'Hanna', 'email': 'user7@example.com', 'password': 'password'},
-        {'username': 'Lexy', 'email': 'user8@example.com', 'password': 'password'},
-        {'username': 'Anna', 'email': 'user9@example.com', 'password': 'password'},
-        {'username': 'Ivan', 'email': 'user10@example.com', 'password': 'password'},
-        {'username': 'Matteo', 'email': 'user11@example.com', 'password': 'password'},
-        {'username': 'Nicole', 'email': 'user12@example.com', 'password': 'password'},
-        {'username': 'Pepper', 'email': 'user13@example.com', 'password': 'password'},
-        {'username': 'Ruby', 'email': 'user14@example.com', 'password': 'password'},
-        {'username': 'Georgie', 'email': 'user15@example.com', 'password': 'password'},
-        {'username': 'Mitch', 'email': 'user16@example.com', 'password': 'password'},
-        {'username': 'Rob', 'email': 'user17@example.com', 'password': 'password'},
-        {'username': 'Pat', 'email': 'user18@example.com', 'password': 'password'},
-        {'username': 'Alex', 'email': 'user19@example.com', 'password': 'password'},
-        {'username': 'John', 'email': 'user20@example.com', 'password': 'password'}
+        {'username': 'Oli', 'email': 'oli@gmail.com', 'password': 'password'},
+        {'username': 'Ollie', 'email': 'ollie@gmail.com', 'password': 'password'},
+        {'username': 'Matty', 'email': 'matty@gmail.com', 'password': 'password'},
+        {'username': 'Kalila', 'email': 'kalila@gmail.com', 'password': 'password'},
+        {'username': 'Liao', 'email': 'liao@gmail.com', 'password': 'password'},
+        {'username': 'Max', 'email': 'max@gmail.com', 'password': 'password'},
+        {'username': 'Hanna', 'email': 'hanna@gmail.com', 'password': 'password'},
+        {'username': 'Lexy', 'email': 'lexy@gmail.com', 'password': 'password'},
+        {'username': 'Anna', 'email': 'anna@gmail.com', 'password': 'password'},
+        {'username': 'Ivan', 'email': 'ivan@gmail.com', 'password': 'password'},
+        {'username': 'Matteo', 'email': 'matteo@gmail.com', 'password': 'password'},
+        {'username': 'Nicole', 'email': 'nicole@gmail.com', 'password': 'password'},
+        {'username': 'Erin', 'email': 'erin@gmail.com', 'password': 'password'},
+        {'username': 'Ruby', 'email': 'ruby@gmail.com', 'password': 'password'},
+        {'username': 'Georgie', 'email': 'georgie@gmail.com', 'password': 'password'},
+        {'username': 'Mitch', 'email': 'mitch@gmail.com', 'password': 'password'},
+        {'username': 'Rob', 'email': 'rob@gmail.com', 'password': 'password'},
+        {'username': 'Pat', 'email': 'pat@gmail.com', 'password': 'password'},
+        {'username': 'Alex', 'email': 'alex@gmail.com', 'password': 'password'},
+        {'username': 'John', 'email': 'john@gmail.com', 'password': 'password'}
     ]
     for user_data in users_data:
         User.objects.create_user(**user_data)
@@ -96,31 +103,31 @@ def create_places():
 
 def create_events():
     events_data = [
-        {'title': 'Fitness Class', 'description': 'Join our fitness class and stay fit!', 'start_time': timezone.make_aware(datetime(2024, 3, 25, 14, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 25, 16, 0, 0)), 'location': Place.objects.get(location='ChIJ4d_MFsxFiEgRfvixuazun6c'), 'categories': ['Personal', 'Fitness'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Live Music Night', 'description': 'Join us for a night of live music!', 'start_time': timezone.make_aware(datetime(2024, 3, 24, 20, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 24, 22, 0, 0)), 'location': Place.objects.get(location='ChIJjc5Tnp9GiEgRYSkWPUevw6c'), 'categories': ['Entertainment', 'Social'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Movie Night', 'description': 'Enjoy a movie screening under the stars!', 'start_time': timezone.make_aware(datetime(2024, 3, 24, 22, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 24, 23, 30, 0)), 'location': Place.objects.get(location='ChIJ8cF-6MtFiEgRwMvh3DDvPDY'), 'categories': ['Entertainment', 'Social'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Morning Yoga', 'description': 'Start your day right with a nice stretch!', 'start_time': timezone.make_aware(datetime(2024, 3, 24, 9, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 24, 10, 30, 0)), 'location': Place.objects.get(location='ChIJ8cF-6MtFiEgRwMvh3DDvPDY'), 'categories': ['Personal', 'Fitness'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Nature Walk', 'description': 'Embrace nature and take a guided tour at Glasgow\'s botanic gardens!', 'start_time': timezone.make_aware(datetime(2024, 3, 24, 12, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 24, 15, 30, 0)), 'location': Place.objects.get(location='ChIJ8cF-6MtFiEgRwMvh3DDvPDY'), 'categories': ['Personal', 'Fitness', 'Hobbies'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Museum Tour', 'description': 'Learn about glasgow in our museum tour!', 'start_time': timezone.make_aware(datetime(2024, 3, 24, 12, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 24, 14, 30, 0)), 'location': Place.objects.get(location='ChIJ7zFC8tBFiEgRA1AWs9n2fAs'), 'categories': ['Education', 'Hobbies'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Science Exhibition', 'description': 'Dive into science in our workshop!', 'start_time': timezone.make_aware(datetime(2024, 3, 25, 12, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 25, 14, 30, 0)), 'location': Place.objects.get(location='ChIJ7zFC8tBFiEgRA1AWs9n2fAs'), 'categories': ['Education', 'Hobbies'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Gardening Class', 'description': 'Learn the basics of gardening and grow your own plants!', 'start_time': timezone.make_aware(datetime(2024, 3, 24, 12, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 24, 15, 30, 0)), 'location': Place.objects.get(location='ChIJ8cF-6MtFiEgRwMvh3DDvPDY'), 'categories': ['Personal', 'Fitness', 'Hobbies'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Art Workshop', 'description': 'Learn to create beautiful art at our workshop!', 'start_time': timezone.make_aware(datetime(2024, 3, 26, 16, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 26, 20, 0, 0)), 'location': Place.objects.get(location='ChIJ6ZTla9FFiEgR_p_K8XyyWFI'), 'categories': ['Education', 'Hobbies'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Food Festival', 'description': 'Explore a variety of cuisines at our food festival!', 'start_time': timezone.make_aware(datetime(2024, 3, 24, 12, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 26, 22, 0, 0)), 'location': Place.objects.get(location='ChIJdzq8LZ9GiEgRLJ7c2pFX6ik'), 'categories': ['Social'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Poker Night', 'description': 'Try your luck at our weekly poker night! Tourney entry £5, one re-buy.', 'start_time': timezone.make_aware(datetime(2024, 3, 26, 19, 30, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 26, 23, 0, 0)), 'location': Place.objects.get(location='ChIJi8Q4pSlEiEgRbkvS7hUgqhY'), 'categories': ['Social'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Chess Night', 'description': 'Come play a game of chess with us! All levels welcome.', 'start_time': timezone.make_aware(datetime(2024, 3, 27, 18, 30, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 27, 22, 0, 0)), 'location': Place.objects.get(location='ChIJi8Q4pSlEiEgRbkvS7hUgqhY'), 'categories': ['Hobbies','Social'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Board Game Night', 'description': 'Come play a game with us!', 'start_time': timezone.make_aware(datetime(2024, 3, 28, 18, 30, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 28, 22, 0, 0)), 'location': Place.objects.get(location='ChIJi8Q4pSlEiEgRbkvS7hUgqhY'), 'categories': ['Hobbies','Social'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Comedy Night', 'description': 'Come have a laugh with us!', 'start_time': timezone.make_aware(datetime(2024, 3, 28, 18, 30, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 28, 22, 0, 0)), 'location': Place.objects.get(location='ChIJaYl4oCBEiEgRGROD01mT8jo'), 'categories': ['Hobbies','Social'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Camden Rocks', 'description': 'Camden Rocks is the quintessential student-club-night. Delivering floor-filler after floor-filler in one of the cities most reputable nights-out.', 'start_time': timezone.make_aware(datetime(2024, 3, 28, 17, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 29, 3, 0, 0)), 'location': Place.objects.get(location='ChIJswdENyZEiEgRhmpBkAxhdrU'), 'categories': ['Nightclub','Social'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Language Exchange', 'description': 'Practice speaking different languages with fellow language enthusiasts!', 'start_time': timezone.make_aware(datetime(2024, 3, 28, 14, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 28, 16, 0, 0)), 'location': Place.objects.get(location='ChIJrz4aDSlEiEgRANNqj9MoUQk'), 'categories': ['Hobbies','Social', 'Education'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Group Study Session', 'description': 'Study with fellow students in preparation for exams.', 'start_time': timezone.make_aware(datetime(2024, 3, 28, 14, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 28, 16, 0, 0)), 'location': Place.objects.get(location='ChIJrz4aDSlEiEgRANNqj9MoUQk'), 'categories': ['Social', 'Education'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Tech Hackathon', 'description': '24-hour coding marathon to build innovative tech solutions', 'start_time': timezone.make_aware(datetime(2024, 3, 28, 14, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 29, 14, 0, 0)), 'location': Place.objects.get(location='ChIJrz4aDSlEiEgRANNqj9MoUQk'), 'categories': ['Social', 'Education'], 'tags': ['Under £20', 'Highly rated']},
-        {'title': 'Book Club Meeting', 'description': 'Join our book club discussion!', 'start_time': timezone.make_aware(datetime(2024, 3, 28, 14, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 28, 16, 0, 0)), 'location': Place.objects.get(location='ChIJpzaZb6BGiEgRScmAJ9zJgI8'), 'categories': ['Social', 'Education', 'Hobbies'], 'tags': ['City centre']},
-        {'title': 'Volleyball Social', 'description': 'Come join us after training!', 'start_time': timezone.make_aware(datetime(2024, 3, 28, 21, 0, 0)), 'end_time': timezone.make_aware(datetime(2024, 3, 28, 23, 0, 0)), 'location': Place.objects.get(location='ChIJpzaZb6BGiEgRScmAJ9zJgI8'), 'categories': ['Social', 'Entertainment'], 'tags': ['Highly rated']},
+        {'title': 'Fitness Class', 'description': 'Join our fitness class and stay fit!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 25, 14, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 25, 16, 0, 0)), 'location': Place.objects.get(location='ChIJ4d_MFsxFiEgRfvixuazun6c'), 'categories': ['Personal', 'Fitness'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Live Music Night', 'description': 'Join us for a night of live music!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 20, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 22, 0, 0)), 'location': Place.objects.get(location='ChIJjc5Tnp9GiEgRYSkWPUevw6c'), 'categories': ['Entertainment', 'Social'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Movie Night', 'description': 'Enjoy a movie screening under the stars!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 22, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 23, 30, 0)), 'location': Place.objects.get(location='ChIJ8cF-6MtFiEgRwMvh3DDvPDY'), 'categories': ['Entertainment', 'Social'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Morning Yoga', 'description': 'Start your day right with a nice stretch!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 9, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 10, 30, 0)), 'location': Place.objects.get(location='ChIJ8cF-6MtFiEgRwMvh3DDvPDY'), 'categories': ['Personal', 'Fitness'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Nature Walk', 'description': 'Embrace nature and take a guided tour at Glasgow\'s botanic gardens!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 12, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 15, 30, 0)), 'location': Place.objects.get(location='ChIJ8cF-6MtFiEgRwMvh3DDvPDY'), 'categories': ['Personal', 'Fitness', 'Hobbies'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Museum Tour', 'description': 'Learn about glasgow in our museum tour!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 12, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 14, 30, 0)), 'location': Place.objects.get(location='ChIJ7zFC8tBFiEgRA1AWs9n2fAs'), 'categories': ['Education', 'Hobbies'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Science Exhibition', 'description': 'Dive into science in our workshop!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 25, 12, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 25, 14, 30, 0)), 'location': Place.objects.get(location='ChIJ7zFC8tBFiEgRA1AWs9n2fAs'), 'categories': ['Education', 'Hobbies'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Gardening Class', 'description': 'Learn the basics of gardening and grow your own plants!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 12, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 15, 30, 0)), 'location': Place.objects.get(location='ChIJ8cF-6MtFiEgRwMvh3DDvPDY'), 'categories': ['Personal', 'Fitness', 'Hobbies'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Art Workshop', 'description': 'Learn to create beautiful art at our workshop!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 26, 16, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 26, 20, 0, 0)), 'location': Place.objects.get(location='ChIJ6ZTla9FFiEgR_p_K8XyyWFI'), 'categories': ['Education', 'Hobbies'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Food Festival', 'description': 'Explore a variety of cuisines at our food festival!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 24, 12, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 26, 22, 0, 0)), 'location': Place.objects.get(location='ChIJdzq8LZ9GiEgRLJ7c2pFX6ik'), 'categories': ['Social'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Poker Night', 'description': 'Try your luck at our weekly poker night! Tourney entry £5, one re-buy.', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 26, 19, 30, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 26, 23, 0, 0)), 'location': Place.objects.get(location='ChIJi8Q4pSlEiEgRbkvS7hUgqhY'), 'categories': ['Social'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Chess Night', 'description': 'Come play a game of chess with us! All levels welcome.', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 27, 18, 30, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 27, 22, 0, 0)), 'location': Place.objects.get(location='ChIJi8Q4pSlEiEgRbkvS7hUgqhY'), 'categories': ['Hobbies','Social'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Board Game Night', 'description': 'Come play a game with us!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 18, 30, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 22, 0, 0)), 'location': Place.objects.get(location='ChIJi8Q4pSlEiEgRbkvS7hUgqhY'), 'categories': ['Hobbies','Social'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Comedy Night', 'description': 'Come have a laugh with us!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 18, 30, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 22, 0, 0)), 'location': Place.objects.get(location='ChIJaYl4oCBEiEgRGROD01mT8jo'), 'categories': ['Hobbies','Social'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Camden Rocks', 'description': 'Camden Rocks is the quintessential student-club-night. Delivering floor-filler after floor-filler in one of the cities most reputable nights-out.', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 17, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 29, 3, 0, 0)), 'location': Place.objects.get(location='ChIJswdENyZEiEgRhmpBkAxhdrU'), 'categories': ['Nightclub','Social'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Language Exchange', 'description': 'Practice speaking different languages with fellow language enthusiasts!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 14, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 16, 0, 0)), 'location': Place.objects.get(location='ChIJrz4aDSlEiEgRANNqj9MoUQk'), 'categories': ['Hobbies','Social', 'Education'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Group Study Session', 'description': 'Study with fellow students in preparation for exams.', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 14, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 16, 0, 0)), 'location': Place.objects.get(location='ChIJrz4aDSlEiEgRANNqj9MoUQk'), 'categories': ['Social', 'Education'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Tech Hackathon', 'description': '24-hour coding marathon to build innovative tech solutions', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 14, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 29, 14, 0, 0)), 'location': Place.objects.get(location='ChIJrz4aDSlEiEgRANNqj9MoUQk'), 'categories': ['Social', 'Education'], 'tags': ['Under £20', 'Highly rated']},
+        {'title': 'Book Club Meeting', 'description': 'Join our book club discussion!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 14, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 16, 0, 0)), 'location': Place.objects.get(location='ChIJpzaZb6BGiEgRScmAJ9zJgI8'), 'categories': ['Social', 'Education', 'Hobbies'], 'tags': ['City centre']},
+        {'title': 'Volleyball Social', 'description': 'Come join us after training!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 21, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 23, 0, 0)), 'location': Place.objects.get(location='ChIJpzaZb6BGiEgRScmAJ9zJgI8'), 'categories': ['Social', 'Entertainment'], 'tags': ['Highly rated']},
     ]
     for event_data in events_data:
         tags_list = event_data.pop('tags', [])
         tags_objs = [Tag.objects.get_or_create(name=tag_name)[0] for tag_name in tags_list]
-        1
+        
         categories_list = event_data.pop('categories', [])
         categories_objs = [Category.objects.get_or_create(name=category_name)[0] for category_name in categories_list]
 
@@ -141,7 +148,7 @@ def create_activities():
         {'user': users[0], 'title': 'Yoga Session', 'description': 'Relax and rejuvenate with a yoga session.', 'duration': 1, 'location': None, 'categories': ['Fitness', 'Personal'], 'tags': []},
         {'user': users[0], 'title': 'Drawing', 'description': 'Unleash your creativity through drawing.', 'duration': 2, 'location': None, 'categories': ['Hobbies', 'Personal'], 'tags': []},
         {'user': users[0], 'title': 'Language Learning', 'description': 'Learn a new language.', 'duration': 2, 'location': None, 'categories': ['Education', 'Personal'], 'tags': []},
-        {'user': users[0], 'title': 'Gardening', 'description': 'Spend time in the garden and nurture your plants.', 'duration': 3, 'location': None, 'categories': ['Hobbies', 'Personal'], 'tags': []},
+        {'user': users[0], 'title': 'Gardening', 'description': 'Spend time in the garden and nurture your plants.', 'duration': 2, 'location': None, 'categories': ['Hobbies', 'Personal'], 'tags': []},
         {'user': users[0], 'title': 'Music Practice', 'description': 'Practice playing a musical instrument.', 'duration': 2, 'location': None, 'categories': ['Hobbies', 'Personal'], 'tags': []},
         {'user': users[0], 'title': 'Photography', 'description': 'Capture moments through photography.', 'duration': 2, 'location': None, 'categories': ['Hobbies', 'Personal'], 'tags': []},
         {'user': users[0], 'title': 'Running', 'description': 'Go for a run and stay fit.', 'duration': 1, 'location': None, 'categories': ['Fitness', 'Hobbies'], 'tags': []},
@@ -171,42 +178,27 @@ def create_plans():
     events = Event.objects.all()
     activities = Activity.objects.all()
     plans_data = [
-        {'user': users[0], 'title': f"{users[0].username}'s Plan", 'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[1], 'title': f"{users[1].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[2], 'title': f"{users[2].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[3], 'title': f"{users[3].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[4], 'title': f"{users[4].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[5], 'title': f"{users[5].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[6], 'title': f"{users[6].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[7], 'title': f"{users[7].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[8], 'title': f"{users[8].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[9], 'title': f"{users[9].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[10], 'title': f"{users[10].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[11], 'title': f"{users[11].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': False},
-        {'user': users[12], 'title': f"{users[12].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': False},
-        {'user': users[13], 'title': f"{users[13].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': False},
-        {'user': users[14], 'title': f"{users[14].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': False},
-        {'user': users[15], 'title': f"{users[5].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[16], 'title': f"{users[6].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[17], 'title': f"{users[7].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[18], 'title': f"{users[8].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True},
-        {'user': users[19], 'title': f"{users[9].username}'s Plan",'date': timezone.make_aware(datetime(2024, 3, 25)), 'is_public': True}
+        {'user': users[i], 'title': f"{users[i].username}'s Plan", 'date': events[i].start_time.date(), 'is_public': True} for i in range(20)
     ]
 
-    for plan_data in plans_data:
+    for i, plan_data in enumerate(plans_data):
         plan = Plan.objects.create(**plan_data)
 
-        plan.add_event(events[0]) #adds the first event to everyones plan
+        plan.add_activity(activities[i], events[i].start_time - datetime.timedelta(hours=3)) 
 
-        plan.add_activity(activities[random.randrange(20)], timezone.make_aware(datetime(2024, 3, 25, 17, 0, 0))) 
-        plan.add_activity(activities[random.randrange(20)], timezone.make_aware(datetime(2024, 3, 25, 21, 0, 0)))  
+        plan.add_event(events[i])
 
         plan.save()
 
 def create_reviews():
     users = User.objects.all()
+    places = Place.objects.all()
+    plans = Plan.objects.all()
+    reviewContent = ['Amazing stuff!','Very good!', 'Great service!', 'Shocking wait time...', 'Rude staff!', 'Ok food.', 'Horrorendous', 'Fab!', 'Lovely experience <3', 'Beyond brilliant!', 'Could be better...', 'Underrated spot', 'Overrate af', 'Appalling', 'Decent!', 'Very interesting!', 'Welcoming and friendly', 'Hard to get to', 'Worth the trip!', 'WOW']
     reviews_data = [
-        {'user': users[i], 'content': random.choice(['Amazing stuff!','Very good!', 'Great service!', 'Shocking wait time...', 'Rude staff!', 'Ok food.']), 'rating': random.randrange(1,6), 'content_type': ContentType.objects.get_for_model(Place), 'object_id': Place.objects.first().id} for i in range(20)
+        {'user': users[i], 'content': reviewContent[i], 'rating': (i%5)+1, 'content_type': ContentType.objects.get_for_model(Place), 'object_id': places[j].id} for j in range(20) for i in range(20)
+    ] + [
+        {'user': users[i], 'content': reviewContent[i], 'rating': (i%5)+1, 'content_type': ContentType.objects.get_for_model(Plan), 'object_id': plans[j].id} for j in range(20) for i in range(20)
     ]
     for review_data in reviews_data:
         Review.objects.create(**review_data)

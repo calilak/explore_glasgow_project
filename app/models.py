@@ -40,6 +40,9 @@ class UserProfile(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=50)
 
+    class Meta:
+        verbose_name_plural = 'Categories'
+
     def __str__(self):
         return self.name
 
@@ -78,6 +81,10 @@ class Activity(models.Model):
     location = models.ForeignKey(Place, on_delete=models.CASCADE, null=True, blank=True)
     categories = models.ManyToManyField(Category, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Activities'
+
 
     def __str__(self):
         return self.title
@@ -125,6 +132,9 @@ class PlanEvent(models.Model):
 class PlanActivity(models.Model):
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Plan activities'
 
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
