@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+{% load static %}
+<head>
+<meta charset="UTF-8">
+<style>
+  section, footer {
+    margin: 25px;
+    padding: 10px;
+    border: 1px 
+  }
+  .plan-card {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+  .plan-card img {
+    max-width: 100%;
+    height: auto;
+  }
+  .plan-card .details {
+    padding: 5px;
+  }
+
+  nav {
+  display: flex;
+  justify-content: space-between;
+  }
+
+.left-links,
+.right-links {
+  display: flex;
+  }
+
+.left-links a,
+.right-links a {
+  margin-right: 10px;
+  }
+
+.right-links a:last-child {
+  margin-right: 0; 
+  }
+
+</style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="left-links">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'app:places' %}">Places</a>
+        <a href="{% url 'app:events' %}">Events</a>
+        <a href="{% url 'app:activities' %}">Activities</a>
+        <a href="{% url 'app:aboutus' %}">About Us</a>
+      </div>
+      
+      <div class="right-links">
+        <a href="{% url 'app:maps' %}"><img src="{% static 'images/maps.png' %}" alt="maps"></a> 
+        <a href="/language"><img src="{% static 'images/language.png' %}" alt="language"></a>
+        <a href="{% url 'app:account' %}"><img src="{% static 'images/account.jpg' %}" alt="account"></a>
+    </div>
+    </nav>
+  </header>
+  
+<section>
+  <div>
+    <label for="new-plan-title">Plan Title</label>
+    <input type="text" id="new-plan-title" name="new-plan-title">
+    <button>Add New Plan</button>
+  </div>
+</section>
+
+<section>
+  <h2>Browse Plans</h2>
+  <div class="plan-card">
+    <img src="path-to-your-image.jpg" alt="Plan Image">
+    <div class="details">
+      <h3>Plan Title</h3>
+      <p>Brief description</p>
+      <p>4h:30m - £15 @username</p>
+    </div>
+  </div>
+  <!--plan models will exist here -->
+</section>
+
+<footer>
+  <p>Top 20 Plans</p>
+  <!--actual plans yet to be added -->
+</footer>
+
+</body>
+</html>
+

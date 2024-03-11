@@ -7,6 +7,30 @@ from django.contrib.auth import logout
 from django.urls import reverse
 from django.shortcuts import redirect
 
+def aboutus(request):
+    return render(request,'aboutus.html')
+
+def activities(request):
+    return render(request,'activities.html')
+
+def account(request):
+    return render(request,'account.html')
+
+def chosenEvent(request):
+    return render(request,"chosenEvent.html")
+
+def chosenPlan(request):
+    return(request,"chosenPlan.html")
+
+def chosenPlace(request):
+    return render(request,"chosenPlace.html")
+
+def events(request):
+    return render(request,'events.html')
+
+def learnMore(request):
+    return render(request,'learnMore.html')
+
 def index(request):
     return render(request,'app/index.html')
 
