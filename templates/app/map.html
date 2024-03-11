@@ -1,80 +1,20 @@
-<!DOCTYPE html>
 {% extends 'app/base.html' %}
 {% load static %}
 
-<head>
 {% block title_block %}
-  Map
+    Maps
 {% endblock %}
 
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-
-.button {
-  background-color: #555555;
-  color: #ddd;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.button:hover, .button:focus {
-  background-color: #ddd;
-  color: black;
-}
-
-.dropbtn {
-  background-color: black;
-  color: white;
-  padding: 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.dropbtn:hover, .dropbtn:focus {
-  background-color: #ddd;
-  color: black;
-}
-
-.dropdown {
-  position: relative;
-  float: right;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  font-size:12px;
-  min-width: 160px;
-  overflow: auto;
-  z-index: 1;
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown a:hover {background-color: #ddd;}
-
-.show {display: block;}
-
-</style>
-</head>
-<body>
-
-<div class="topnav">
-  <a href="#">Home</a>
-  <a href="#">Places</a>
-  <a href="#">Events</a>
-  <a href="#">Activities</a>
-  <a href="#">About Us</a>
-</div>
+{% block additional_styles %}
+    <link rel="stylesheet" href="{% static 'styling/map.css' %}">
+{% endblock %}
+{% block additional_js %}
+  <script src = "{% static 'javascript/maps.js' %}"></script>
+{% endblock %}
 
 {% block body_block %}
+<body>
+
 <div class="content">
   <h2>Maps</h2>
   <p>Find a Place or Event.</p>
@@ -115,49 +55,5 @@
 </div>
 {% endblock %}
 
-
-<script>
-  /* When the user clicks on the button, 
-  toggle between hiding and showing the dropdown content */
-  function showDropdown() {
-    showPlaces();
-  }
-  
-  function showPlaces() {
-    document.getElementById("place").classList.toggle("show");
-  }
-  
-  function showEvents() {
-    document.getElementById("place").classList.toggle("show");
-  }
-  
-  // Close the dropdown if the user clicks outside of it
-  window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn')) {
-      var dropdowns = document.getElementsByClassName("dropdown-content");
-      var i;
-      for (i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.classList.contains('show')) {
-          openDropdown.classList.remove('show');
-        }
-      }
-    }
-
-    //If Find Places button is clicked
-    if (!event.target.matches('.button')) {
-      
-      var dropdowns = document.getElementsByClassName("dropdown-content");
-      var i;
-      for (i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.classList.contains('show')) {
-          openDropdown.classList.remove('show');
-        }
-      }
-    }
-  }
-  </script>
-
 </body>
-</html>
+{% endblock %}

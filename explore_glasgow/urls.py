@@ -44,9 +44,6 @@ urlpatterns = [
     path('app/', include(('app.urls', 'chosen-plan'), namespace='plan')),
     path('app/', include(('app.urls', 'reviews'), namespace='app')),
     path('app/', include(('app.urls', 'plans'), namespace='app')),
-
-
-
 ]
 
 #path("", include('app.urls', namespace='app')),

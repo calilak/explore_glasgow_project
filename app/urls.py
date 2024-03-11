@@ -23,15 +23,11 @@ urlpatterns = [
     path("plans/chosen-plan/reviews/", views.reviews, name="reviews"),
     path("plans/chosen-place/reviews/", views.reviews, name="reviews"),
     path("account/my-plans/chosen-plan/", views.chosenPlan, name="account_my-plans_chosen-plan"),
-
-
-
-
-    
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
     path('restricted/', views.restricted, name='restricted'),
     path('logout/', views.user_logout, name='logout'),
+    path("maps/", views.map,name='map'),
     path("about-us/", views.about_us, name="about-us"),
     path("activities/", views.activities, name="activities"),
     path("events/", views.events, name="events"),

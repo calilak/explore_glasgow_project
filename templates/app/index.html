@@ -5,9 +5,11 @@
     Home
 {% endblock %}
 
-{% block body_block %}
+{% block additional_styles %}
+    <link rel="stylesheet" href="{% static 'styling/index.css' %}">
+{% endblock %}
 
-<h1>Explore Glasgow - Homepage</h1>
+{% block body_block %}
 
 <div id="overlay">
   <h1 id="inputted-title">New Plan</h1>

@@ -1,40 +1,4 @@
-section, footer {
-    margin: 25px;
-    padding: 10px;
-    border: 1px 
-  }
-  .plan-card {
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-  }
-  .plan-card img {
-    max-width: 100%;
-    height: auto;
-  }
-  .plan-card .details {
-    padding: 5px;
-  }
-
-  nav {
-  display: flex;
-  justify-content: space-between;
-  }
-
-.left-links,
-.right-links {
-  display: flex;
-  }
-
-.left-links a,
-.right-links a {
-  margin-right: 10px; /* Adjust spacing between links */
-  }
-
-.right-links a:last-child {
-  margin-right: 0; /* Remove margin from the last link */
-  }
-
-  #overlay {
+#overlay {
     height: 100%;
     width: 100%;
     display: none; /* Change to flex when you want to display it */
