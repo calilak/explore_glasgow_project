@@ -64,6 +64,8 @@ def create_users():
     for user_data in users_data:
         User.objects.create_user(**user_data)
 
+        print(f"Added user {user_data['username']}")
+
 def create_categories_and_tags():
     categories_data = ['Personal', 'Fitness', 'Work', 'Education', 'Social', 'Hobbies', 'Restaurant', 'Nightclub', 'Museum', 'Entertainment', 'Shopping']
     tags_data = ['Highly rated', 'Live music', 'Good for large groups', 'Under £20', 'City centre']
@@ -112,6 +114,8 @@ def create_places():
         place.categories.add(*categories_objs)
         place.tags.add(*tags_objs)
 
+        print(f"Added place {place_data['name']}")
+
 def create_events():
     events_data = [
         {'title': 'Fitness Class', 'description': 'Join our fitness class and stay fit!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 25, 14, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 25, 16, 0, 0)), 'location': Place.objects.get(location='ChIJ4d_MFsxFiEgRfvixuazun6c'), 'categories': ['Personal', 'Fitness'], 'tags': ['Under £20', 'Highly rated']},
@@ -146,6 +150,8 @@ def create_events():
 
         event.categories.add(*categories_objs)
         event.tags.add(*tags_objs)
+
+        print(f"Added event {event_data['title']}")
 
 def create_activities():
     users = User.objects.all()
@@ -184,6 +190,8 @@ def create_activities():
         activity.categories.add(*categories_objs)
         activity.tags.add(*tags_objs)
 
+        print(f"Added activity {activity_data['title']}")
+
 def create_plans():
     users = User.objects.all()
     events = Event.objects.all()
@@ -201,6 +209,8 @@ def create_plans():
 
         plan.save()
 
+        print(f"Added plan by {plan_data['user'].username} ({plan_data['title']})")
+
 def create_reviews():
     users = User.objects.all()
     places = Place.objects.all()
@@ -213,6 +223,8 @@ def create_reviews():
     ]
     for review_data in reviews_data:
         Review.objects.create(**review_data)
+
+        print(f"Added review by {review_data['user'].username} for {'Place' if review_data['content_type'] == ContentType.objects.get_for_model(Place) else 'Plan'} {review_data['object_id']}")
 
 if __name__ == '__main__':
     print('Populating database...')
