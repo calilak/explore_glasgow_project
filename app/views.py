@@ -61,13 +61,27 @@ def user_login(request):
 
 @login_required
 def restricted(request):
-    return render(request, 'restricted.html')
+    return render(request, 'app/restricted.html')
 
 @login_required
 def user_logout(request):
     logout(request)
     return redirect(reverse('app:index'))
 
+def about_us(request):
+    return render(request, "app/aboutus.html")
+
+def activities(request):
+    return render(request, "app/activities.html")
+
+def events(request):
+    return render(request, "app/events.html")
+
+def language(request):
+    return render(request, "app/language.html")
 
 def map(request):
     return render(request, "app/map.html")
+
+def places(request):
+    return render(request, "app/places.html")

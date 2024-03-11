@@ -1,0 +1,140 @@
+section, footer {
+    margin: 25px;
+    padding: 10px;
+    border: 1px 
+  }
+  .plan-card {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+  .plan-card img {
+    max-width: 100%;
+    height: auto;
+  }
+  .plan-card .details {
+    padding: 5px;
+  }
+
+  nav {
+  display: flex;
+  justify-content: space-between;
+  }
+
+.left-links,
+.right-links {
+  display: flex;
+  }
+
+.left-links a,
+.right-links a {
+  margin-right: 10px; /* Adjust spacing between links */
+  }
+
+.right-links a:last-child {
+  margin-right: 0; /* Remove margin from the last link */
+  }
+
+  #overlay {
+    height: 100%;
+    width: 100%;
+    display: none; /* Change to flex when you want to display it */
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0, 0.9);
+    flex-direction: column;
+    align-items: center;
+    padding-bottom:10vh;
+}
+
+#inputted-title {
+    font-size: 28px;
+    color: white;
+    text-align: center;
+    margin:3px 3px;
+}
+
+#inputted-date {
+    font-size:20px;
+    color:white;
+    text-align:center;
+    margin:5px 2px;
+}
+
+.columns {
+    display: flex;
+    width: 50%; /* Adjust as necessary */
+    height: calc(90% - 50px);
+    justify-content: space-around; /* This spaces out the two columns */
+}
+
+.column {
+    flex: 1; /* Ensures both columns take up equal space */
+    padding: 10px; /* Adds some padding inside each column */
+    border:2px solid white;
+    background-color: #ddd;
+}
+
+.search-database {
+    padding:5px 5px;
+    font-size:16px;
+    margin:5px;
+}
+
+.calendar {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: auto 1fr; /* Timeline column and events column */
+    margin: 2rem;
+}
+
+.timeline {
+    display: grid;
+    grid-template-rows: repeat(10, 40px); /* Allocate equal space for each time marker */
+}
+
+/* The following classes are examples if you need to position events starting or ending at specific times */
+.start-10 {
+    grid-row-start: 2;
+}
+
+.start-12 {
+    grid-row-start: 4;
+}
+
+.start-1 {
+    grid-row-start: 5;
+}
+
+.start-2 {
+    grid-row-start: 6;
+}
+
+.end-12 {
+    grid-row-end: 4;
+}
+
+.end-1 {
+    grid-row-end: 5;
+}
+
+.end-3 {
+    grid-row-end: 7;
+}
+
+.end-4 {
+    grid-row-end: 8;
+}
+
+.end-5 {
+    grid-row-end: 9;
+}
+
+.events {
+    display: grid;
+    grid-template-rows: repeat(10, 40px); /* Aligns with the timeline's rows */
+    border-radius: 5px;
+    background: #fff1f8;
+    /* Add your styling for events here */
+}

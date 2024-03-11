@@ -10,5 +10,10 @@ urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('restricted/', views.restricted, name='restricted'),
     path('logout/', views.user_logout, name='logout'),
-    path("map/", views.map, name="map")
+    path("about-us/", views.about_us, name="about-us"),
+    path("activities/", views.activities, name="activities"),
+    path("events/", views.events, name="events"),
+    path("language/", views.language, name="language"),
+    path("map/", views.map, name="map"),
+    path("places/", views.places, name="places"),
 ]

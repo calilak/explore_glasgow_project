@@ -9,9 +9,11 @@
         <title>
             Explore Glasgow
             {% block title_block %}
-                Explore Glasgow Now!
+                Title
             {% endblock %}
         </title>
+        <link rel = "stylesheet" href="{% static 'styles.css' %}">
+        <script src = "{% static 'main.js' %}"></script>
     </head>
 
     <body>
@@ -20,11 +22,11 @@
             <header>
                 <nav>
                   <div class="left-links">
-                    <a href="/index">Home</a> |
-                    <a href="/places">Places</a> |
-                    <a href="/events">Events</a> |
-                    <a href="/activities">Activities</a> |
-                    <a href="/about-us">About Us</a>
+                    <a href="{% url 'app:index' %}">Home</a> |
+                    <a href="{% url 'app:places' %}">Places</a> |
+                    <a href="{% url 'app:events' %}">Events</a> |
+                    <a href="{% url 'app:activities' %}">Activities</a> |
+                    <a href="{% url 'app:about-us' %}">About Us</a>
                   </div>
                   <div class="right-links">
                     <a href="/map"><img src="{% static 'images/maps.png' %}" alt="maps"></a> |
@@ -41,6 +43,7 @@
         </div>
         <hr />
         <div>
+            {% block user_block %}
             <ul>
                 {% if user.is_authenticated %}
                 <!-- Show these links when the user is logged in -->
@@ -49,10 +52,11 @@
                 <!-- Show these links when the user is NOT logged in -->
                 <li><a href="{% url 'app:register' %}">Sign Up</a></li>
                 <li><a href="{% url 'app:login' %}">Login</a></li>
-                <li><a href="{% url 'app:restricted' %}">Restricted Page</a></li>
                 {% endif %}
                 <!-- Outside the conditional statements, ALWAYS show -->
+                <li><a href="{% url 'app:restricted' %}">Restricted Page</a></li>
             </ul>
+            {% endblock %}
         </div>
     </body>
 </html>
