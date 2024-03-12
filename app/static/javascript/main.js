@@ -5,3 +5,7 @@ function addNewPlan() {
     document.getElementById("inputted-title").innerHTML = "New Plan: " + inputTitle;
     document.getElementById("inputted-date").innerHTML = inputDate;
 }
+
+function closeOverlay() {
+    document.getElementById("overlay").style.display = "none";
+}

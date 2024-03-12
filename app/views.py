@@ -93,7 +93,60 @@ def user_logout(request):
     return redirect(reverse('app:index'))
 
 def about_us(request):
-    return render(request, "app/aboutus.html")
+    team_members = [
+        {
+            'name': 'Ollie',
+            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'image': 'images/profile-pics/ollie.jpg', # Path under your static directory
+            'account_link': '#',
+            'instagram_link': 'https://www.instagram.com/olliel1',
+            'linkedin_link': 'https://www.linkedin.com/in/ollie-w-livingston',
+            'email': 'oliverlivingston@iCloud.com',
+        },
+        {
+            'name': 'Liao',
+            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'image': 'images/profile-pics/liao.jpg', # Path under your static directory
+            'account_link': '#',
+            'instagram_link': 'https://www.instagram.com/',
+            'linkedin_link': '#',
+            'email': '#',
+        },
+        {
+            'name': 'Kalila',
+            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'image': 'images/profile-pics/kalila.jpg', # Path under your static directory
+            'account_link': '#',
+            'instagram_link': 'https://www.instagram.com/',
+            'linkedin_link': '#',
+            'email': '#',
+        },
+        {
+            'name': 'Matty',
+            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'image': 'images/profile-pics/matty.jpg', # Path under your static directory
+            'account_link': '#',
+            'instagram_link': 'https://www.instagram.com/',
+            'linkedin_link': '#',
+            'email': '#',
+        },
+        {
+            'name': 'Oli',
+            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'image': 'images/profile-pics/chan.jpg', # Path under your static directory
+            'account_link': '#',
+            'instagram_link': 'https://www.instagram.com/',
+            'linkedin_link': '#',
+            'email': '#',
+        },
+        # Add other team members in the same way
+    ]
+
+    context = {
+        'team_members': team_members,
+    }
+
+    return render(request, 'app/aboutus.html', context)
 
 def activities(request):
     return render(request, "app/activities.html")
@@ -109,3 +162,18 @@ def map(request):
 
 def places(request):
     return render(request, "app/places.html")
+
+def myPlans(request):
+    return render(request, "app/myPlans.html")
+
+def myAccount(request):
+    return render(request, "app/myAccount.html")
+
+def privatePolicy(request):
+    return render(request, "app/privacyPolicy.html")
+
+def plans(request):
+    return render(request, "app/plans.html")
+
+def reviews(request):
+    return render(request, "app/reviews.html")

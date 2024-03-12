@@ -5,6 +5,24 @@
     About Us
 {% endblock %}
 
+{% block additional_styles %}
+    <link rel="stylesheet" href="{% static 'styling/about-us.css' %}">
+{% endblock %}
+
 {% block body_block %}
-<h1>About Us</h1>
+<div class="profile-cards-container">
+    {% for member in team_members %}
+    <div class="profile-card">
+        <img src="{% static member.image %}" alt="Profile photo of {{ member.name }}">
+        <h2>{{ member.name }}</h2>
+        <p><a href="{{ member.account_link }}">View Profile</a></p>
+        <p>{{ member.bio }}</p>
+        <div class="social-links">
+            <a href="{{ member.instagram_link }}"><i class="fab fa-instagram"></i></a>
+            <a href="mailto:{{ member.email }}"><i class="fas fa-envelope"></i></a>
+            <a href="{{ member.linkedin_link }}"><i class="fab fa-linkedin"></i></a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

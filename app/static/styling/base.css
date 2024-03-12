@@ -1,45 +1,76 @@
-section, footer {
-  margin: 25px;
-  padding: 10px;
-  border: 1px 
+/* Resetting default styles */
+body, h1, h2, h3, h4, h5, h6, p, ul, li, a {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+  color: inherit;
 }
 
-.plan-card {
-  border: 1px solid #ddd;
-  margin-bottom: 10px;
+/* Basic body styling */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif; /* You can choose a different font */
+  background-color: #fff; /* Light background for a clean look */
 }
 
-.plan-card img {
-  max-width: 100%;
-  height: auto;
-}
-
-.plan-card .details {
-  padding: 5px;
+/* Header and navigation styles */
+header {
+  background-color: #f8f9fa; /* Light gray background for the header for a subtle contrast */
+  padding: 20px 10%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Soft shadow for depth */
 }
 
 nav {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
-.left-links, .right-links {
-  display: flex;
-  font-size:30px;
-}
-
-.left-links a,.right-links a {
+.left-links a, .right-links a {
   margin-right: 20px; /* Adjust spacing between links */
-  color:rgb(104, 54, 54);
+  color: #686868; /* Soften the color for a modern, minimalist look */
+  font-size: 16px; /* Slightly reduced font size for elegance */
 }
 
-header {
-  border:1px solid black;
-  padding:10px 10px;
-  width:100%;
+.left-links a:last-child, .right-links a:last-child {
+  margin-right: 0; /* Remove margin from the last link */
 }
 
-body {
-  margin:0;
-  padding:0;
+.right-links a {
+  display: inline-flex; /* Center icons vertically */
+  align-items: center;
+}
+
+.right-links i {
+  margin-right: 8px; /* Space between icon and text */
+}
+
+/* Removes the pipe '|' characters for a cleaner look */
+.left-links a:not(:last-child)::after, .right-links a:not(:last-child)::after {
+  content: "|";
+  color: #bbb; /* Lighter color for the separator for subtlety */
+  margin-left: 20px;
+}
+
+.fas {
+  font-size: 20px; /* Icon size - adjust as needed */
+}
+
+/* Hover effects for links */
+.left-links a:hover, .right-links a:hover {
+  color: #505050; /* Darker color on hover for interaction feedback */
+  text-decoration: none; /* No underline to maintain the clean look */
+}
+
+/* Active link styling */
+.left-links a.active, .right-links a.active {
+  font-weight: bold; /* Make the active link bold */
+  color: #8d5d5d; /* Specific color for the active link */
+}
+
+/* Ensure the hover effect does not override the active link styling */
+.left-links a.active:hover, .right-links a.active:hover {
+  color: #8d5d5d; /* Maintain the active color even on hover */
 }

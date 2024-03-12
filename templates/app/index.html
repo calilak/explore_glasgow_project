@@ -12,19 +12,38 @@
 {% block body_block %}
 
 <div id="overlay">
+  <span class="close-overlay" onclick="closeOverlay()">&times;</span>
   <h1 id="inputted-title">New Plan</h1>
   <h4 id="inputted-date">Today</h4>
   <div class="columns">
     <div class="column">
+      <!-- Search Events -->
+      <label for="search-events">Search Events:</label>
       <input type="text" class="search-database" id="search-events" name="add-events-to-plan" placeholder="Search events...">
-      <button>Add</button>
+      <button onclick="addEvent()"><i class="fas fa-search"></i>Add</button>
+      
+      <!-- Search Activities -->
+      <label for="search-activities">Search Activities:</label>
       <input type="text" class="search-database" id="search-activities" name="add-activities-to-plan" placeholder="Search activities...">
-      <button>Add</button>
-    </div>
+      <button onclick="addActivity()"><i class="fas fa-search"></i>Add</button>
+    
+      <!-- Is Public Toggle -->
+      <div class="public-toggle">
+          <label for="is-public">Is Public:</label>
+          <label class="switch">
+            <input type="checkbox" id="is-public">
+            <span class="slider round"></span>
+          </label>
+      </div>
+
+      <!-- Post Plan Button -->
+      <button class="post-plan" onclick="postPlan()"><i class="fas fa-upload"></i> Post Plan</button>
+  </div>
+
     <div class="column">
       <div class="calendar">
         <div class="timeline">
-            <!-- Removed the spacer div as it's not necessary -->
+            <!-- Time Markers -->
             <div class="time-marker">9 AM</div>
             <div class="time-marker">10 AM</div>
             <div class="time-marker">11 AM</div>
@@ -35,23 +54,32 @@
             <div class="time-marker">4 PM</div>
             <div class="time-marker">5 PM</div>
             <div class="time-marker">6 PM</div>
+            <div class="time-marker">7 PM</div>
+            <div class="time-marker">8 PM</div>
+            <div class="time-marker">9 PM</div>
         </div>
         <div class="events">
-            <!-- Your event divs will go here -->
+            <!-- Placeholder events positioned by time -->
+            <div class="event" style="grid-row-start: 1;">Yoga Class - 10 AM to 11 AM</div> <!-- Starts at 10 AM -->
+            <div class="event" style="grid-row-start: 11;">Meditation Session - 11 AM to 12 PM</div> <!-- Starts at 11 AM -->
         </div>
-    </div>
+      </div>
     </div>
   </div>
 </div>
-  <section>
-    <div>
+
+
+<section>
+  <div>
+    <div class="form-fields">
       <label for="new-plan-title">Plan Title</label>
       <input type="text" id="new-plan-title" name="new-plan-title">
-      <labal for="new-plan-date">Plan Date</labal>
-      <input type ="date" id="new-plan-date" name="new-plan-date">
-      <button onClick="addNewPlan()">Add New Plan</button>
+      <label for="new-plan-date">Date</label>
+      <input type="date" id="new-plan-date" name="new-plan-date">
     </div>
-  </section>
+    <button onClick="addNewPlan()">Add New Plan</button>
+  </div>
+</section>
 
   <section>
     <h2>Browse Plans</h2>

@@ -1,0 +1,51 @@
+.profile-cards-container {
+    display: flex;
+    flex-wrap: nowrap; /* Changed from wrap to nowrap */
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    overflow-x: auto; /* Adds horizontal scrolling if needed */
+}
+
+.profile-card {
+    width: 300px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
+    background-color: #f8f9fa;
+}
+
+.profile-card img {
+    width: 150px; /* Set a specific size for the images */
+    height: 150px; /* Equal to width to create a circle */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image covers the circle nicely */
+    display: block;
+    margin: 0 auto 20px; /* Center the image horizontally and add some space below */
+}
+
+.profile-card h2 {
+    margin: 10px 0;
+}
+
+.profile-card p {
+    margin: 10px 20px;
+}
+
+.social-links {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    font-size:24px;
+}
+
+.social-links a {
+    color: #686868;
+    transition: color 0.3s;
+}
+
+.social-links a:hover {
+    color: #8d5d5d;
+}

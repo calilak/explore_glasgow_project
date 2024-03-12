@@ -5,9 +5,8 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="{% static 'style.css' %}">
         <title>
-            Explore Glasgow
+            ExpGgow - 
             {% block title_block %}
                 Title
             {% endblock %}
@@ -23,22 +22,22 @@
         <header>
             <nav>
               <div class="left-links">
-                <a href="{% url 'app:index' %}">Index</a> |
-                <a href="{% url 'app:places' %}">Places</a> |
-                <a href="{% url 'app:events' %}">Events</a> |
-                <a href="{% url 'app:activities' %}">Activities</a> |
-                <a href="{% url 'app:about-us' %}">About Us</a>
+                <a href="{% url 'app:index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">Index</a>
+                <a href="{% url 'app:places' %}" class="{% if request.resolver_match.url_name == 'places' %}active{% endif %}">Places</a>
+                <a href="{% url 'app:events' %}" class="{% if request.resolver_match.url_name == 'events' %}active{% endif %}">Events</a>
+                <a href="{% url 'app:activities' %}" class="{% if request.resolver_match.url_name == 'activities' %}active{% endif %}">Activities</a>
+                <a href="{% url 'app:about-us' %}" class="{% if request.resolver_match.url_name == 'about-us' %}active{% endif %}">About Us</a>
               </div>
               <div class="right-links">
-                <a href="/maps"><i class="fas fa-map-marked-alt" aria-hidden="true"></i></a> |
-                <a href="/language"><i class="fas fa-language" aria-hidden="true"></i></a> |
+                <a href="{% url 'app:map' %}" class="{% if request.resolver_match.url_name == 'map' %}active{% endif %}"><i class="fas fa-map-marked-alt" aria-hidden="true"></i></a> 
+                <a href="{% url 'app:language' %}" class="{% if request.resolver_match.url_name == 'language' %}active{% endif %}"><i class="fas fa-language" aria-hidden="true"></i></a> 
                 <!-- Conditional display based on authentication status -->
                 {% if request.user.is_authenticated %}
                     <a href="{% url 'app:logout' %}"><i class="fas fa-user-circle" aria-hidden="true"></i></a> 
                 {% else %}
-                    <a href="{% url 'app:login' %}"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login/Sign Up</a>
+                    <a href="{% url 'app:login' %}" class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login/Sign Up</a>
                 {% endif %}
-            </div>
+              </div>
             </nav>
         </header>
         <div>
