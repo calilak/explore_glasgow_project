@@ -61,20 +61,30 @@ def create_users():
         {'username': 'Alex', 'email': 'alex@gmail.com', 'password': 'password'},
         {'username': 'John', 'email': 'john@gmail.com', 'password': 'password'}
     ]
-    for user_data in users_data:
-        User.objects.create_user(**user_data)
 
-        print(f"Added user {user_data['username']}")
+    print("Adding users...")
+    for i, user_data in enumerate(users_data):
+        user = User.objects.create_user(**user_data)
+        if i<5:
+            user.is_superuser = True
+            user.is_staff = True
+            user.save()
+
+    print("Users added successfully!")
+
 
 def create_categories_and_tags():
     categories_data = ['Personal', 'Fitness', 'Work', 'Education', 'Social', 'Hobbies', 'Restaurant', 'Nightclub', 'Museum', 'Entertainment', 'Shopping']
     tags_data = ['Highly rated', 'Live music', 'Good for large groups', 'Under £20', 'City centre']
 
+    print("Adding categories and tags...")
     for category_name in categories_data:
         Category.objects.get_or_create(name=category_name)
 
     for tag_name in tags_data:
         Tag.objects.get_or_create(name=tag_name)
+
+    print("Categories and tags added successfully!")
 
 def create_places():
     categories = Category.objects.all()
@@ -102,6 +112,7 @@ def create_places():
         {'location': 'ChIJ4d_MFsxFiEgRfvixuazun6c', 'name': 'The Gym Group Glasgow West End', 'categories': ['Personal', 'Fitness'], 'tags': ['Under £20', 'Highly rated']}
     ]
 
+    print("Adding places...")
     for place_data in places_data:
         tags_list = place_data.pop('tags', [])
         tags_objs = [Tag.objects.get_or_create(name=tag_name)[0] for tag_name in tags_list]
@@ -114,7 +125,7 @@ def create_places():
         place.categories.add(*categories_objs)
         place.tags.add(*tags_objs)
 
-        print(f"Added place {place_data['name']}")
+    print("Places added successfully!")
 
 def create_events():
     events_data = [
@@ -139,6 +150,8 @@ def create_events():
         {'title': 'Book Club Meeting', 'description': 'Join our book club discussion!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 14, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 16, 0, 0)), 'location': Place.objects.get(location='ChIJpzaZb6BGiEgRScmAJ9zJgI8'), 'categories': ['Social', 'Education', 'Hobbies'], 'tags': ['City centre']},
         {'title': 'Volleyball Social', 'description': 'Come join us after training!', 'start_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 21, 0, 0)), 'end_time': timezone.make_aware(datetime.datetime(2024, 3, 28, 23, 0, 0)), 'location': Place.objects.get(location='ChIJpzaZb6BGiEgRScmAJ9zJgI8'), 'categories': ['Social', 'Entertainment'], 'tags': ['Highly rated']},
     ]
+
+    print("Adding events...")
     for event_data in events_data:
         tags_list = event_data.pop('tags', [])
         tags_objs = [Tag.objects.get_or_create(name=tag_name)[0] for tag_name in tags_list]
@@ -151,7 +164,7 @@ def create_events():
         event.categories.add(*categories_objs)
         event.tags.add(*tags_objs)
 
-        print(f"Added event {event_data['title']}")
+    print("Events added successfully!")
 
 def create_activities():
     users = User.objects.all()
@@ -178,6 +191,7 @@ def create_activities():
         {'user': users[0], 'title': 'Film Night', 'description': 'Enjoy a movie night at home.', 'duration': 2, 'location': None, 'categories': ['Personal', 'Entertainment'], 'tags': []}
     ]
 
+    print("Adding activities...")
     for activity_data in activities_data:
         tags_list = activity_data.pop('tags', [])
         tags_objs = [Tag.objects.get_or_create(name=tag_name)[0] for tag_name in tags_list]
@@ -190,7 +204,7 @@ def create_activities():
         activity.categories.add(*categories_objs)
         activity.tags.add(*tags_objs)
 
-        print(f"Added activity {activity_data['title']}")
+    print("Activities added successfully!")
 
 def create_plans():
     users = User.objects.all()
@@ -200,6 +214,7 @@ def create_plans():
         {'user': users[i], 'title': f"{users[i].username}'s Plan", 'date': events[i].start_time.date(), 'is_public': True} for i in range(20)
     ]
 
+    print("Adding plans...")
     for i, plan_data in enumerate(plans_data):
         plan = Plan.objects.create(**plan_data)
 
@@ -209,7 +224,7 @@ def create_plans():
 
         plan.save()
 
-        print(f"Added plan by {plan_data['user'].username} ({plan_data['title']})")
+    print("Plans added successfully!")
 
 def create_reviews():
     users = User.objects.all()
@@ -221,10 +236,12 @@ def create_reviews():
     ] + [
         {'user': users[i], 'content': reviewContent[i], 'rating': (i%5)+1, 'content_type': ContentType.objects.get_for_model(Plan), 'object_id': plans[j].id} for j in range(20) for i in range(20)
     ]
+
+    print("Adding reviews...")
     for review_data in reviews_data:
         Review.objects.create(**review_data)
 
-        print(f"Added review by {review_data['user'].username} for {'Place' if review_data['content_type'] == ContentType.objects.get_for_model(Place) else 'Plan'} {review_data['object_id']}")
+    print("Reviews added successfully!")
 
 if __name__ == '__main__':
     print('Populating database...')
