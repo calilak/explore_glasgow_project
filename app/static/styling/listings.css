@@ -17,15 +17,17 @@
     padding: 5px;
   }
 
+  /*Style the place, event or plan listing*/
   .listing-box {
     overflow: auto;
     flex-wrap: wrap;
     display: inline;
     float: left;
-    width: 31%;
+    background-color:#fff;
+    width: 32%;
     height: 350px; /* Need to be careful in making sure each box is same height */
     border: 2px dashed black;
-    margin: 1%;
+    margin: 0.5%;
   }
   
   /* Style the header */
