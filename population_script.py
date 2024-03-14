@@ -118,12 +118,23 @@ def create_places():
         tags_objs = [Tag.objects.get_or_create(name=tag_name)[0] for tag_name in tags_list]
         
         categories_list = place_data.pop('categories', [])
+        print(place_data["name"], categories_list)
         categories_objs = [Category.objects.get_or_create(name=category_name)[0] for category_name in categories_list]
 
         place = Place.objects.create(**place_data)
 
         place.categories.add(*categories_objs)
         place.tags.add(*tags_objs)
+
+        #categoriesString = ""
+        #for category in place.categories.all():
+        #    categoriesString += category.name + " "
+        #print(categoriesString)
+
+        tagsString = ""
+        for tag in place.tags.all():
+            tagsString += tag.name + " "
+        print(tagsString)
 
     print("Places added successfully!")
 

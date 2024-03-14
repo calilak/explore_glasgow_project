@@ -1,0 +1,71 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .inline {
+    flex-wrap: wrap;
+    display: inline;
+    font-size: 20px;
+  }
+
+  .inline li {
+    display: inline;
+    padding: 5px;
+  }
+
+  .listing-box {
+    overflow: auto;
+    flex-wrap: wrap;
+    display: inline;
+    float: left;
+    width: 31%;
+    height: 350px; /* Need to be careful in making sure each box is same height */
+    border: 2px dashed black;
+    margin: 1%;
+  }
+  
+  /* Style the header */
+  .header {
+    grid-column-start: span 5;
+    background-color: #505050;
+    color:#fff;
+    padding: 5px;
+    text-align: center;
+    font-size: 25px;
+  }
+  
+  /* The grid container */
+  .grid-container {
+    display: grid;
+    overflow: auto;
+    grid-template-columns: 1fr 4fr;
+    gap:0;
+  } 
+  
+  .left,
+  .right {
+    padding: 10px;
+    margin: 0;
+  }
+  
+  /* Style the left column */
+  .left {
+    grid-column-start: 1;
+  }
+  
+  /* Style the right column */
+  .right {
+    grid-column-start: 2;
+  }
+  
+  /* Style the footer */
+  .footer {
+    grid-column-start: span 5;
+    background-color: #f1f1f1;
+    padding: 10px;
+    text-align: center;
+  }
