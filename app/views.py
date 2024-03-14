@@ -7,6 +7,7 @@ from django.contrib.auth import logout
 from django.contrib import messages
 from django.urls import reverse
 from django.shortcuts import redirect
+from .models import Event
 
 def aboutus(request):
     return render(request,'aboutus.html')
@@ -27,7 +28,8 @@ def chosenPlace(request):
     return render(request,"chosenPlace.html")
 
 def events(request):
-    return render(request,'events.html')
+    events = Event.objects.all().order_by('start_time')  # Get all events, ordered by start time
+    return render(request, 'app/events.html', {'events': events})
 
 def learnMore(request):
     return render(request,'learnMore.html')
