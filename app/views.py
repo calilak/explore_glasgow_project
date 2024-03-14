@@ -4,6 +4,7 @@ from app.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.contrib import messages
 from django.urls import reverse
 from django.shortcuts import redirect
 
@@ -91,6 +92,14 @@ def restricted(request):
 def user_logout(request):
     logout(request)
     return redirect(reverse('app:index'))
+
+@login_required
+def delete_account(request):
+    user = request.user
+    user.delete()
+    logout(request)
+    messages.success(request, 'Your account has been successfully deleted.')
+    return redirect('app:index')
 
 def about_us(request):
     team_members = [
