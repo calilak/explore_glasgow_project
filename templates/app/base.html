@@ -17,6 +17,7 @@
         {% block additional_styles %}{% endblock %}
         {% block additional_js %}{% endblock %}
         <script src="{% static 'javascript/main.js' %}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
 
     <body>
@@ -48,6 +49,14 @@
             </nav>
         </header>        
         <div>
+            <!-- Popup Form for Event Time Selection -->
+            <div id="time-picker-popup" class="time-picker-popup" style="display:none;">
+                <form id="add-event-form">
+                    <label for="event-time">Select Event Time:</label>
+                    <input type="time" id="event-time" name="event-time" required>
+                    <button type="submit">Add Event</button>
+                </form>
+            </div>
             <div id="overlay">
                 <span class="close-overlay" onclick="closeOverlay()">&times;</span>
                 <h1 id="inputted-title">New Plan</h1>
@@ -56,8 +65,9 @@
                   <div class="column">
                     <!-- Search Events with Plus Button -->
                     <div class="input-group">
-                        <input type="text" class="search-database" id="search-events" name="add-events-to-plan" placeholder="Search events...">
-                        <button onclick="addEvent()"><i class="fas fa-plus"></i></button>
+                        <input type="text" class="search-database" id="search-events" name="add-events-to-plan" placeholder="Search events..." oninput="event_autocomplete()">
+                        <button onclick="showPopup()"><i class="fas fa-plus"></i></button>
+                        <div id="autocomplete-results" class="autocomplete-results"></div>
                     </div>
                     
                     <!-- Search Activities with Plus Button -->
@@ -85,6 +95,15 @@
                     <div class="calendar">
                       <div class="timeline">
                           <!-- Time Markers -->
+                          <div class="time-marker">12 AM</div>
+                          <div class="time-marker">1 AM</div>
+                          <div class="time-marker">2 AM</div>
+                          <div class="time-marker">3 AM</div>
+                          <div class="time-marker">4 AM</div>
+                          <div class="time-marker">5 AM</div>
+                          <div class="time-marker">6 AM</div>
+                          <div class="time-marker">7 AM</div>
+                          <div class="time-marker">8 AM</div>
                           <div class="time-marker">9 AM</div>
                           <div class="time-marker">10 AM</div>
                           <div class="time-marker">11 AM</div>
@@ -98,18 +117,14 @@
                           <div class="time-marker">7 PM</div>
                           <div class="time-marker">8 PM</div>
                           <div class="time-marker">9 PM</div>
+                          <div class="time-marker">10 PM</div>
+                          <div class="time-marker">11 PM</div>
                       </div>
                       <div class="events">
-                        <!-- Placeholder events positioned by time -->
-                        <div class="event" style="grid-row-start: 1;">
-                            Yoga Class - 10 AM to 11 AM
-                            <i class="fas fa-trash delete-icon" onclick="deleteEvent('eventId1')"></i>
-                        </div> <!-- Starts at 10 AM -->
-                        <div class="event" style="grid-row-start: 11;">
-                            Meditation Session - 11 AM to 12 PM
-                            <i class="fas fa-trash delete-icon" onclick="deleteEvent('eventId2')"></i>
-                        </div> <!-- Starts at 11 AM -->
+
+                      </div>
                     </div>
+                    
                     
                     </div>
                   </div>
