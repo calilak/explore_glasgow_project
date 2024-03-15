@@ -32,4 +32,5 @@ urlpatterns = [
     path("events/", views.events, name="events"),
     path("language/", views.language, name="language"),
     path("map/", views.map, name="map"),
+   
 ]

@@ -5,6 +5,88 @@
     Activities
 {% endblock %}
 
-{% block body_block %}
-<h1>Your activities</h1>
+{% block additional_styles %}
+    <link rel="stylesheet" href="{% static 'styling/index.css' %}">
 {% endblock %}
+
+{% block body_block %}
+
+<style>
+.container {
+    display: flex;
+}
+
+.left-section, .right-section {
+    flex: 1; 
+}
+#left-header, #right-header{
+    display:flex;
+    justify-content: center;
+}
+
+.inner-left-section {
+    display: flex;
+    flex: 1; 
+}
+
+.activities-list {
+    flex: 1; 
+}
+
+.activities {
+    flex: 1; 
+}
+
+#main-section-right{
+    flex: 1;
+    justify-content: center;
+
+}
+button {
+  width: 150px;       
+  height: 50px;      
+  font-size: 16px;   
+  padding: 10px;  
+  box-sizing: border-box; 
+  display: block;  
+  cursor: pointer; 
+  border: 1px solid #ccc; 
+  background-color: #f8f8f8;
+  text-align: center; 
+}
+</style>
+<div class="container">
+    <div class="left-section">
+        <div id="left-header">
+            <h1>Your Activities</h1>
+        </div>
+        <div class="inner-left-section">
+            <div id="activities-list"> 
+                  <li><button> Personal </button></li>
+                  <li><button> Work </button></li>
+                  <li><button> Fitness </button></li>
+                  <li><button> Education </button></li>
+                  <li><button> Social </button></li>
+                  <li><button> Hobbies </button></li>
+                </ul>
+            </div>
+            <div class="activities">
+                
+            </div>
+        </div>
+    </div>
+    <div class="right-section">
+        <div id="right-header">
+            <h1>New Activity</h1>
+        </div>
+        <div id = "main-section-right"> 
+            <form action="/search" method="get">
+                <input type="search" id="site-search" name="q" label="Search through site content">
+                <button type="submit">Add Activity</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
