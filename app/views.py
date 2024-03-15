@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.urls import reverse
 from django.shortcuts import redirect
+from django.http import JsonResponse
+from .models import Event
+from django.db.models import Q
 
 def aboutus(request):
     return render(request,'aboutus.html')
@@ -177,3 +180,13 @@ def plans(request):
 
 def reviews(request):
     return render(request, "app/reviews.html")
+
+def search_events(request):
+    query = request.GET.get('q', '')
+    if query:
+        events = Event.objects.filter(title__icontains=query).values_list('title', flat=True)[:10]  # Limit to 5 suggestions for efficiency
+        suggestions = list(events)
+        print (suggestions)
+    else:
+        suggestions = []
+    return JsonResponse(suggestions, safe=False)
