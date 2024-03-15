@@ -12,6 +12,7 @@
             {% endblock %}
         </title>
         <link rel="stylesheet" href="{% static 'styling/base.css' %}">
+        <link rel="stylesheet" href="{% static 'styling/overlay.css' %}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- for icons -->
         {% block additional_styles %}{% endblock %}
         {% block additional_js %}{% endblock %}
@@ -21,27 +22,99 @@
     <body>
         <header>
             <nav>
-              <div class="left-links">
-                <a href="{% url 'app:index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">Index</a>
-                <a href="{% url 'app:places' %}" class="{% if request.resolver_match.url_name == 'places' %}active{% endif %}">Places</a>
-                <a href="{% url 'app:events' %}" class="{% if request.resolver_match.url_name == 'events' %}active{% endif %}">Events</a>
-                <a href="{% url 'app:activities' %}" class="{% if request.resolver_match.url_name == 'activities' %}active{% endif %}">Activities</a>
-                <a href="{% url 'app:about-us' %}" class="{% if request.resolver_match.url_name == 'about-us' %}active{% endif %}">About Us</a>
-              </div>
-              <div class="right-links">
-                <a href="{% url 'app:map' %}" class="{% if request.resolver_match.url_name == 'map' %}active{% endif %}"><i class="fas fa-map-marked-alt" aria-hidden="true"></i></a> 
-                <a href="{% url 'app:language' %}" class="{% if request.resolver_match.url_name == 'language' %}active{% endif %}"><i class="fas fa-language" aria-hidden="true"></i></a> 
-                <!-- Conditional display based on authentication status -->
-                {% if request.user.is_authenticated %}
-                    <a href="{% url 'app:logout' %}"><i class="fas fa-user-circle" aria-hidden="true"></i></a>
-                    <a href="{% url 'app:delete_account' %}" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');"><i class="fas fa-user-minus" aria-hidden="true"></i> Delete Account</a>
+                <div class="left-links">
+                    <a href="{% url 'app:index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">Index</a>
+                    <a href="{% url 'app:places' %}" class="{% if request.resolver_match.url_name == 'places' %}active{% endif %}">Places</a>
+                    <a href="{% url 'app:events' %}" class="{% if request.resolver_match.url_name == 'events' %}active{% endif %}">Events</a>
+                    <a href="{% url 'app:activities' %}" class="{% if request.resolver_match.url_name == 'activities' %}active{% endif %}">Activities</a>
+                    <a href="{% url 'app:about-us' %}" class="{% if request.resolver_match.url_name == 'about-us' %}active{% endif %}">About Us</a>
+                </div>
+                <div class="right-links">
+                    <!-- New Create New Plan Button -->
+                    <a onclick="addNewPlan()" class="create-plan-btn"><i class="fas fa-plus-circle"></i> Create New Plan</a>
+                    <a href="{% url 'app:map' %}" class="{% if request.resolver_match.url_name == 'map' %}active{% endif %}"><i class="fas fa-map-marked-alt" aria-hidden="true"></i></a> 
+                    <a href="{% url 'app:language' %}" class="{% if request.resolver_match.url_name == 'language' %}active{% endif %}"><i class="fas fa-language" aria-hidden="true"></i></a> 
+                    <!-- Conditional display based on authentication status -->
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'app:logout' %}"><i class="fas fa-user-circle" aria-hidden="true"></i></a>
+                        <a href="{% url 'app:delete_account' %}" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');"><i class="fas fa-user-minus" aria-hidden="true"></i> Delete Account</a>
                 {% else %}
-                    <a href="{% url 'app:login' %}" class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login/Sign Up</a>
+                    <div class="auth-links">
+                        <a href="{% url 'app:login' %}" class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login</a>
+                        <a href="{% url 'app:register' %}" class="{% if request.resolver_match.url_name == 'register' %}active{% endif %}">Register</a>
+                    </div>
                 {% endif %}
-              </div>
+                </div>
             </nav>
-        </header>
+        </header>        
         <div>
+            <div id="overlay">
+                <span class="close-overlay" onclick="closeOverlay()">&times;</span>
+                <h1 id="inputted-title">New Plan</h1>
+                <h4 id="inputted-date">Today</h4>
+                <div class="columns">
+                  <div class="column">
+                    <!-- Search Events with Plus Button -->
+                    <div class="input-group">
+                        <input type="text" class="search-database" id="search-events" name="add-events-to-plan" placeholder="Search events...">
+                        <button onclick="addEvent()"><i class="fas fa-plus"></i></button>
+                    </div>
+                    
+                    <!-- Search Activities with Plus Button -->
+                    <div class="input-group">
+                        <input type="text" class="search-database" id="search-activities" name="add-activities-to-plan" placeholder="Search activities...">
+                        <button onclick="addActivity()"><i class="fas fa-plus"></i></button>
+                    </div>
+                
+                    <!-- Is Public Toggle and Post Plan Button on the same line -->
+                    <div class="action-row">
+                        <div class="public-toggle">
+                            <label for="is-public">Is Public:</label>
+                            <label class="switch">
+                                <input type="checkbox" id="is-public">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                
+                        <button class="post-plan" onclick="postPlan()"><i class="fas fa-circle-arrow-up"></i> Post Plan</button>
+                    </div>
+                </div>
+                
+              
+                  <div class="column">
+                    <div class="calendar">
+                      <div class="timeline">
+                          <!-- Time Markers -->
+                          <div class="time-marker">9 AM</div>
+                          <div class="time-marker">10 AM</div>
+                          <div class="time-marker">11 AM</div>
+                          <div class="time-marker">12 PM</div>
+                          <div class="time-marker">1 PM</div>
+                          <div class="time-marker">2 PM</div>
+                          <div class="time-marker">3 PM</div>
+                          <div class="time-marker">4 PM</div>
+                          <div class="time-marker">5 PM</div>
+                          <div class="time-marker">6 PM</div>
+                          <div class="time-marker">7 PM</div>
+                          <div class="time-marker">8 PM</div>
+                          <div class="time-marker">9 PM</div>
+                      </div>
+                      <div class="events">
+                        <!-- Placeholder events positioned by time -->
+                        <div class="event" style="grid-row-start: 1;">
+                            Yoga Class - 10 AM to 11 AM
+                            <i class="fas fa-trash delete-icon" onclick="deleteEvent('eventId1')"></i>
+                        </div> <!-- Starts at 10 AM -->
+                        <div class="event" style="grid-row-start: 11;">
+                            Meditation Session - 11 AM to 12 PM
+                            <i class="fas fa-trash delete-icon" onclick="deleteEvent('eventId2')"></i>
+                        </div> <!-- Starts at 11 AM -->
+                    </div>
+                    
+                    </div>
+                  </div>
+                </div>
+              </div>
             {% block body_block %}
             {% endblock %}
         </div>

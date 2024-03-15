@@ -11,63 +11,6 @@
 
 {% block body_block %}
 
-<div id="overlay">
-  <span class="close-overlay" onclick="closeOverlay()">&times;</span>
-  <h1 id="inputted-title">New Plan</h1>
-  <h4 id="inputted-date">Today</h4>
-  <div class="columns">
-    <div class="column">
-      <!-- Search Events -->
-      <label for="search-events">Search Events:</label>
-      <input type="text" class="search-database" id="search-events" name="add-events-to-plan" placeholder="Search events...">
-      <button onclick="addEvent()"><i class="fas fa-search"></i>Add</button>
-      
-      <!-- Search Activities -->
-      <label for="search-activities">Search Activities:</label>
-      <input type="text" class="search-database" id="search-activities" name="add-activities-to-plan" placeholder="Search activities...">
-      <button onclick="addActivity()"><i class="fas fa-search"></i>Add</button>
-    
-      <!-- Is Public Toggle -->
-      <div class="public-toggle">
-          <label for="is-public">Is Public:</label>
-          <label class="switch">
-            <input type="checkbox" id="is-public">
-            <span class="slider round"></span>
-          </label>
-      </div>
-
-      <!-- Post Plan Button -->
-      <button class="post-plan" onclick="postPlan()"><i class="fas fa-upload"></i> Post Plan</button>
-  </div>
-
-    <div class="column">
-      <div class="calendar">
-        <div class="timeline">
-            <!-- Time Markers -->
-            <div class="time-marker">9 AM</div>
-            <div class="time-marker">10 AM</div>
-            <div class="time-marker">11 AM</div>
-            <div class="time-marker">12 PM</div>
-            <div class="time-marker">1 PM</div>
-            <div class="time-marker">2 PM</div>
-            <div class="time-marker">3 PM</div>
-            <div class="time-marker">4 PM</div>
-            <div class="time-marker">5 PM</div>
-            <div class="time-marker">6 PM</div>
-            <div class="time-marker">7 PM</div>
-            <div class="time-marker">8 PM</div>
-            <div class="time-marker">9 PM</div>
-        </div>
-        <div class="events">
-            <!-- Placeholder events positioned by time -->
-            <div class="event" style="grid-row-start: 1;">Yoga Class - 10 AM to 11 AM</div> <!-- Starts at 10 AM -->
-            <div class="event" style="grid-row-start: 11;">Meditation Session - 11 AM to 12 PM</div> <!-- Starts at 11 AM -->
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 <section>
   <div>

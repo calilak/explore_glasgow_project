@@ -5,6 +5,69 @@
     Places
 {% endblock %}
 
+{% block additional_styles %}
+<link rel="stylesheet" href="{% static 'styling/listings.css' %}">
+{% endblock %}
+
 {% block body_block %}
-<h1>Places in Glasgow</h1>
+<h1>Places in Glasgow</h1><br>
+
+<div class="grid-container">
+  {% block topbar %}
+    <div class="header">
+      <ul class="inline">
+        {% for category in categories %}
+        <!--List every defined Category object-->
+          <li><a href="#">{{ category.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endblock %}
+  
+  <div class="left" style="background-color:#bbb">
+    <form action="#">
+      <input type="text" placeholder="Search events...">
+      <!--Checkbox for every defined Tag object-->
+      {% for tag in tags %}
+        <input type="checkbox" id="{{ tag.id }}" name="{{ tag.name }}" value="{{ tag.name }}">
+        <label for="{{ tag.id }}">{{ tag.name }}</label><br>
+      {% endfor %}
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+
+  <div class="right" style="background-color:#eee">
+    <ul>
+      {% for place in places %}
+        {% block listing_block %}
+        <!--User can click anywhere on the place listing to navigate there as it is an <a> tag-->
+        <a href="#"> <!--Add specific place reference as href-->
+          <li class="listing-box">
+            <strong>{{ place.name }}</strong>
+            <!--Image of the place-->
+            <div style="height: 200px; text-align: left;">
+              <img src="/IMAGE PATH HERE/" alt="Picture of {{ place.name }}"> <!--Add path to image as src-->
+            </div>
+            <ul class="inline">
+              {% for category in place.categories %}
+              <!--List all categories associated with place-->
+                <li style="color: #7a0000">{{ category.name }}</li>
+              {% endfor %}
+            </ul>
+            <br>
+      
+            <ul class="inline">
+              {% for tag in place.tags %}
+                <!--List all tags associated with place-->
+                <li style="color: #003f7a">{{ tag.name }}</li>
+              {% endfor %}
+            </ul>
+          </li>
+        </a>
+        {% endblock %}
+      {% endfor %}
+      </ul>
+  </div>
+</div>
+
 {% endblock %}
