@@ -7,4 +7,20 @@
 
 {% block body_block %}
 <h1>Events in Glasgow</h1>
+{% if events %}
+            <ul class="events-list">
+                {% for event in events %}
+                    <li class="event-item">
+                        <h2>{{ event.title }}</h2>
+                        <p>{{ event.description }}</p>
+                        <p>Start: {{ event.start_time|date:"D, d M Y H:i" }}</p>
+                        <p>End: {{ event.end_time|date:"D, d M Y H:i" }}</p>
+                        <p>Location: {{ event.location.name }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No events found.</p>
+        {% endif %}
+    </div>
 {% endblock %}

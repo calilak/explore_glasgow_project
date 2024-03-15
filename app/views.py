@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.urls import reverse
 from django.shortcuts import redirect
+from .models import *
 
 def aboutus(request):
     return render(request,'aboutus.html')
@@ -161,7 +162,17 @@ def map(request):
     return render(request, "app/map.html")
 
 def places(request):
-    return render(request, "app/places.html")
+    places_objects = Place.objects.all()
+    categories_objects = Category.objects.all()
+    tags_objects = Tag.objects.all()
+
+    #List of dictionaries containing all Place object names, categories and tags
+    places = [{"name": place.name, "categories": place.categories.all(), 
+               "tags": place.tags.all()} for place in places_objects]
+    categories = [{"name": category.name} for category in categories_objects]
+    tags = [{"name": tag.name} for tag in tags_objects]
+    context = {"places": places, "categories": categories, "tags": tags}
+    return render(request, "app/places.html", context=context)
 
 def myPlans(request):
     return render(request, "app/myPlans.html")
