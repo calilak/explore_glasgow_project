@@ -6,6 +6,10 @@
     font-family: Arial, Helvetica, sans-serif;
   }
 
+  h1 {
+    text-align: center;
+  }
+
   .inline {
     flex-wrap: wrap;
     display: inline;
@@ -17,7 +21,7 @@
     padding: 5px;
   }
 
-  /*Style the place, event or plan listing*/
+  /* The listing-box should contain all the quick-view information about a specific listing */
   .listing-box {
     overflow: auto;
     flex-wrap: wrap;
@@ -54,20 +58,13 @@
     margin: 0;
   }
   
-  /* Style the left column */
+  /* Style the left column of search options */
   .left {
     grid-column-start: 1;
   }
   
-  /* Style the right column */
+  /* Style the right column of listings */
   .right {
     grid-column-start: 2;
-  }
-  
-  /* Style the footer */
-  .footer {
-    grid-column-start: span 5;
-    background-color: #f1f1f1;
-    padding: 10px;
     text-align: center;
   }

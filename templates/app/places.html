@@ -26,6 +26,7 @@
   
   <div class="left" style="background-color:#bbb">
     <form action="#">
+      <input type="text" placeholder="Search events...">
       <!--Checkbox for every defined Tag object-->
       {% for tag in tags %}
         <input type="checkbox" id="{{ tag.id }}" name="{{ tag.name }}" value="{{ tag.name }}">
@@ -39,12 +40,14 @@
     <ul>
       {% for place in places %}
         {% block listing_block %}
-        <!--User can click anywhere on the listing as it is an <a> tag-->
+        <!--User can click anywhere on the place listing to navigate there as it is an <a> tag-->
         <a href="#"> <!--Add specific place reference as href-->
           <li class="listing-box">
             <strong>{{ place.name }}</strong>
-            <!--Add path to image as src-->
-            <div style="height: 200px"><img src="/IMAGE PATH HERE/" alt="Picture of {{ place.name }}"></div>
+            <!--Image of the place-->
+            <div style="height: 200px; text-align: left;">
+              <img src="/IMAGE PATH HERE/" alt="Picture of {{ place.name }}"> <!--Add path to image as src-->
+            </div>
             <ul class="inline">
               {% for category in place.categories %}
               <!--List all categories associated with place-->
