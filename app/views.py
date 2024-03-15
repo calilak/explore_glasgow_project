@@ -174,6 +174,7 @@ def map(request):
     return render(request, "app/map.html")
 
 def places(request):
+    print("PLaces requested!")
     places_objects = Place.objects.all()
     categories_objects = Category.objects.all()
     tags_objects = Tag.objects.all()
@@ -184,7 +185,7 @@ def places(request):
     categories = [{"name": category.name} for category in categories_objects]
     tags = [{"name": tag.name} for tag in tags_objects]
     context = {"places": places, "categories": categories, "tags": tags}
-    return render(request, "app/places.html", context=context)
+    return render(request, "app/places.html", context)
 
 def myPlans(request):
     return render(request, "app/myPlans.html")
