@@ -8,11 +8,16 @@
 {% block body_block %}
 <h1>Delete Your Account</h1>
 <p>Are you sure you want to delete your account? This action is irreversible.</p>
-<form id="delete_account_form" method="post" action="{% url 'app:delete_account' %}">
+<form id="delete_account_form" method="post" action="{% url 'app:delete_account' %}" onsubmit="return confirmDelete();">
     {% csrf_token %}
-    <input type="submit" value="Yes, delete my account" onclick="return confirm('Are you sure? This action cannot be undone.');"/>
+    <input type="submit" value="Yes, delete my account"/>
     <a href="{% url 'app:index' %}">No, take me back</a>
 </form>
+<script>
+    function confirmDelete() {
+        return confirm('Are you sure? This action cannot be undone.');
+    }
+</script>
 {% endblock %}
 
 {% block user_block %}
