@@ -6,7 +6,7 @@
     <head>
         <meta charset="UTF-8">
         <title>
-            ExpGgow - 
+            Explore Glasgow: 
             {% block title_block %}
                 Title
             {% endblock %}
@@ -34,11 +34,10 @@
                     <!-- New Create New Plan Button -->
                     <a onclick="addNewPlan()" class="create-plan-btn"><i class="fas fa-plus-circle"></i> Create New Plan</a>
                     <a href="{% url 'app:map' %}" class="{% if request.resolver_match.url_name == 'map' %}active{% endif %}"><i class="fas fa-map-marked-alt" aria-hidden="true"></i></a> 
-                    <a href="{% url 'app:language' %}" class="{% if request.resolver_match.url_name == 'language' %}active{% endif %}"><i class="fas fa-language" aria-hidden="true"></i></a> 
                     <!-- Conditional display based on authentication status -->
                     {% if request.user.is_authenticated %}
                         <a href="{% url 'app:logout' %}"><i class="fas fa-user-circle" aria-hidden="true"></i></a> 
-                        <a href="{% url 'app:delete_account' %}" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');"><i class="fas fa-user-minus" aria-hidden="true"></i> Delete Account</a>
+                        <a href="{% url 'app:delete_account' %}" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');"><i class="fas fa-user-times" aria-hidden="true"></i></a>
                     {% else %}
                     <div class="auth-links">
                         <a href="{% url 'app:login' %}" class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login</a>
@@ -51,9 +50,9 @@
         <div>
             <!-- Popup Form for Event Time Selection -->
             <div id="time-picker-popup" class="time-picker-popup" style="display:none;">
-                <form id="add-event-form">
-                    <label for="event-time">Select Event Time:</label>
-                    <input type="time" id="event-time" name="event-time" required>
+                <form id="add-activity-form">
+                    <label for="activity-time">Select Event Time:</label>
+                    <input type="time" id="activity-time" name="activity-time" required>
                     <button type="submit">Add Event</button>
                 </form>
             </div>
@@ -64,16 +63,21 @@
                 <div class="columns">
                   <div class="column">
                     <!-- Search Events with Plus Button -->
-                    <div class="input-group">
-                        <input type="text" class="search-database" id="search-events" name="add-events-to-plan" placeholder="Search events..." oninput="event_autocomplete()">
-                        <button onclick="showPopup()"><i class="fas fa-plus"></i></button>
-                        <div id="autocomplete-results" class="autocomplete-results"></div>
-                    </div>
+                    <form id="event-form">
+                        <div class="input-group">
+                            <input type="text" class="search-database" id="search-events" name="add-events-to-plan" placeholder="Search events..." autocomplete="off" oninput="event_autocomplete()">
+                            <button id="add-event" type="submit"><i class="fas fa-plus"></i></button>
+                            <input type="hidden" id="selected-event-id" name="selected_event_id">
+                            <div id="autocomplete-results" class="autocomplete-results"></div>
+                        </div>
+                    </form>
+                    
                     
                     <!-- Search Activities with Plus Button -->
                     <div class="input-group">
-                        <input type="text" class="search-database" id="search-activities" name="add-activities-to-plan" placeholder="Search activities...">
+                        <input type="text" class="search-database" id="search-activities" name="add-activities-to-plan" placeholder="Search activities..." oninput="activity_autocomplete()">
                         <button onclick="addActivity()"><i class="fas fa-plus"></i></button>
+                        <div id="autocomplete-results-activities" class="autocomplete-results"></div>  <!-- Container for displaying activity suggestions -->
                     </div>
                 
                     <!-- Is Public Toggle and Post Plan Button on the same line -->
@@ -96,29 +100,53 @@
                       <div class="timeline">
                           <!-- Time Markers -->
                           <div class="time-marker">12 AM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">1 AM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">2 AM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">3 AM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">4 AM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">5 AM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">6 AM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">7 AM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">8 AM</div>
-                          <div class="time-marker">9 AM</div>
+                          <div class="time-marker"></div>
+                          <div class="time-marker" id="time-9am">9 AM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">10 AM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">11 AM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">12 PM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">1 PM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">2 PM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">3 PM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">4 PM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">5 PM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">6 PM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">7 PM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">8 PM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">9 PM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">10 PM</div>
+                          <div class="time-marker"></div>
                           <div class="time-marker">11 PM</div>
+                          <div class="time-marker"></div>
                       </div>
                       <div class="events">
 

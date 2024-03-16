@@ -31,7 +31,8 @@ urlpatterns = [
     path("about-us/", views.about_us, name="about-us"),
     path("activities/", views.activities, name="activities"),
     path("events/", views.events, name="events"),
-    path("language/", views.language, name="language"),
     path("map/", views.map, name="map"),
     path("search-events/",views.search_events,name="search-events"),
+    path('search-activities/', views.search_activities, name='search-activities'),
+    path("process-plans/",views.process_plan,name="process-plans"),
 ]
