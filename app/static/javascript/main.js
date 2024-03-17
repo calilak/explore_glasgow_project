@@ -1,9 +1,12 @@
+let addedEventIds = [];
+
 function addNewPlan() {
     document.getElementById("overlay").style.display = "flex";
     const inputTitle = document.getElementById('new-plan-title').value;
     const inputDate = document.getElementById('new-plan-date').value;
     document.getElementById("inputted-title").innerHTML = "New Plan: " + inputTitle;
     document.getElementById("inputted-date").innerHTML = inputDate;
+    setTimeout(scrollTo9AM, 500); // Adjust delay as needed
 }
 
 function closeOverlay() {
@@ -15,28 +18,30 @@ function event_autocomplete() {
     var input = $('#search-events');
     var query = input.val();
 
-    if (query !== "") {
-        $(".autocomplete-results").css("border", "1px solid #ccc");
-    } else {
-        $(".autocomplete-results").css("border", "none");
-    }
+    $(".autocomplete-results").css("border", query !== "" ? "1px solid #ccc" : "none");
 
     if (query.length > 0) {
         $.ajax({
             url: '/app/search-events/',
-            data: {
-                'q': query,
-            },
+            data: { 'q': query },
             dataType: 'json',
-            success: function (data) {
+            success: function (response) {
                 var resultsContainer = $('#autocomplete-results');
                 resultsContainer.empty();
-                data.forEach(function(item) {
-                    var div = $('<div>').text(item);
+                response.events.forEach(function(event) {
+                    // Assuming event object now also includes an 'id'
+                    var eventDetails = $('<span>').text(`${event.title} (${new Date(event.start_time).toLocaleTimeString()} - ${new Date(event.end_time).toLocaleTimeString()})`).addClass('event-details');
+                    
+                    var div = $('<div>').addClass('autocomplete-item').data('event', event); // Store the whole event object
+                    div.append(eventDetails);
+                    
                     div.on('click', function() {
-                        input.val($(this).text());
+                        input.val(event.title); // Update input with title
+                        $('#selected-event-time').text(`Start: ${event.start_time}, End: ${event.end_time}`); // Display selected event times somewhere in UI
+                        input.data('selected-event', event); // Store selected event data in input's data attribute
                         resultsContainer.empty();
                     });
+                    
                     resultsContainer.append(div);
                 });
             }
@@ -44,13 +49,59 @@ function event_autocomplete() {
     } else {
         $('#autocomplete-results').empty();
     }
-    console.log("what");
+}
+
+function activity_autocomplete() {
+    var input = $('#search-activities');
+    var query = input.val();
+
+    if (query.length > 0) {
+        $.ajax({
+            url: '/app/search-activities/',  // Ensure you have this endpoint set up in Django
+            data: { 'q': query },
+            dataType: 'json',
+            success: function (response) {
+                var resultsContainer = $('#autocomplete-results-activities');  // Make sure you have this container in your HTML
+                resultsContainer.empty();
+                response.activities.forEach(function(activity) {
+                    var activityDetails = $('<span>').text(`${activity.title}`).addClass('activity-details');  // Assuming 'name' is a property of your activities
+                    
+                    var div = $('<div>').addClass('autocomplete-item').data('activity', activity);
+                    div.append(activityDetails);
+                    
+                    div.on('click', function() {
+                        input.val(activity.title);  // Update input with activity title
+                        $('#search-activities').data('selected-activity', {id: activity.id, duration: activity.duration}); // Store activity ID and duration
+                        resultsContainer.empty();
+                    });
+                    
+                    resultsContainer.append(div);
+                });
+            }
+        });
+    } else {
+        $('#autocomplete-results-activities').empty();
+    }
 }
 
 function deleteEvent(icon) {
     const eventDiv = icon.parentNode;
-    eventDiv.parentNode.removeChild(eventDiv);
+    const eventId = eventDiv.getAttribute('data-event-id'); // Get the event ID as a string
+
+    console.log('Before removal:', addedEventIds);
+
+    // Convert eventId to the correct type (number) if it's stored as a numeric ID
+    const eventIdAsNumber = parseInt(eventId, 10);
+
+    // Ensure the comparison is correct (based on how IDs are stored in the array)
+    addedEventIds = addedEventIds.filter(id => id !== eventId && id !== eventIdAsNumber);
+
+    console.log('After removal:', addedEventIds);
+
+    eventDiv.parentNode.removeChild(eventDiv); // Remove the event div
 }
+
+
 
 
 function showPopup() {
@@ -61,39 +112,61 @@ function showPopup() {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('add-event-form').addEventListener('submit', function(e) {
-        e.preventDefault(); // stops the form submitting in the traditional way
+    document.getElementById('event-form').addEventListener('submit', function(e) {
+        e.preventDefault();
 
-        $(".autocomplete-results").css("border", "none");
-    
-        const eventName = document.getElementById('search-events').value.trim();
-        const startTime = document.getElementById('event-time').value; // Get the selected time
-    
-        if (eventName !== "" && startTime !== "") {
-            addEventToCalendar(eventName, startTime);
+        const selectedEvent = $('#search-events').data('selected-event');
+        const eventId = $('#search-events').data('selected-event-id'); // Retrieve the stored event ID
+        console.log("Event ID",eventId);
+        if (selectedEvent) {
+            addEventToCalendar(selectedEvent.title, selectedEvent.start_time, selectedEvent.end_time, selectedEvent.id);
+            $('#selected-event-id').val(selectedEvent.id);
         }
-    
-        // hide the popup and overlay after adding the event
-        document.getElementById('time-picker-popup').style.display = 'none';
-        document.querySelector('.overlay').style.display = 'flex';
-        
-        // Clear the input field
-        document.getElementById('search-events').value = "";
+
+        $('#time-picker-popup').hide();
+        $('.overlay').show();
+        $('#search-events').val("");
     });
 });
 
-function addEventToCalendar(eventName, startTime) {
+
+function addEventToCalendar(eventName, startTime, endTime,eventId) {
     const eventsContainer = document.querySelector('.events');
-    const hour = new Date("1970-01-01T" + startTime + "Z").getHours();
-    const gridRowStart = hour; // adjust for timeline start
+    const startDate = new Date(startTime);
+    const endDate = new Date(endTime);
+
+    // Calculate the grid row start. Multiply the hour by 2 (for 30-minute increments), 
+    // add 1 more if the minutes are 30 or above, since CSS grid rows are 1-indexed.
+    let gridRowStart = (startDate.getHours() * 2) + 1; // Start at the correct hour
+    if (startDate.getMinutes() >= 30) {
+        gridRowStart += 1; // Adjust for half-hour
+    }
+
+    // Calculate the grid row end using the same logic as for the gridRowStart
+    let gridRowEnd = (endDate.getHours() * 2) + 1; // Start at the correct hour
+    if (endDate.getMinutes() > 0) {
+        gridRowEnd += 1; // Adjust if minutes are past the hour
+    }
+
+    const eventDurationRows = gridRowEnd - gridRowStart + 1; // Calculate duration in rows
 
     const eventDiv = document.createElement('div');
     eventDiv.className = 'event';
     eventDiv.style.gridRowStart = gridRowStart;
-    eventDiv.innerHTML = `${eventName} - ${startTime} <i class="fas fa-trash delete-icon" onclick="deleteEvent(this)"></i>`;
-    
+    eventDiv.style.gridRowEnd = `span ${eventDurationRows}`;
+    eventDiv.innerHTML = `${eventName} - ${startDate.toLocaleTimeString('en-us', { hour: '2-digit', minute: '2-digit', hour12: false })} to ${endDate.toLocaleTimeString('en-us', { hour: '2-digit', minute: '2-digit', hour12: false })} <i class="fas fa-trash delete-icon" onclick="deleteEvent(this)"></i>`;
+
+    // Add event ID to global array
+    if (!addedEventIds.includes(eventId)) {
+        addedEventIds.push(eventId);
+        console.log(addedEventIds);
+    }
+
+    eventDiv.setAttribute('data-event-id', eventId); // Set event ID on the div for later access
+
     eventsContainer.appendChild(eventDiv);
 }
+
 
 document.addEventListener('DOMContentLoaded', function() {
     var searchInput = document.getElementById('search-events');
@@ -117,37 +190,78 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
     });
 });
-document.addEventListener('DOMContentLoaded', (event) => {
-    const slider = document.getElementById('durationSlider');
-    const display = document.getElementById('durationDisplay');
 
-    slider.oninput = function() {
-        display.textContent = this.value;
-        // Here, you can also adjust the duration of your event using this.value
-        // For example, updateEventDuration(this.value);
-    }
-});
-
-
-let eventDuration = 1; 
-function updateEventDuration(newDuration) {
-    
-    eventDuration = newDuration;
-
-    const eventInfo = document.getElementById('eventInfo');
-    if(eventInfo) {
-        eventInfo.textContent = `Event Duration: ${eventDuration} hours`;
-    }
-
-
+function postPlan() {
+    $.ajax({
+        url: '/app/process-plans/', // Adjust this URL to the correct endpoint
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            event_ids: JSON.stringify(addedEventIds), // Send the IDs as a JSON string
+        },
+        success: function(response) {
+            console.log("Plan submitted successfully.", response);
+            // Further success handling
+        },
+        error: function(error) {
+            console.error("Error submitting plan:", error);
+            // Error handling
+        }
+    });
 }
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    const slider = document.getElementById('durationSlider');
-    const display = document.getElementById('durationDisplay');
-
-    slider.oninput = function() {
-        display.textContent = this.value;
-        updateEventDuration(this.value);
+function scrollTo9AM() {
+    var time9AM = document.getElementById('time-9am');
+    if (time9AM) {
+        time9AM.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+}
+
+function addActivity() {
+    // Show the time picker popup
+    document.getElementById('time-picker-popup').style.display = 'block';
+
+    // Optional: Any other logic you want to execute when adding an activity
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('add-activity-form').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+    
+        // Retrieve the picked time and the selected activity's data
+        const pickedTime = document.getElementById('activity-time').value;
+        const selectedActivity = $('#search-activities').data('selected-activity');
+    
+        if (selectedActivity && pickedTime) {
+            // Construct a Date object for the start time based on the picked time
+            const startTime = new Date(`1970-01-01T${pickedTime}:00Z`);
+            // Calculate the end time based on the duration
+            const endTime = new Date(startTime.getTime() + (selectedActivity.duration * 3600 * 1000));
+    
+            // Add the activity to the calendar with the correct name, start time, end time, and ID
+            addActivityToCalendar(selectedActivity.title, startTime, selectedActivity.duration, selectedActivity.id);
+    
+            // Clear the form, hide the popup, and reset the selected activity data
+            $('#time-picker-popup').hide();
+            $('#activity-time').val('');
+            $('#search-activities').removeData('selected-activity');
+        }
+    });
+    
 });
+
+// Helper function to format time as HH:MM
+function formatTime(date) {
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+// Helper function to format time as HH:MM
+function formatTime(date) {
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+function addActivityToCalendar(activityName, pickedTime, duration, activityId) {
+    
+}
+
+

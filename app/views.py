@@ -9,7 +9,10 @@ from django.urls import reverse
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.db.models import Q
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 from .models import *
+from django.contrib.auth.forms import AuthenticationForm
 
 def aboutus(request):
     return render(request,'aboutus.html')
@@ -72,21 +75,17 @@ def register(request):
 
 def user_login(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-
-        if user:
-            if user.is_active:
-                login(request, user)
-                return redirect(reverse('app:index'))
-            else:
-                return HttpResponse("Your app account is disabled.")
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect(reverse('app:index'))  # Adjust to your index page's URL name
         else:
-            print(f"Invalid login details: {username}, {password}")
+            print(form.errors)
             return HttpResponse("Invalid login details supplied.")
     else:
-        return render(request, 'app/login.html')
+        form = AuthenticationForm()
+    return render(request, 'app/login.html', {'form': form})
 
 @login_required
 def restricted(request):
@@ -205,9 +204,35 @@ def reviews(request):
 def search_events(request):
     query = request.GET.get('q', '')
     if query:
-        events = Event.objects.filter(title__icontains=query).values_list('title', flat=True)[:10]  # Limit to 5 suggestions for efficiency
+        # Fetch events including start and end times
+        events = Event.objects.filter(title__icontains=query).values('title', 'start_time', 'end_time','id')[:10]  # Limit to 10 suggestions for efficiency
         suggestions = list(events)
-        print (suggestions)
     else:
         suggestions = []
-    return JsonResponse(suggestions, safe=False)
+    return JsonResponse({'events': suggestions}, safe=False)  # Wrap in a dictionary for consistent JSON structure
+
+def search_activities(request):
+    query = request.GET.get('q', '')
+    if query:
+        # Fetch activities by matching titles with the query, limiting to 10 suggestions
+        activities = Activity.objects.filter(title__icontains=query).values('id', 'title','duration')[:10]
+        activities_data = list(activities)  # Convert QuerySet to list for JSON serialization
+    else:
+        activities_data = []
+    return JsonResponse({'activities': activities_data})
+
+@require_POST
+@csrf_exempt  # Only use csrf_exempt for testing purposes or where absolutely necessary
+def process_plan(request):
+    # Parsing the JSON string from the request
+    event_ids = json.loads(request.POST.get('event_ids', '[]'))
+    print("Parsed Event IDs:", event_ids)
+
+    
+    # Retrieve event titles based on IDs
+    event_titles = list(Event.objects.filter(id__in=event_ids).values_list('title', flat=True))
+    
+    # For testing: Print titles to the Python console
+    print("Event Titles:", event_titles)
+    
+    return JsonResponse({'status': 'success', 'event_titles': event_titles})

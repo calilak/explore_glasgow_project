@@ -3,7 +3,7 @@ section {
   display: flex;
   justify-content: center; /* Centers the content horizontally */
   align-items: center; /* Centers the content vertically */
-  margin: 25px 0; /* Adjusts the margin for vertical spacing */
+  margin: 20px 0; /* Adjusts the margin for vertical spacing */
   padding: 10px 0; /* Padding for visual breathing room */
 }
 
