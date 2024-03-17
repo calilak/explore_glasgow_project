@@ -117,3 +117,37 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
     });
 });
+document.addEventListener('DOMContentLoaded', (event) => {
+    const slider = document.getElementById('durationSlider');
+    const display = document.getElementById('durationDisplay');
+
+    slider.oninput = function() {
+        display.textContent = this.value;
+        // Here, you can also adjust the duration of your event using this.value
+        // For example, updateEventDuration(this.value);
+    }
+});
+
+
+let eventDuration = 1; 
+function updateEventDuration(newDuration) {
+    
+    eventDuration = newDuration;
+
+    const eventInfo = document.getElementById('eventInfo');
+    if(eventInfo) {
+        eventInfo.textContent = `Event Duration: ${eventDuration} hours`;
+    }
+
+
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const slider = document.getElementById('durationSlider');
+    const display = document.getElementById('durationDisplay');
+
+    slider.oninput = function() {
+        display.textContent = this.value;
+        updateEventDuration(this.value);
+    }
+});
