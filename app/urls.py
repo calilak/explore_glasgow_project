@@ -11,6 +11,7 @@ urlpatterns = [
     path("events/chosen-event/", views.chosenEvent, name="events_chosen-event"),
     path("events/chosen-place/", views.chosenPlace, name="events_chosen-place"),
     path("events/", views.events, name="events"),
+    path('events/<int:event_id>/', views.event_detail, name='event_detail'),
     path("account/signup/learn-more", views.learnMore, name="account_signup_learn-more"),
     path("account/my-plans/", views.myPlans, name="account_my-plans"),
     path("account/my-account/", views.myAccount, name="account_my-account"),
@@ -30,7 +31,6 @@ urlpatterns = [
     path('delete-account/', views.delete_account, name='delete_account'),
     path("about-us/", views.about_us, name="about-us"),
     path("activities/", views.activities, name="activities"),
-    path("events/", views.events, name="events"),
     path("language/", views.language, name="language"),
     path("map/", views.map, name="map"),
 ]

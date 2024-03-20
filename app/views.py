@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 from app.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login
@@ -8,6 +8,9 @@ from django.contrib import messages
 from django.urls import reverse
 from django.shortcuts import redirect
 from .models import Event
+from .models import *
+import calendar
+
 
 def aboutus(request):
     return render(request,'aboutus.html')
@@ -27,10 +30,6 @@ def chosenPlan(request):
 def chosenPlace(request):
     return render(request,"chosenPlace.html")
 
-def events(request):
-    events = Event.objects.all().order_by('start_time')  # Get all events, ordered by start time
-    return render(request, 'app/events.html', {'events': events})
-
 def learnMore(request):
     return render(request,'learnMore.html')
 
@@ -48,6 +47,7 @@ def register(request):
             user = user_form.save()
             user.set_password(user.password)
             user.save()
+
             profile = profile_form.save(commit=False)
             profile.user = user
 
@@ -57,17 +57,19 @@ def register(request):
             profile.save()
             registered = True
 
-        else:
-            print(user_form.errors, profile_form.errors)
+            new_user = authenticate(username=user_form.cleaned_data['username'],
+                                    password=user_form.cleaned_data['password'])
+            login(request, new_user)
+
+            return redirect('app:index')
+
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
 
-    return render(request,'app/register.html',
-                  context = {'user_form': user_form,
-                             'profile_form': profile_form,
-                             'registered': registered})
-
+    return render(request, 'app/register.html',
+                  {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+ 
 def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -163,7 +165,39 @@ def activities(request):
     return render(request, "app/activities.html")
 
 def events(request):
-    return render(request, "app/events.html")
+    all_events = Event.objects.all()
+    tags = Tag.objects.all()
+    month_names = [calendar.month_abbr[i] for i in range(1, 13)]
+
+    context = {
+        'events': all_events,
+        'month_names': month_names,
+        'tags':tags,
+    }
+    return render(request, 'app/events.html', context)
+
+def event_detail(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    categories = event.categories.all()
+    tags = event.tags.all()
+
+    context = {
+        "event": {
+            "id": event.id,
+            "name": event.name,
+            "date": event.date,
+            "title": event.title,
+            "description": event.description,
+            "start_time": event.start_time,
+            "end_time": event.end_time,
+            "location": event.location,
+            "categories": categories, 
+            "tags": tags,
+            "image": event.image.url if event.image else None,
+        }
+    }
+
+    return render(request, "app/event_detail.html", context)
 
 def language(request):
     return render(request, "app/language.html")
@@ -172,7 +206,17 @@ def map(request):
     return render(request, "app/map.html")
 
 def places(request):
-    return render(request, "app/places.html")
+    places_objects = Place.objects.all()
+    categories_objects = Category.objects.all()
+    tags_objects = Tag.objects.all()
+
+    #List of dictionaries containing all Place object names, categories and tags
+    places = [{"name": place.name, "categories": place.categories.all(), 
+               "tags": place.tags.all()} for place in places_objects]
+    categories = [{"name": category.name} for category in categories_objects]
+    tags = [{"name": tag.name} for tag in tags_objects]
+    context = {"places": places, "categories": categories, "tags": tags}
+    return render(request, "app/places.html", context=context)
 
 def myPlans(request):
     return render(request, "app/myPlans.html")

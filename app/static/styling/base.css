@@ -11,66 +11,116 @@ body, h1, h2, h3, h4, h5, h6, p, ul, li, a {
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif; /* You can choose a different font */
-  background-color: #fff; /* Light background for a clean look */
+  font-family: Arial, sans-serif;
+  background-color: #fff;
 }
 
 /* Header and navigation styles */
 header {
-  background-color: #f8f9fa; /* Light gray background for the header for a subtle contrast */
+  background-color: #f8f9fa;
   padding: 20px 10%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Soft shadow for depth */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-right:20px;
 }
 
+/* Navigation Links with Dividers */
+.left-links a:not(:last-child)::after, 
+.right-links a:not(:last-child):not(.create-plan-btn)::after {
+  content: "|";
+  color: #bbb; /* Lighter color for the separator for subtlety */
+  margin: 0 10px; /* Adjust spacing around the divider */
+}
+
+.right-links {
+  display: flex;
+  align-items: center;
+}
+
+
 .left-links a, .right-links a {
-  margin-right: 20px; /* Adjust spacing between links */
-  color: #686868; /* Soften the color for a modern, minimalist look */
-  font-size: 16px; /* Slightly reduced font size for elegance */
+  margin-right: 20px;
+  color: #686868;
+  font-size: 16px;
 }
 
 .left-links a:last-child, .right-links a:last-child {
-  margin-right: 0; /* Remove margin from the last link */
+  margin-right: 0;
 }
 
 .right-links a {
-  display: inline-flex; /* Center icons vertically */
+  display: inline-flex;
   align-items: center;
 }
 
 .right-links i {
-  margin-right: 8px; /* Space between icon and text */
-}
-
-/* Removes the pipe '|' characters for a cleaner look */
-.left-links a:not(:last-child)::after, .right-links a:not(:last-child)::after {
-  content: "|";
-  color: #bbb; /* Lighter color for the separator for subtlety */
-  margin-left: 20px;
-}
-
-.fas {
-  font-size: 20px; /* Icon size - adjust as needed */
+  margin-right: 8px;
 }
 
 /* Hover effects for links */
 .left-links a:hover, .right-links a:hover {
-  color: #505050; /* Darker color on hover for interaction feedback */
-  text-decoration: none; /* No underline to maintain the clean look */
+  color: #505050;
+  text-decoration: none;
 }
 
 /* Active link styling */
 .left-links a.active, .right-links a.active {
-  font-weight: bold; /* Make the active link bold */
-  color: #8d5d5d; /* Specific color for the active link */
+  font-weight: bold;
+  color: #8d5d5d;
 }
 
 /* Ensure the hover effect does not override the active link styling */
 .left-links a.active:hover, .right-links a.active:hover {
-  color: #8d5d5d; /* Maintain the active color even on hover */
+  color: #8d5d5d;
+}
+
+/* Create New Plan Button */
+.create-plan-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  background-color: #8d5d5d; /* Maroon-like background color */
+  color: #ffffff !important; /* Ensures text color is white and prioritized */
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.create-plan-btn i {
+  color: inherit !important; /* Ensures icon inherits the button's white color */
+}
+
+.create-plan-btn:hover {
+  background-color: #7a4c4c; /* Darker shade on hover for interactive feedback */
+  color: #ffffff !important; /* Maintains white text color on hover */
+}
+
+/* Adjust this if the Create New Plan Button should not have a divider before it */
+.right-links .create-plan-btn:not(:last-child)::after {
+  content: none; /* This removes the divider after the Create New Plan Button if it's not the last item */
+}
+
+/* Additional styling for auth links container */
+.auth-links {
+  display: inline-flex;
+  align-items: center;
+}
+
+.auth-links a {
+  margin: 0 5px; /* Adjust spacing around the links */
+  color: #686868; /* Consistent with other navigation links */
+}
+
+.auth-links a:hover {
+  color: #505050; /* Darker color on hover */
 }

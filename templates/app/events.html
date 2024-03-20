@@ -5,22 +5,70 @@
     Events
 {% endblock %}
 
+{% block additional_styles %}
+<link rel="stylesheet" href="{% static 'styling/listings.css' %}">
+{% endblock %}
+
 {% block body_block %}
-<h1>Events in Glasgow</h1>
-{% if events %}
-            <ul class="events-list">
-                {% for event in events %}
-                    <li class="event-item">
-                        <h2>{{ event.title }}</h2>
-                        <p>{{ event.description }}</p>
-                        <p>Start: {{ event.start_time|date:"D, d M Y H:i" }}</p>
-                        <p>End: {{ event.end_time|date:"D, d M Y H:i" }}</p>
-                        <p>Location: {{ event.location.name }}</p>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No events found.</p>
-        {% endif %}
+<h1>What's on?</h1>
+
+<div class="grid-container">
+  {% block topbar %}
+    <div class="header">
+      <ul class="inline">
+        {% for month in month_names %}
+        <li><a href="#">{{ month }}</a></li>
+        {% endfor %}
+        <li><a href="#">All</a></li>
+      </ul>
     </div>
+  {% endblock %}
+
+  <div class="left" style="background-color:#bbb; padding: 20px;">
+    <form action="#" method="get">
+      <input type="search" name="q" placeholder="Search events..." aria-label="Search events" style="width: 100%; padding: 5px; margin-bottom: 10px;">
+      <!--Checkbox-->
+      <h3>Filter:</h3>
+      <label for="specific-date" style="display: block;">Specific Date:</label>
+      <input type="date" id="specific-date" name="date" style="width: 100%; padding: 5px; margin-bottom: 10px;">
+
+      {% for tag in tags %}
+        <div style="margin-bottom: 10px;">
+          <input type="checkbox" id="tag_{{ tag.id }}" name="tags" value="{{ tag.id }}">
+          <label for="tag_{{ tag.id }}">{{ tag.name }}</label>
+        </div>
+      {% endfor %}
+
+      <input type="submit" value="Apply Filters" style="width: 100%; padding: 5px; margin-top: 10px;">
+    </form>
+  </div>
+  
+  <div class="right" style="padding: 20px;">
+    <div class="event-cards" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start;">
+      {% for event in events %}
+        <!-- Each event card has a width set to calc(33.333% - 10px) to keep three in a row -->
+        <div class="event-card" style="border: 1px solid #ccc; padding: 10px; flex: 0 0 calc(33.333% - 10px); box-sizing: border-box; margin-bottom: 10px;">
+          <div style="height: 200px; background-color: #f3f3f3; margin-bottom: 10px;">
+            {% if event.image_url %}
+              <img src="{{ event.image_url }}" alt="{{ event.title }}" style="max-height: 200px; width: 100%; object-fit: cover;">
+            {% else %}
+              <!-- Display a placeholder image or leave it empty -->
+              <img src="{% static 'path/to/placeholder-image.jpg' %}" alt="No image available" style="max-height: 200px; width: 100%; object-fit: cover;">
+            {% endif %}
+          </div>
+          <h3 style="margin: 0;">{{ event.title }}</h3>
+          <p style="margin: 0;">{{ event.location }}</p>
+          <p style="margin: 0;">{{ event.date|date:"D, d M Y" }}</p>
+          <p style="margin: 0;">Price: {% if event.price %}£{{ event.price }}{% else %}Free{% endif %}</p>
+        </div>
+        <!-- Clearfix after every third event card -->
+        {% if forloop.counter|divisibleby:3 %}
+          <div style="width: 100%;"></div>
+        {% endif %}
+      {% endfor %}
+      <div style="clear: both;"></div> <!-- Ensures the floating elements are cleared correctly -->
+    </div>
+  </div>
+  
+
 {% endblock %}

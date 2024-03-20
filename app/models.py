@@ -62,14 +62,17 @@ class Place(models.Model):
         return self.name
 
 class Event(models.Model):
+    name = models.CharField(max_length=255, default='Default Event Name')
+    date = models.DateField(default=timezone.now)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    location = models.ForeignKey(Place, on_delete=models.CASCADE)
+    location = models.CharField(max_length=255)
     categories = models.ManyToManyField(Category)
     tags = models.ManyToManyField(Tag)
-
+    image = models.ImageField(upload_to='events_images/', blank=True, null=True) 
+    
     def __str__(self):
         return self.title
 

@@ -1,0 +1,70 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  .inline {
+    flex-wrap: wrap;
+    display: inline;
+    font-size: 20px;
+  }
+
+  .inline li {
+    display: inline;
+    padding: 5px;
+  }
+
+  /* The listing-box should contain all the quick-view information about a specific listing */
+  .listing-box {
+    overflow: auto;
+    flex-wrap: wrap;
+    display: inline;
+    float: left;
+    background-color:#fff;
+    width: 32%;
+    height: 350px; /* Need to be careful in making sure each box is same height */
+    border: 2px dashed black;
+    margin: 0.5%;
+  }
+  
+  /* Style the header */
+  .header {
+    grid-column-start: span 5;
+    background-color: #505050;
+    color:#fff;
+    padding: 5px;
+    text-align: center;
+    font-size: 25px;
+  }
+  
+  /* The grid container */
+  .grid-container {
+    display: grid;
+    overflow: auto;
+    grid-template-columns: 1fr 4fr;
+    gap:0;
+  } 
+  
+  .left,
+  .right {
+    padding: 10px;
+    margin: 0;
+  }
+  
+  /* Style the left column of search options */
+  .left {
+    grid-column-start: 1;
+  }
+  
+  /* Style the right column of listings */
+  .right {
+    grid-column-start: 2;
+    text-align: center;
+  }
