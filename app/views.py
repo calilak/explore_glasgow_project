@@ -8,6 +8,8 @@ from django.contrib import messages
 from django.urls import reverse
 from django.shortcuts import redirect
 from .models import Event
+from django.http import JsonResponse
+from django.db.models import Q
 from .models import *
 import calendar
 
@@ -206,6 +208,7 @@ def map(request):
     return render(request, "app/map.html")
 
 def places(request):
+    print("PLaces requested!")
     places_objects = Place.objects.all()
     categories_objects = Category.objects.all()
     tags_objects = Tag.objects.all()
@@ -216,7 +219,7 @@ def places(request):
     categories = [{"name": category.name} for category in categories_objects]
     tags = [{"name": tag.name} for tag in tags_objects]
     context = {"places": places, "categories": categories, "tags": tags}
-    return render(request, "app/places.html", context=context)
+    return render(request, "app/places.html", context)
 
 def myPlans(request):
     return render(request, "app/myPlans.html")
@@ -232,3 +235,13 @@ def plans(request):
 
 def reviews(request):
     return render(request, "app/reviews.html")
+
+def search_events(request):
+    query = request.GET.get('q', '')
+    if query:
+        events = Event.objects.filter(title__icontains=query).values_list('title', flat=True)[:10]  # Limit to 5 suggestions for efficiency
+        suggestions = list(events)
+        print (suggestions)
+    else:
+        suggestions = []
+    return JsonResponse(suggestions, safe=False)

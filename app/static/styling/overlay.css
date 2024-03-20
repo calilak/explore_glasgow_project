@@ -151,15 +151,18 @@
 }
 
 .search-database {
-  border: none;
-  flex-grow: 1;
-  margin-right: 10px;
+  flex-grow: 1; /* Allows input to fill available space */
+  border: 1px solid #ccc; /* Example border, adjust as needed */
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px; /* Match your theme */
 }
 
 .input-group {
+  position: relative;
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  width: 100%; /* Ensures the group takes full width */
 }
 
 .action-row {
@@ -240,3 +243,82 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+/* Updated Autocomplete Results Styling */
+.autocomplete-results {
+  border: none;
+  position: absolute;
+  z-index: 10;
+  background: white;
+  width: 100%; /* Matches the .input-group width */
+  top: calc(100% + 2px); /* Positions just below the input field */
+  left: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: Adds depth */
+  border-radius: 0 0 5px 5px; /* Continuation of the input's border-radius */
+}
+
+.autocomplete-results div {
+  padding: 5px 10px; /* Slightly larger padding for better touch target */
+  cursor: pointer;
+}
+
+.autocomplete-results div:hover {
+  background-color: #f8f9fa; /* A light hover color */
+}
+
+
+/* time picker pop up */
+
+.time-picker-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f8f9fa; /* Light gray background, similar to the header */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow for depth, aligning with other elements */
+  z-index: 20; /* Ensure it's above other content */
+  border: 1px solid #ddd; /* Subtle border to match inputs and buttons */
+  color: #686868; /* Text color used across the site */
+  font-family: Arial, sans-serif; /* Consistent font family */
+  width: auto; /* Or specify a fixed width if preferred */
+  max-width: 95%; /* Ensures the popup doesn't get too wide on smaller screens */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+}
+
+/* Styles for the form within the popup to align with your site's form styles */
+#time-picker-popup form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#time-picker-popup label {
+  font-weight: bold; /* Making labels bold */
+}
+
+#time-picker-popup input[type="time"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc; /* Border color to match the site's inputs */
+  font-size: 16px; /* Consistent font size */
+}
+
+#time-picker-popup button {
+  padding: 10px 20px;
+  background-color: #8d5d5d; /* Button color to match the site's theme */
+  color: #ffffff; /* Text color for buttons */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+  font-size: 16px; /* Consistent font size with other buttons */
+}
+
+#time-picker-popup button:hover {
+  background-color: #7a4c4c; /* Darker shade on hover */
+}
+
