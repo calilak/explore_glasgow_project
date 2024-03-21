@@ -26,8 +26,19 @@ def chosenEvent(request):
 def chosenPlan(request):
     return(request,"chosenPlan.html")
 
-def chosenPlace(request):
-    return render(request,"chosenPlace.html")
+def chosen_place(request, place_name_slug):
+    context_dict = {}
+    try:
+        # The .get() method returns one model instance or raises an exception.
+        chosen_place = Place.objects.get(slug=place_name_slug)
+        events = list(Event.objects.filter(location=chosen_place))
+        context_dict['place'] = chosen_place
+        context_dict['events'] = events
+    except Place.DoesNotExist:
+        # the template will display the "no place" message for us.
+        context_dict['place'] = None
+        context_dict['events'] = None
+    return render(request,"app/chosen_place.html", context_dict)
 
 def events(request):
     events = Event.objects.all().order_by('start_time')  # Get all events, ordered by start time
@@ -180,7 +191,7 @@ def places(request):
     tags_objects = Tag.objects.all()
 
     #List of dictionaries containing all Place object names, categories and tags
-    places = [{"name": place.name, "categories": place.categories.all(), 
+    places = [{"name": place.name, "slug": place.slug, "categories": place.categories.all(), 
                "tags": place.tags.all()} for place in places_objects]
     categories = [{"name": category.name} for category in categories_objects]
     tags = [{"name": tag.name} for tag in tags_objects]

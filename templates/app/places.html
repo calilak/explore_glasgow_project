@@ -9,6 +9,27 @@
 <link rel="stylesheet" href="{% static 'styling/listings.css' %}">
 {% endblock %}
 
+{% block additional_js %}
+<script>
+  // JavaScript code
+  function search() {
+    console.log("searching...")
+    let input = document.getElementById('searchbar').value
+    input = input.toLowerCase();
+    let x = document.getElementsByClassName('listing-box');
+
+    for (i = 0; i < x.length; i++) {
+      if (!x[i].getElementByTagName('strong').toLowerCase().includes(input)) {
+        x[i].style.display = "none";
+      }
+      else {
+        x[i].style.display = "inline";
+      }
+    }
+  }
+</script>
+{% endblock %}
+
 {% block body_block %}
 <h1>Places in Glasgow</h1><br>
 
@@ -26,13 +47,13 @@
   
   <div class="left" style="background-color:#bbb">
     <form action="#">
-      <input type="text" placeholder="Search events...">
+      <input type="text" placeholder="Search places..." id="searchbar" onkeyup="search()"><br>
       <!--Checkbox for every defined Tag object-->
       {% for tag in tags %}
         <input type="checkbox" id="{{ tag.id }}" name="{{ tag.name }}" value="{{ tag.name }}">
         <label for="{{ tag.id }}">{{ tag.name }}</label><br>
       {% endfor %}
-      <input type="submit" value="Submit">
+      <input onclick="search()" type="submit" value="Submit">
     </form>
   </div>
 
@@ -41,9 +62,9 @@
       {% for place in places %}
         {% block listing_block %}
         <!--User can click anywhere on the place listing to navigate there as it is an <a> tag-->
-        <a href="#"> <!--Add specific place reference as href-->
+        <a href="/app/places/{{ place.slug }}/"> <!--Add specific place reference as href-->
           <li class="listing-box">
-            <strong>{{ place.name }}</strong>
+            <strong class="listing-name">{{ place.name }}</strong>
             <!--Image of the place-->
             <div style="height: 200px; text-align: left;">
               <img src="/IMAGE PATH HERE/" alt="Picture of {{ place.name }}"> <!--Add path to image as src-->

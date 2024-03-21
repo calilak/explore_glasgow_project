@@ -1,0 +1,42 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    {{ place.name }}
+{% endblock %}
+
+{% block body_block %}
+    {% if place %}
+        <h1 style="display: inline;">{{ place.name }}</h1>
+
+        <!--Link to return to places.html-->
+        <a href="{% url 'app:places' %}" style="display:inline; margin-left: 20px;">--Back to all places--</a>
+
+        <!--Image of place-->
+        <div style="height: 200px; text-align: left;">
+          <img src="/IMAGE PATH HERE/" alt="Picture of {{ place.name }}"> <!--Add path to image as src-->
+        </div>
+
+        <h2>Upcoming events at {{ place.name }}</h2>
+        <!--Listing upcoming events if any as a description list-->
+          {% if events %}
+          <dl>
+            {% for event in events %}
+            <!--List all upcoming events at the place-->
+              <dt style="color: #7a0000">{{ event.title }}</dt>
+              <dd>Event date and time here</dd>
+            {% endfor %}
+          </dl><br>
+          {% else %}
+            <p>There are currently no upcoming events here.</p>
+          {% endif %}
+          <br>
+        <!--Need to pass in reviews in chosen_place view-->
+        <h2>Reviews</h2>
+        <p>Reviews go here</p><br>
+        <h3>Leave a review of {{ place.name }}</h3>
+        <p>Review form goes here</p>
+    {% else %}
+        The specified place does not exist.
+    {% endif %}
+{% endblock %}

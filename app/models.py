@@ -6,6 +6,7 @@ from django.db.models import Avg, Count
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
+from django.template.defaultfilters import slugify
 
 
 class UserProfile(models.Model):
@@ -55,8 +56,14 @@ class Tag(models.Model):
 class Place(models.Model):
     location = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
+    slug = models.SlugField()
+    #img_ref = models.CharField(max_length=100)
     categories = models.ManyToManyField(Category)
     tags = models.ManyToManyField(Tag)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Place, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
