@@ -32,18 +32,6 @@ urlpatterns = [
     path("language/", views.language, name="language"),
     path("map/", views.map, name="map"),
     path("places/", views.places, name="places"),
-    path('app/', include(('app.urls', 'account'), namespace='app')),
-    path('app/', include(('app.urls', 'my-account'), namespace='app')),
-    path('app/', include(('app.urls', 'my-plans'), namespace='app')),
-    path('app/', include(('app.urls', 'my-plans'), namespace='app')),
-    path('app/', include(('app.urls', 'terms-of-use'), namespace='app')),
-    path('app/', include(('app.urls', 'private-policy'), namespace='app')),
-    path('app/', include(('app.urls', 'learn-more'), namespace='app')),
-    path('app/', include(('app.urls', 'chosen-event'), namespace='app')),
-    path('app/', include(('app.urls', 'chosen-place'), namespace='app')),
-    path('app/', include(('app.urls', 'chosen-plan'), namespace='plan')),
-    path('app/', include(('app.urls', 'reviews'), namespace='app')),
-    path('app/', include(('app.urls', 'plans'), namespace='app')),
 ]
 
 #path("", include('app.urls', namespace='app')),
