@@ -13,7 +13,8 @@ class UserProfile(models.Model):
     followers = models.IntegerField(default=0)
     account_created = models.DateTimeField(default=timezone.now)
     picture = models.ImageField(upload_to='profile_images', blank=True)
-
+    activities = models.ManyToManyField('Activity', blank=True, related_name='user_profiles')
+    
     def __str__(self):
         return self.user.username
 
@@ -74,13 +75,14 @@ class Event(models.Model):
         return self.title
 
 class Activity(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    #user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     duration = models.IntegerField(default=1)
     location = models.ForeignKey(Place, on_delete=models.CASCADE, null=True, blank=True)
     categories = models.ManyToManyField(Category, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
+    
 
     class Meta:
         verbose_name_plural = 'Activities'

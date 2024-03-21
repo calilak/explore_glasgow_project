@@ -13,6 +13,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from django.contrib.auth.forms import AuthenticationForm
+from .models import Activity
 
 def aboutus(request):
     return render(request,'aboutus.html')
@@ -212,13 +213,20 @@ def search_events(request):
     return JsonResponse({'events': suggestions}, safe=False)  # Wrap in a dictionary for consistent JSON structure
 
 def search_activities(request):
-    query = request.GET.get('q', '')
+    query = request.GET.get('q', '')  # Note the uppercase GET
+    category = request.GET.get('category', '')
+
+    activities_query = Activity.objects.all()
+
     if query:
-        # Fetch activities by matching titles with the query, limiting to 10 suggestions
-        activities = Activity.objects.filter(title__icontains=query).values('id', 'title','duration')[:10]
-        activities_data = list(activities)  # Convert QuerySet to list for JSON serialization
-    else:
-        activities_data = []
+        activities_query = activities_query.filter(title__icontains=query)
+
+    if category:
+        activities_query = activities_query.filter(category__name=category)
+   
+    activities = activities_query.values('id', 'title', 'duration')[:10]
+    activities_data = list(activities)  # Convert QuerySet to list for JSON serialization
+
     return JsonResponse({'activities': activities_data})
 
 @require_POST
@@ -236,3 +244,38 @@ def process_plan(request):
     print("Event Titles:", event_titles)
     
     return JsonResponse({'status': 'success', 'event_titles': event_titles})
+     
+def user_activities(request):
+    activities = Activity.objects.filter(user=request.user) 
+    return render(request, 'activitied.html', {'activities':activities})
+
+def add_existing_activity(request):
+    activity_name = request.POST.get('activity_name')
+
+    try: 
+        activity = Activity.objects.get(title=activity_name)
+        
+        user_profile = UserProfile.objects.get(user=request.user)
+        
+        user_profile.activities.add(activity)
+        
+        return JsonResponse({'success': True})
+    
+    except Activity.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Activity does not exist.'})
+    except UserProfile.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'User profile does not exist.'})
+    
+def add_new_activity(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    title = request.POST.get('title')
+    description = request.POST.get('description')
+    duration = request.POST.get('duration')
+    location_name = request.POST.get('location')
+    
+    location = Place.objects.get_or_create(name=location_name)[0] if location_name else None
+    
+    activity = Activity.objects.create(user=user_profile, title=title, description=description, duration=duration, location=location)
+    
+    # Return a response indicating success
+    return JsonResponse({'status': 'success', 'message': 'Activity added successfully'})

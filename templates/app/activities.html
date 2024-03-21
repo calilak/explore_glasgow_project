@@ -1,21 +1,25 @@
 {% extends 'app/base.html' %}
+{% load app_template_tags %}
+
 {% load static %}
 
 {% block title_block %}
     Activities
 {% endblock %}
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'styling/base.css' %}">
 
-{% block additional_styles %}
     <link rel="stylesheet" href="{% static 'styling/index.css' %}">
-{% endblock %}
-
-{% block body_block %}
-
-<style>
-.container {
+    {% block additional_styles %}{% endblock %}
+    {% block additional_js %}{% endblock %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'js/activities.js' %}"></script>
+    {% block body_block %}
+    <style>
+    .container {
     display: flex;
 }
-
 .left-section, .right-section {
     flex: 1; 
 }
@@ -23,38 +27,70 @@
     display:flex;
     justify-content: center;
 }
-
 .inner-left-section {
     display: flex;
     flex: 1; 
 }
-
 .activities-list {
     flex: 1; 
 }
-
 .activities {
     flex: 1; 
 }
-
 #main-section-right{
     flex: 1;
     justify-content: center;
-
 }
 button {
-  width: 150px;       
-  height: 50px;      
-  font-size: 16px;   
-  padding: 10px;  
-  box-sizing: border-box; 
-  display: block;  
-  cursor: pointer; 
-  border: 1px solid #ccc; 
-  background-color: #f8f8f8;
-  text-align: center; 
+width: 150px;       
+height: 50px;      
+font-size: 16px;   
+padding: 10px;  
+box-sizing: border-box; 
+display: block;  
+cursor: pointer; 
+border: 1px solid #ccc; 
+background-color: #f8f8f8;
+text-align: center; 
 }
-</style>
+
+
+#autocomplete-results-activities{
+    position: absolute;
+    min-height: fit-content;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+    z-index: 1000; /* Ensure it's above other items */
+}
+.autocomplete-results .activity-item {
+padding: 30px;
+cursor: pointer; 
+border-bottom: 1px solid #eee; 
+}
+.autocomplete-results .activity-item:last-child {
+border-bottom: none; 
+}
+.autocomplete-results .activity-item:hover,
+.autocomplete-results .activity-item:focus {
+background-color: #f8f8f8; 
+}
+#searchedActivitiesContainer {
+  flex: 1;
+}
+#user-activities{
+    flex : 1
+}
+    </style>
+    
+</head>
+
+<body>
+
+
 <div class="container">
     <div class="left-section">
         <div id="left-header">
@@ -62,16 +98,24 @@ button {
         </div>
         <div class="inner-left-section">
             <div id="activities-list"> 
-                  <li><button> Personal </button></li>
-                  <li><button> Work </button></li>
-                  <li><button> Fitness </button></li>
-                  <li><button> Education </button></li>
-                  <li><button> Social </button></li>
-                  <li><button> Hobbies </button></li>
+                  <li><button onclick="activity_autocomplete('Personal')"> Personal </button></li>
+                  <li><button onclick="activity_autocomplete('Work')"> Work </button></li>
+                  <li><button onclick="activity_autocomplete('fitness')"> Fitness </button></li>
+                  <li><button onclick="activity_autocomplete('Education')"> Education </button></li>
+                  <li><button onclick="activity_autocomplete('Social')"> Social </button></li>
+                  <li><button onclick="activity_autocomplete('Hobbies')"> Hobbies </button></li>
                 </ul>
             </div>
-            <div class="activities">
-                
+            <div class="main-section-left">
+                <div id="user-activities">
+                    <ul>
+                      {% for activity in activities %}
+                        <li>{{ activity.title }} - {{ activity.description }}</li>
+                      {% empty %}
+                        <li>No activities found.</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
             </div>
         </div>
     </div>
@@ -79,16 +123,41 @@ button {
         <div id="right-header">
             <h1>New Activity</h1>
         </div>
+        <div class="main-section-right" id="main-section-right">
+        </div>
         <label for="durationSlider">Event Duration (hours): </label>
         <input type="range" id="durationSlider" name="duration" min="1" max="24" value="1">
         <span id="durationDisplay">1</span> hours
 
+        <!-- Search Activities with Plus Button -->
         <div class="input-group">
-            <input type="text" class="search-database" id="search-events" name="add-events-to-plan" placeholder="Search activities..." oninput="event_autocomplete()">
-            <button onclick="showPopup()"><i class="fas fa-plus"></i></button>
-            <div id="autocomplete-results" class="autocomplete-results"></div>
+            <input type="text" class="search-database" id="activity-name" name="activity-name" placeholder="Search activities..." oninput="activity_autocomplete2()">
+            <button onclick="addExistingActivity()"><i class="fas fa-plus"></i></button>
+            <div id="autocomplete-results-activities" class="autocomplete-results"></div>  <!-- Container for displaying activity suggestions -->
         </div>
+        
+    <button onclick="addActivity()">Add New Activity</button>
+
+
+<div id="activity-details-popup" style="display:none;">
+    <form id="new-activity-form">
+        {% csrf_token %}
+      <label for="activity-name">Activity Name:</label>
+      <input type="text" id="activity-name" name="activity-name"><br>
+      <label for="description">description</label>
+      <input type="text" id="description" name="description"><br>
+      <label for="location">Location:</label>
+      <input type="text" id="location" name="location"><br>
+      <label for="duration">Duration (hours):</label>
+      <input type="number" id="duration" name="duration"><br>
+      <button type="button" onclick="addNewActivity()"> Submit</button>
+    </form>
+  </div>
+  
+
+        
     </div>
 </div>
-
-{% endblock %}
+</body>
+    {% endblock %}
+</html>

@@ -51,9 +51,16 @@ function event_autocomplete() {
     }
 }
 
-function activity_autocomplete() {
+// Create new plan search
+function activity_autocomplete(category = '') {
     var input = $('#search-activities');
     var query = input.val();
+
+    // Button selection
+    var requestData = {'q':query};
+    if (category){
+        requestData.category = category;
+    }
 
     if (query.length > 0) {
         $.ajax({
@@ -61,6 +68,45 @@ function activity_autocomplete() {
             data: { 'q': query },
             dataType: 'json',
             success: function (response) {
+                console.log("Success");
+                console.log(response);
+                var resultsContainer = $('#autocomplete-results-activities');  // Make sure you have this container in your HTML
+                resultsContainer.empty();
+                response.activities.forEach(function(activity) {
+                    var activityDetails = $('<span>').text(`${activity.title}`).addClass('activity-details');  // Assuming 'name' is a property of your activities
+                    
+                    var div = $('<div>').addClass('autocomplete-item').data('activity', activity);
+                    div.append(activityDetails);
+                    div.on('click', function() {
+                        input.val(activity.title);  // Update input with activity title
+                        $('#search-activities').data('selected-activity', {id: activity.id, duration: activity.duration}); // Store activity ID and duration
+                        resultsContainer.empty();
+                    });
+                    
+                    resultsContainer.append(div);
+                });
+            }
+        });
+    } else {
+        $('#autocomplete-results-activities').empty();
+    }
+}
+
+// New activity search
+function activity_autocomplete2() {
+    let input = $('#search-activities2');
+    let query = input.val();
+
+
+    if (query.length > 0) {
+        console.log("Query = " + query);
+        $.ajax({
+            url: '/app/search-activities/',  // Ensure you have this endpoint set up in Django
+            data: { 'q': query },
+            dataType: 'json',
+            success: function (response) {
+                console.log("Success");
+                console.log(response);
                 var resultsContainer = $('#autocomplete-results-activities');  // Make sure you have this container in your HTML
                 resultsContainer.empty();
                 response.activities.forEach(function(activity) {
@@ -71,7 +117,7 @@ function activity_autocomplete() {
                     
                     div.on('click', function() {
                         input.val(activity.title);  // Update input with activity title
-                        $('#search-activities').data('selected-activity', {id: activity.id, duration: activity.duration}); // Store activity ID and duration
+                        $('#search-activities2').data('selected-activity', {id: activity.id, duration: activity.duration}); // Store activity ID and duration
                         resultsContainer.empty();
                     });
                     
@@ -218,10 +264,79 @@ function scrollTo9AM() {
 }
 
 function addActivity() {
-    // Show the time picker popup
-    document.getElementById('time-picker-popup').style.display = 'block';
-
+    // Show the new popup for adding activity details
+    document.getElementById('activity-details-popup').style.display = 'block';
+    
     // Optional: Any other logic you want to execute when adding an activity
+}
+
+function addNewActivity() {
+    const formData = {
+        'title': document.getElementById('activity-name').value,
+        'description': document.getElementById('description').value,
+        'duration': document.getElementById('duration').value,
+        'location': document.getElementById('location').value,
+    };
+
+    const csrfToken = getCookie('csrftoken');
+
+    fetch('/app/activities/user/', { 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.message);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+function addExistingActivity(){
+    var activityName = document.getElementById('activity-name').value;
+    var csrfToken = getCookie('csrftoken');
+
+    fetch('/app/activities/user/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;',
+            'X-CSRFToken': csrfToken
+        },
+        body: 'activity_name=' + encodeURIComponent(activityName)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the UI to reflect the added activity
+            console.log("Activity added successfully");
+        } else {
+            // Handle errors
+            console.error(data.error);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+// Utility function to get the CSRF token from a cookie
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -262,6 +377,10 @@ function formatTime(date) {
 
 function addActivityToCalendar(activityName, pickedTime, duration, activityId) {
     
+}
+
+function refineActivity(){
+    var query = document.getElementById('searchQuery').vaule;
 }
 
 
