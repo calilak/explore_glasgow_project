@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.http import HttpResponse
 from app.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login
@@ -32,11 +33,13 @@ def chosen_place(request, place_name_slug):
         # The .get() method returns one model instance or raises an exception.
         chosen_place = Place.objects.get(slug=place_name_slug)
         events = list(Event.objects.filter(location=chosen_place))
-        context_dict['place'] = chosen_place
-        context_dict['events'] = events
+        img_dir = "images/places/"
+        #CHANGE IMAGE PATH VALUE
+        context_dict = {'place': chosen_place, 'image': img_dir+chosen_place.img_ref, 'events': events}
     except Place.DoesNotExist:
         # the template will display the "no place" message for us.
         context_dict['place'] = None
+        context_dict['image'] = None
         context_dict['events'] = None
     return render(request,"app/chosen_place.html", context_dict)
 
@@ -184,19 +187,48 @@ def language(request):
 def map(request):
     return render(request, "app/map.html")
 
-def places(request):
-    print("PLaces requested!")
+#changes to make here
+def places(request, category=""):
     places_objects = Place.objects.all()
     categories_objects = Category.objects.all()
     tags_objects = Tag.objects.all()
 
-    #List of dictionaries containing all Place object names, categories and tags
-    places = [{"name": place.name, "slug": place.slug, "categories": place.categories.all(), 
-               "tags": place.tags.all()} for place in places_objects]
+    if category != "":
+        category_places = get_category_places(category)
+        places = category_places
+    else:
+        #List of dictionaries containing all Place object names, categories and tags
+        img_dir = "images/places/"
+        places = [{"name": place.name, "slug": place.slug, "image": img_dir+place.img_ref, "categories": place.categories.all(), 
+                "tags": place.tags.all()} for place in places_objects]
+        category_places = places
+
     categories = [{"name": category.name} for category in categories_objects]
     tags = [{"name": tag.name} for tag in tags_objects]
-    context = {"places": places, "categories": categories, "tags": tags}
-    return render(request, "app/places.html", context)
+    context = {"places": places, "chosen_category_places": category_places, "categories": categories, "tags": tags}
+
+    #print("Context: " + str(context))
+    places_html = render_to_string('app/places_partial.html', context)
+
+    return render(request, 'app/places.html', {'places_html': places_html})
+
+#get all places of a particular category
+def get_category_places(category):
+    cat_obj = Category.objects.get(name=category)
+    print(cat_obj)
+    places_objects = Place.objects.all()
+
+    #List of dictionaries containing all Place object names, categories and tags
+    img_dir = "images/places/"
+    places_list = []
+    for place in places_objects: #go through every place
+        for place_category in place.categories.all(): #go through every category associated with the place
+            if cat_obj == place_category: #place has the category
+                places_list.append({"name": place.name, "slug": place.slug, "image": img_dir+place.img_ref,
+                                 "categories": place.categories.all(), "tags": place.tags.all()})
+                break
+
+    return places_list
 
 def myPlans(request):
     return render(request, "app/myPlans.html")

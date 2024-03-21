@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            Partial
+        </title>
+    </head>
+
+    <body>
+        <div id="places-container">
+            <ul>
+            {% for place in places %}
+            {% if place in chosen_category_places %}
+                {% block listing_block %}
+                <li class="listing-box">
+                    <!--User can click anywhere on the place listing to navigate there as it is an <a> tag-->
+                    <a href="/app/places/{{ place.slug }}/"> <!--Links to the chosen place-->
+                    <strong class="listing-name">{{ place.name }}</strong>
+                    <!--Image of the place-->
+                    <div>
+                    <!--Image is as wide as the listing box-->
+                    <img style="width:100%;" src="{% static place.image %}" alt="Picture of {{ place.name }}"> <!--Add path to image as src-->
+                    </div>
+                    <ul class="inline">
+                    {% for category in place.categories %}
+                    <!--List all categories associated with place-->
+                        <li style="color: #7a0000">{{ category.name }}</li>
+                    {% endfor %}
+                    </ul>
+                    <br>
+            
+                    <ul class="inline">
+                    {% for tag in place.tags %}
+                        <!--List all tags associated with place-->
+                        <li style="color: #003f7a">{{ tag.name }}</li>
+                    {% endfor %}
+                    </ul>
+                    </a>
+                </li>
+                {% endblock %}
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </div>
+    </body>
+</html>

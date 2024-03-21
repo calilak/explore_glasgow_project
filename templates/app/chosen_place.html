@@ -11,11 +11,12 @@
 
         <!--Link to return to places.html-->
         <a href="{% url 'app:places' %}" style="display:inline; margin-left: 20px;">--Back to all places--</a>
-
+        <hr>
+        
         <!--Image of place-->
-        <div style="height: 200px; text-align: left;">
-          <img src="/IMAGE PATH HERE/" alt="Picture of {{ place.name }}"> <!--Add path to image as src-->
-        </div>
+        <div style="text-align: left;">
+          <img src="{% static image %}" alt="Picture of {{ place.name }}" style="display: block; width: 80%;"> <!--Add path to image as src-->
+        </div><br>
 
         <h2>Upcoming events at {{ place.name }}</h2>
         <!--Listing upcoming events if any as a description list-->

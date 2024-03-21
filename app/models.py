@@ -57,7 +57,7 @@ class Place(models.Model):
     location = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     slug = models.SlugField()
-    #img_ref = models.CharField(max_length=100)
+    img_ref = models.CharField(max_length=100, default="")
     categories = models.ManyToManyField(Category)
     tags = models.ManyToManyField(Tag)
 

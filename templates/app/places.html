@@ -11,22 +11,22 @@
 
 {% block additional_js %}
 <script>
-  // JavaScript code
-  function search() {
-    console.log("searching...")
-    let input = document.getElementById('searchbar').value
-    input = input.toLowerCase();
-    let x = document.getElementsByClassName('listing-box');
-
-    for (i = 0; i < x.length; i++) {
-      if (!x[i].getElementByTagName('strong').toLowerCase().includes(input)) {
-        x[i].style.display = "none";
-      }
-      else {
-        x[i].style.display = "inline";
-      }
-    }
-  }
+  document.addEventListener('DOMContentLoaded', function() {
+      var buttons = document.querySelectorAll('.category-button');
+      buttons.forEach(function(button) {
+          button.addEventListener('click', function() {
+              var category = this.textContent.trim();
+              var xhr = new XMLHttpRequest();
+              xhr.open('GET', '/places/?category=' + category, true);
+              xhr.onreadystatechange = function() {
+                  if (xhr.readyState == 4 && xhr.status == 200) {
+                      document.getElementById('places-container').innerHTML = xhr.responseText;
+                  }
+              };
+              xhr.send();
+          });
+      });
+  });
 </script>
 {% endblock %}
 
@@ -36,58 +36,32 @@
 <div class="grid-container">
   {% block topbar %}
     <div class="header">
-      <ul class="inline">
+      <div id="category-buttons">
+        <button style="color: #2596ff;">All</button>
         {% for category in categories %}
         <!--List every defined Category object-->
-          <li><a href="#">{{ category.name }}</a></li>
+          <button class="category-button" style="color:#000;">{{ category.name }}</button>
         {% endfor %}
-      </ul>
+      </div>
     </div>
   {% endblock %}
   
   <div class="left" style="background-color:#bbb">
-    <form action="#">
-      <input type="text" placeholder="Search places..." id="searchbar" onkeyup="search()"><br>
+    <form action="">
+      <input type="text" placeholder="Search places..." id="searchbar"><br>
       <!--Checkbox for every defined Tag object-->
       {% for tag in tags %}
         <input type="checkbox" id="{{ tag.id }}" name="{{ tag.name }}" value="{{ tag.name }}">
         <label for="{{ tag.id }}">{{ tag.name }}</label><br>
       {% endfor %}
-      <input onclick="search()" type="submit" value="Submit">
+      <input onclick="" type="submit" value="Submit">
     </form>
   </div>
 
   <div class="right" style="background-color:#eee">
-    <ul>
-      {% for place in places %}
-        {% block listing_block %}
-        <!--User can click anywhere on the place listing to navigate there as it is an <a> tag-->
-        <a href="/app/places/{{ place.slug }}/"> <!--Add specific place reference as href-->
-          <li class="listing-box">
-            <strong class="listing-name">{{ place.name }}</strong>
-            <!--Image of the place-->
-            <div style="height: 200px; text-align: left;">
-              <img src="/IMAGE PATH HERE/" alt="Picture of {{ place.name }}"> <!--Add path to image as src-->
-            </div>
-            <ul class="inline">
-              {% for category in place.categories %}
-              <!--List all categories associated with place-->
-                <li style="color: #7a0000">{{ category.name }}</li>
-              {% endfor %}
-            </ul>
-            <br>
-      
-            <ul class="inline">
-              {% for tag in place.tags %}
-                <!--List all tags associated with place-->
-                <li style="color: #003f7a">{{ tag.name }}</li>
-              {% endfor %}
-            </ul>
-          </li>
-        </a>
-        {% endblock %}
-      {% endfor %}
-      </ul>
+    <div id="places-container">
+      {{ places_html | safe }}
+    </div>
   </div>
 </div>
 
