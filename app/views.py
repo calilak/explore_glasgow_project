@@ -145,12 +145,12 @@ def about_us(request):
         },
         {
             'name': 'Oli',
-            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'bio': 'Oli is a university student who loves exploring Glasgow.',
             'image': 'images/profile-pics/chan.jpg', # Path under your static directory
             'account_link': '#',
-            'instagram_link': 'https://www.instagram.com/',
-            'linkedin_link': '#',
-            'email': '#',
+            'instagram_link': 'https://www.instagram.com/reviio/',
+            'linkedin_link': 'https://www.linkedin.com/in/oliver-chan-b94090226/',
+            'email': 'olivercwchan@gmail.com',
         },
         # Add other team members in the same way
     ]
