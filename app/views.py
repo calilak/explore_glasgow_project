@@ -127,12 +127,12 @@ def about_us(request):
         },
         {
             'name': 'Kalila',
-            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'bio': 'Kalila is a university student who loves going to the best new restaurants in Glasgow.',
             'image': 'images/profile-pics/kalila.jpg', # Path under your static directory
             'account_link': '#',
             'instagram_link': 'https://www.instagram.com/',
-            'linkedin_link': '#',
-            'email': '#',
+            'linkedin_link': 'https://www.linkedin.com/in/kalila-chand-4a0798243/',
+            'email': 'kalilachand@gmail.com',
         },
         {
             'name': 'Matty',
