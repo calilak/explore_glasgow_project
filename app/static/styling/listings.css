@@ -30,7 +30,7 @@
     background-color:#fff;
     width: 32%;
     height: 350px; /* Need to be careful in making sure each box is same height */
-    border: 2px solid black;
+    border: 2px dashed black;
     margin: 0.5%;
   }
 

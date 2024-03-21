@@ -16,6 +16,7 @@ urlpatterns = [
     path("account/my-account/", views.myAccount, name="account_my-account"),
     path("places/", views.places, name="places"),
     path("places/<slug:place_name_slug>/", views.chosen_place, name="chosen-place"), #mapping a place url to the chosen_place view
+    path("places/<str:category>/", views.places, name="places"),
     path("account/signup/private-policy", views.privatePolicy, name="account_signup_private-policy"),
     path("account/signup/", views.register, name="account_signup"),
     path("account/signup/terms-of-use", views.register, name="account_signup_terms-of-use"),

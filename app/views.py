@@ -188,7 +188,8 @@ def map(request):
     return render(request, "app/map.html")
 
 #changes to make here
-def places(request, category=""):
+def places(request):
+    category = request.GET.get('category','') #gets the value of 'category' from the request QueryDict
     places_objects = Place.objects.all()
     categories_objects = Category.objects.all()
     tags_objects = Tag.objects.all()
@@ -196,6 +197,7 @@ def places(request, category=""):
     if category != "":
         category_places = get_category_places(category)
         places = category_places
+        print(places)
     else:
         #List of dictionaries containing all Place object names, categories and tags
         img_dir = "images/places/"
@@ -207,10 +209,18 @@ def places(request, category=""):
     tags = [{"name": tag.name} for tag in tags_objects]
     context = {"places": places, "chosen_category_places": category_places, "categories": categories, "tags": tags}
 
-    #print("Context: " + str(context))
-    places_html = render_to_string('app/places_partial.html', context)
+    is_ajax_request = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax_request:
+        #If AJAX request, return JSON response with places HTML content
+        places_html = render_to_string('app/places_partial.html', context)
+        partial_context = {"places_html": places_html}
+        return JsonResponse(partial_context)
 
-    return render(request, 'app/places.html', {'places_html': places_html})
+    #get all the required HTML content for places.html
+    places_html = render_to_string('app/places_partial.html', context)
+    context["places_html"] = places_html
+    #render the page
+    return render(request, 'app/places.html', context)
 
 #get all places of a particular category
 def get_category_places(category):
@@ -222,12 +232,10 @@ def get_category_places(category):
     img_dir = "images/places/"
     places_list = []
     for place in places_objects: #go through every place
-        for place_category in place.categories.all(): #go through every category associated with the place
-            if cat_obj == place_category: #place has the category
-                places_list.append({"name": place.name, "slug": place.slug, "image": img_dir+place.img_ref,
-                                 "categories": place.categories.all(), "tags": place.tags.all()})
-                break
-
+        if cat_obj in place.categories.all(): #if the required category is one of the place's categories
+            places_list.append({"name": place.name, "slug": place.slug, "image": img_dir+place.img_ref,
+                                "categories": place.categories.all(), "tags": place.tags.all()})
+    
     return places_list
 
 def myPlans(request):
