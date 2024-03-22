@@ -34,7 +34,7 @@
                 </li>
                 {% endfor %}
             </ul>
-            <p>{{ avg_rating|floatformat:"1" }} ★ from {{ num_reviews }} reviews, <a href="{% url 'app:plan_reviews' plan.id %}" style="color: blue; text-decoration: underline;">read all reviews</a></p>
+            <p>Average rating of {{ avg_rating|floatformat:"1" }} ★ from {{ num_reviews }} reviews, <a href="{% url 'app:plan_reviews' plan.id %}" style="color: blue; text-decoration: underline;">read all reviews</a></p>
             {% else %}
             <p>No reviews yet.</p>
             {% endif %}
@@ -42,7 +42,7 @@
         </div>
         <div style="width: 45%;">
           <div style="margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 10px; margin-right: 30px;">
-            <h3>Leave a review of {{ plan.title }}</h3>
+            <h3>Leave a review for {{ plan.title }}</h3>
             <form method="POST" action="{% url 'app:submit_plan_review' plan.id %}">
                 {% csrf_token %}
                 <label for="content"><strong>Review:</strong></label>

@@ -409,7 +409,7 @@ def submit_plan_review(request, plan_id):
         )
 
         messages.success(request, 'Your review was submitted successfully!')
-        return redirect("{% url 'app:specific_plan' plan.id %}", plan_id=plan_id)
+        return redirect(reverse('app:specific_plan', kwargs={'plan_id': plan_id}))
     else:
         return HttpResponse("Invalid request method", status=400)
     
