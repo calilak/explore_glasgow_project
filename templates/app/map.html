@@ -8,9 +8,6 @@
 {% block additional_styles %}
     <link rel="stylesheet" href="{% static 'styling/map.css' %}">
 {% endblock %}
-{% block additional_js %}
-  <script src = "{% static 'javascript/maps.js' %}"></script>
-{% endblock %}
 
 {% block body_block %}
 <body>
@@ -23,35 +20,13 @@
     <button class="button">Find Places</button>
     <button class="button">Find Events</button>
     <div class="dropdown">
-      <button onclick="showDropdown()" class="dropbtn">Filter by category</button>
-      <div id="categoryDropdown">
-        <div id="place" class="dropdown-content">
-          <a href="#">Restaurants</a>
-          <a href="#">Pubs</a>
-          <a href="#">Caf&eacutes</a>
-          <a href="#">Cinemas and Theatres</a>
-          <a href="#">Nature</a>
-          <a href="#">Sport</a>
-          <a href="#">Landmarks</a>
-          <a href="#">Art and Museums</a>
-        </div>
-
-        <div id="event" class="dropdown-content">
-          <a href="#">Food and Drink</a>
-          <a href="#">Arts and Culture</a>
-          <a href="#">Music</a>
-          <a href="#">Nature</a>
-          <a href="#">Sport</a>
-          <a href="#">Tours</a>
-          <a href="#">Nightlife</a>
-        </div>
-      </div>
+      <button class="dropbtn">Filter by category</button>
     </div>
   </div>
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d143322.27652446818!2d-4.397266322737153!3d55.85554270806823!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x488815562056ceeb%3A0x71e683b805ef511e!2sGlasgow!5e0!3m2!1sen!2suk!4v1709560380272!5m2!1sen!2suk"
-    width="100%" height="450" style="border:0;" 
-    allowfullscreen="" loading="lazy" 
-    referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <iframe 
+  src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d24850.100188237782!2d-4.274346326557983!3d55.859889730393775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2suk!4v1711056170070!5m2!1sen!2suk" 
+  width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" 
+  referrerpolicy="no-referrer-when-downgrade"></iframe>
 </div>
 </body>
 {% endblock %}

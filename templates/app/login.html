@@ -5,15 +5,20 @@
     Login
 {% endblock %}
 
+{% block additional_styles %}
+    <link rel="stylesheet" href="{% static 'styling/login.css' %}">
+{% endblock %}
+
 {% block body_block %}
-<h1>Login to app</h1>
-<form id="login_form" method="post" action="{% url 'app:login' %}">
-    {% csrf_token %}
-    Username: <input type="text" name="username" value="" size="50" />
-    <br />
-    Password: <input type="password" name="password" value="" size="50" />
-    <br />
-    <input type="submit" value="submit" />
-</form>
-<p>Don't have an account? <a href="{% url 'app:register' %}">Register here</a>.</p>
+<div class="form-container">
+    <h1>Login to Explore Glasgow</h1>
+    <form id="login_form" method="post" action="{% url 'app:login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="submit-container">
+            <input type="submit" value="Submit" />
+        </div>
+    </form>
+    <p>Don't have an account? <a href="{% url 'app:register' %}">Register <span style="color:#8d5d5d">here</span></a>.</p>
+</div>
 {% endblock %}

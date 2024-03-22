@@ -1,0 +1,79 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    {{ place.name }}
+{% endblock %}
+
+{% block body_block %}
+  <body style="padding-left: 10px;">
+    {% if place %}
+        <h1 style="display: inline;">{{ place.name }}</h1>
+
+        <!--Link to return to places.html-->
+        <a href="{% url 'app:places' %}" style="display:inline; margin-left: 20px;">--Back to all places--</a>
+        <hr>
+        <!--Image of place-->
+        <div style="text-align: left;">
+          <img src="{% static image %}" alt="Picture of {{ place.name }}" style="display: block; width: 50%;"> <!--Add path to image as src-->
+        </div><br>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Google&query_place_id={{place.location}}"
+         style="color: #004b7a; text-decoration: underline;">
+            See location in Google Maps (leave site)</a>
+        <br><br>
+
+        <h2>Upcoming events at {{ place.name }}</h2>
+        <!--Listing upcoming events if any as a description list-->
+          {% if events %}
+          <dl>
+            {% for event in events %}
+            <!--List all upcoming events at the place-->
+              <dt style="color: #7a0000">{{ event.title }}</dt>
+              <!--Could add a href link to the event here-->
+              <dd><strong>{{ event.start_time }}</strong> to <strong>{{ event.end_time }}</strong></dd> <!--Need to make sure this works-->
+            {% endfor %}
+          </dl><br>
+          {% else %}
+            <p>There are currently no upcoming events here.</p>
+          {% endif %}
+          <br>
+        <div style="display: flex; justify-content: space-between;">
+          <div style="width: 50%; margin-left: 30px;">
+            <div style="margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
+              <h2>Reviews for {{ place.name }}</h2>
+              {% if five_reviews %}
+              <ul>
+                  {% for review in five_reviews %}
+                  <li>
+                      <strong>{{ review.user.username }}: </strong>{{ review.rating }} ★ - {{ review.content }}
+                  </li>
+                  {% endfor %}
+              </ul>
+              <p>{{ avg_rating|floatformat:"1" }} ★ from {{ num_reviews }} reviews, <a href="{% url 'app:place_reviews' place.slug %}" style="color: blue; text-decoration: underline;">read all reviews</a></p>
+              {% else %}
+              <p>No reviews yet.</p>
+              {% endif %}
+            </div>
+          </div>
+          <div style="width: 45%;">
+            <div style="margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 10px; margin-right: 30px;">
+              <h3>Leave a review of {{ place.name }}</h3>
+              <form method="POST" action="{% url 'app:submit_place_review' place.slug %}">
+                  {% csrf_token %}
+                  <label for="content"><strong>Review:</strong></label>
+                  <textarea name="content" placeholder="Write your review here" style="width: 100%; height: 100px;" required></textarea>
+                  <br>
+                  <label for="rating"><strong>Rating ★ (1-5):</strong></label>
+                  <input type="number" id="rating" name="rating" min="1" max="5" style="margin-left: 5px;" required>
+                  <br>
+                  <button type="submit">Submit Review</button>
+              </form>
+            </div>
+          </div>
+        </div>
+    {% else %}
+        The specified place does not exist.
+    {% endif %}
+  </body>
+{% endblock %}

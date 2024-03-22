@@ -1,0 +1,70 @@
+.plans-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.plan-card {
+    display: flex;
+    width: 100%;
+    max-width: 650px; /* Control the maximum width of the cards */
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.plan-info, .plan-schedule {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure items are spaced out vertically */
+}
+
+.plan-info {
+    padding: 20px;
+    border-right: 1px solid #ddd; /* Adds a subtle separator */
+}
+
+.plan-schedule {
+    padding: 20px;
+}
+
+.plan-schedule ul {
+    list-style: none;
+    padding: 0;
+}
+
+.plan-schedule li {
+    margin-bottom: 10px;
+}
+
+.view-plan-btn {
+    align-self: center; /* Center the button within its container */
+    padding: 10px 20px;
+    background-color: #8d5d5d;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-top: 10px; /* Ensure it doesn't overlap text */
+}
+
+.view-plan-btn:hover {
+    background-color: #7a4c4c;
+}
+
+.username-link {
+    color: #8d5d5d; /* Maroon color for the link */
+    text-decoration: none; /* Initially remove the underline */
+    transition: text-decoration 0.3s ease, color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.username-link:hover {
+    text-decoration: underline; /* Add underline on hover */
+    color: #7a4c4c; /* Slightly darker shade on hover for interaction feedback */
+}
+

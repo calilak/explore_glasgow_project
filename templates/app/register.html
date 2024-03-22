@@ -5,19 +5,26 @@
     Register
 {% endblock %}
 
-{% block body_block %}
-<h1>Register for app</h1>
-{% if registered %}
-    <strong>Thank you for registering!</strong>
-    <a href="{% url 'app:index' %}">Return to the homepage.</a><br />
-{% else %}
-    <form id="user_form" method="post" action="{% url 'app:register' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ user_form.as_p }}
-        {{ profile_form.as_p }}
+{% block additional_styles %}
+    <link rel="stylesheet" href="{% static 'styling/login.css' %}">
+{% endblock %}
 
-        <input type="submit" name="submit" value="Register" />
-    </form>
-    <p>Already have an account? <a href="{% url 'app:login' %}">Login here</a>.</p>
-{% endif %}
+{% block body_block %}
+<div class="form-container">
+    <h1>Sign Up to Explore Glasgow</h1>
+    {% if registered %}
+        <strong>Thank you for registering!</strong>
+        <a href="{% url 'app:index' %}">Return to the homepage.</a>
+    {% else %}
+        <form id="user_form" method="post" action="{% url 'app:register' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ user_form.as_p }}
+            {{ profile_form.as_p }}
+            <div class="submit-container">
+                <input type="submit" name="submit" value="Register" />
+            </div>
+        </form>
+        <p>Already have an account? <a href="{% url 'app:login' %}">Login <span style="color:#8d5d5d">here</span></a>.</p>
+    {% endif %}
+</div>
 {% endblock %}

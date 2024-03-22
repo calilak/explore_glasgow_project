@@ -30,7 +30,7 @@ SECRET_KEY = "django-insecure-e2%vdpx39vew1t2avyxf3p9!k84gqur7kr5ym$5clz_1xnabfn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*'] #to host on PythonAnywhere
 
 
 # Application definition
@@ -120,6 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static") #for PythonAnywhere
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -128,4 +129,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # logging in
 LOGIN_URL = '/login/'
+
+# Media files
+MEDIA_URL = '/media/profile_images/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media', 'profile_images')
 

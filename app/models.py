@@ -6,8 +6,9 @@ from django.db.models import Avg, Count
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
+from django.template.defaultfilters import slugify
 
-
+#models here
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     followers = models.IntegerField(default=0)
@@ -55,21 +56,39 @@ class Tag(models.Model):
 class Place(models.Model):
     location = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
-    categories = models.ManyToManyField(Category)
-    tags = models.ManyToManyField(Tag)
+    categories = models.ManyToManyField(Category, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
+    slug = models.SlugField(default='', unique=True)
+    img_ref = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        #generate slug based on the name field
+        if not self.slug:  #only generate slug if not provided explicitly
+            self.slug = slugify(self.name)
+
+            #check if the generated slug already exists
+            similar_slugs = Place.objects.filter(slug=self.slug)
+            if similar_slugs.exists():
+                #append a unique identifier to ensure uniqueness
+                self.slug += f"-{similar_slugs.count() + 1}"
+
+        super().save(*args, **kwargs)
 
 class Event(models.Model):
+    name = models.CharField(max_length=255, default='Default Event Name')
+    date = models.DateField(default=timezone.now)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    location = models.ForeignKey(Place, on_delete=models.CASCADE)
+    location = models.CharField(max_length=255)
     categories = models.ManyToManyField(Category)
     tags = models.ManyToManyField(Tag)
-
+    img_ref = models.CharField(max_length=100, default="")
+    
     def __str__(self):
         return self.title
 
@@ -100,27 +119,22 @@ class Plan(models.Model):
 
     def add_event(self, event):
         schedule = json.loads(self.schedule)
-        schedule.append({'type': 'event', 'data': event.id})
+        schedule.append({'type': 'event', 'data': event.id, 'start_time': str(event.start_time)})
         self.schedule = json.dumps(schedule)
+        self.events.add(event)
         self.save()
 
     def add_activity(self, activity, start_time):
         schedule = json.loads(self.schedule)
         schedule.append({'type': 'activity', 'data': activity.id, 'start_time': str(start_time)})
         self.schedule = json.dumps(schedule)
+        self.activities.add(activity)
         self.save()
 
     def get_schedule(self):
-        schedule_details = []
-        for item in self.schedule:
-            if item['type'] == 'event':
-                event = Event.objects.get(id=item['data'])
-                schedule_details.append({'type': 'event', 'data': event})
-            elif item['type'] == 'activity':
-                activity = Activity.objects.get(id=item['data'])
-                start_time = item['start_time']
-                schedule_details.append({'type': 'activity', 'data': activity, 'start_time': start_time})
-        return schedule_details
+        schedule = json.loads(self.schedule)
+        sorted_schedule = sorted(schedule, key=lambda x: x['start_time'])
+        return json.dumps(sorted_schedule)
 
     def __str__(self):
         return f"{self.user.username}'s Plan on {self.date}"
