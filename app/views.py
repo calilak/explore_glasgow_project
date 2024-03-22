@@ -118,12 +118,12 @@ def about_us(request):
         },
         {
             'name': 'Liao',
-            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'bio': 'Liao is a a university student who is passionate about taking photos to record the scenery.',
             'image': 'images/profile-pics/liao.jpg', # Path under your static directory
             'account_link': '#',
-            'instagram_link': 'https://www.instagram.com/',
-            'linkedin_link': '#',
-            'email': '#',
+            'instagram_link': 'https://www.instagram.com/anorising_l?igsh=MWZkdzR0cGV6dXdicw%3D%3D&utm_source=qr',
+            'linkedin_link': 'https://www.linkedin.com/in/anor-liao-10a938247/',
+            'email': 'Anorliao@gmail.com',
         },
         {
             'name': 'Kalila',
