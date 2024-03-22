@@ -10,6 +10,8 @@ from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import *
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 
 def aboutus(request):
     return render(request,'aboutus.html')
@@ -211,3 +213,23 @@ def search_events(request):
     else:
         suggestions = []
     return JsonResponse(suggestions, safe=False)
+
+def user_activities(request):
+    activities = Activity.objects.filter(user=request.user) 
+    return render(request, 'activitied.html', {'activities':activities})
+    
+@require_POST
+@csrf_exempt
+def add_new_activity(request):
+    data = json.loads(request.body)
+    #user_profile = UserProfile.objects.get(user=request.user)
+    title = data.get('title')
+    description = data.get('description')
+    duration = data.get('duration')
+    location_name = data.get('location')
+    
+    location = Place.objects.get_or_create(name=location_name)[0] if location_name else None
+    
+    Activity.objects.create( title=title, description=description, duration=duration, location=location)
+    
+    return JsonResponse({'status': 'success', 'message': 'Activity added successfully'})

@@ -117,3 +117,32 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
     });
 });
+
+function addNewActivity() {
+    const formData = {
+        'title': document.getElementById('activity-name').value,
+        'description': document.getElementById('description').value,
+        'duration': document.getElementById('duration').value,
+        'location': document.getElementById('location').value,
+    };
+
+    const csrfToken = $('input[name=csrfmiddlewaretoken]').val(); 
+
+    $.ajax({
+        url: '/app/activities/', 
+        type: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+        data: JSON.stringify(formData),
+        success: function(response) {
+            console.log(response);
+            
+        },
+        error: function(error) {
+            console.error('Error:', error);
+            // Additional error handling
+        }
+    });
+}

@@ -1,0 +1,100 @@
+/* Container Styles */
+.container {
+    display: flex;
+    justify-content: space-between; /* Adjusted to evenly distribute sections */
+    max-width: 1200px; /* Added to limit container width for better readability */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+/* Left Section Styles */
+.left-section {
+    flex: 1;
+    padding: 20px;
+    background-color: #f5f5f5; /* Added a background color for better contrast */
+    border-radius: 10px; /* Rounded corners for aesthetics */
+}
+
+#left-header {
+    text-align: center; /* Center align the header */
+    margin-bottom: 20px; /* Added spacing between header and content */
+}
+
+.inner-left-section {
+    display: flex;
+    flex-direction: column; /* Adjusted to stack elements vertically */
+    align-items: center; /* Center align children */
+}
+
+#activities-list {
+    margin-bottom: 20px; /* Added spacing between activities list and main section */
+}
+
+/* Main Section Left Styles */
+.main-section-left {
+    flex: 1;
+}
+
+#user-activities {
+    margin-top: 20px; /* Added spacing between activities and section above */
+}
+
+/* Right Section Styles */
+.right-section {
+    flex: 1;
+    padding: 20px;
+    background-color: #f5f5f5; /* Added a background color for better contrast */
+    border-radius: 10px; /* Rounded corners for aesthetics */
+}
+
+#right-header {
+    text-align: center; /* Center align the header */
+    margin-bottom: 20px; /* Added spacing between header and content */
+}
+
+.main-section-right {
+    text-align: center; /* Center align content */
+}
+
+/* Button Styles */
+button {
+    width: 200px; /* Increased button width for better visibility */
+    height: 50px;
+    font-size: 18px; /* Slightly increased font size for readability */
+    margin-bottom: 10px; /* Added spacing between buttons */
+}
+
+/* Input Styles */
+input[type="text"],
+input[type="number"] {
+    width: 100%; /* Ensure inputs take full width */
+    padding: 10px; /* Increased padding for better input field visibility */
+    margin-bottom: 10px; /* Added spacing between inputs */
+    box-sizing: border-box;
+}
+
+/* Slider Styles */
+#durationSlider {
+    width: 100%; /* Ensure slider takes full width */
+    margin-bottom: 10px; /* Added spacing between slider and next element */
+}
+
+/* Autocomplete Styles */
+.autocomplete-results {
+    position: absolute;
+    z-index: 1000;
+    background: white;
+    width: calc(100% - 20px); /* Adjusted width to match parent width minus padding */
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    margin-top: 5px; /* Added spacing between autocomplete and input field */
+}
+
+.autocomplete-results div {
+    padding: 10px; /* Increased padding for better visibility */
+}
+
+.autocomplete-results div:hover {
+    background-color: #f0f0f0; /* Lighter background color on hover for better feedback */
+}
