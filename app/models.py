@@ -7,7 +7,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.template.defaultfilters import slugify
-
+from django.urls import reverse
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -6,17 +6,22 @@
 {% endblock %}
 
 {% block body_block %}
+  <body style="padding-left: 10px;">
     {% if place %}
         <h1 style="display: inline;">{{ place.name }}</h1>
 
         <!--Link to return to places.html-->
         <a href="{% url 'app:places' %}" style="display:inline; margin-left: 20px;">--Back to all places--</a>
         <hr>
-        
         <!--Image of place-->
         <div style="text-align: left;">
-          <img src="{% static image %}" alt="Picture of {{ place.name }}" style="display: block; width: 80%;"> <!--Add path to image as src-->
+          <img src="{% static image %}" alt="Picture of {{ place.name }}" style="display: block; width: 50%;"> <!--Add path to image as src-->
         </div><br>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Google&query_place_id={{place.location}}"
+         style="color: #004b7a; text-decoration: underline;">
+            See location in Google Maps (leave site)</a>
+        <br><br>
 
         <h2>Upcoming events at {{ place.name }}</h2>
         <!--Listing upcoming events if any as a description list-->
@@ -25,13 +30,14 @@
             {% for event in events %}
             <!--List all upcoming events at the place-->
               <dt style="color: #7a0000">{{ event.title }}</dt>
-              <dd>Event date and time here</dd>
+              <dd><a href="/app/places/{{ event.slug }}/"></dd> <!--Need to make sure this works-->
             {% endfor %}
           </dl><br>
           {% else %}
             <p>There are currently no upcoming events here.</p>
           {% endif %}
           <br>
+      
         <!--Need to pass in reviews in chosen_place view-->
         <h2>Reviews</h2>
         <p>Reviews go here</p><br>
@@ -40,4 +46,5 @@
     {% else %}
         The specified place does not exist.
     {% endif %}
+  </body>
 {% endblock %}

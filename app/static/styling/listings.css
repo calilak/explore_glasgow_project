@@ -27,15 +27,11 @@
     flex-wrap: wrap;
     display: inline;
     float: left;
-    background-color:#fff;
+    background-color: #f8f9fa;
     width: 32%;
     height: 350px; /* Need to be careful in making sure each box is same height */
-    border: 2px dashed black;
+    border: 2px solid black;
     margin: 0.5%;
-  }
-
-  .show {
-    display: block;
   }
   
   /* Style the header */

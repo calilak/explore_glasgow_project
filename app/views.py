@@ -27,15 +27,16 @@ def chosenEvent(request):
 def chosenPlan(request):
     return(request,"chosenPlan.html")
 
-def chosen_place(request, place_name_slug):
+def chosen_place(request, slug):
     context_dict = {}
     try:
         # The .get() method returns one model instance or raises an exception.
-        chosen_place = Place.objects.get(slug=place_name_slug)
+        chosen_place = Place.objects.get(slug=slug)
         events = list(Event.objects.filter(location=chosen_place))
         img_dir = "images/places/"
         #CHANGE IMAGE PATH VALUE
         context_dict = {'place': chosen_place, 'image': img_dir+chosen_place.img_ref, 'events': events}
+        print(chosen_place.slug)
     except Place.DoesNotExist:
         # the template will display the "no place" message for us.
         context_dict['place'] = None
@@ -205,6 +206,8 @@ def places(request):
                 "tags": place.tags.all()} for place in places_objects]
         category_places = places
 
+    print("places:")
+    print(place["slug"] for place in places)
     categories = [{"name": category.name} for category in categories_objects]
     tags = [{"name": tag.name} for tag in tags_objects]
     context = {"places": places, "chosen_category_places": category_places, "categories": categories, "tags": tags}
