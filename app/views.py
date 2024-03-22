@@ -29,11 +29,11 @@ def chosenEvent(request):
 def chosenPlan(request):
     return(request,"chosenPlan.html")
 
-def chosen_place(request, slug):
+def chosen_place(request, place_name_slug):
     context_dict = {}
     try:
         # The .get() method returns one model instance or raises an exception.
-        chosen_place = Place.objects.get(slug=slug)
+        chosen_place = Place.objects.get(slug=place_name_slug)
         events = list(Event.objects.filter(location=chosen_place))
         img_dir = "images/places/"
         #CHANGE IMAGE PATH VALUE
