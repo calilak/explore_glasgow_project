@@ -35,4 +35,6 @@ urlpatterns = [
     path("search-events/",views.search_events,name="search-events"),
     path('search-activities/', views.search_activities, name='search-activities'),
     path("process-plans/",views.process_plan,name="process-plans"),
+    path("browsePlans/",views.browsePlans,name="browsePlans"),
+    path('plans/<int:plan_id>/', views.specificPlan, name='specific_plan'),
 ]

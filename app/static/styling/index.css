@@ -59,3 +59,92 @@ section > div button:hover {
 section > div label {
   visibility: visible; /* Ensures labels are visible */
 }
+
+.slideshow-container {
+  position: relative;
+  max-width: 650px;
+  margin: 20px auto;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+  background-color: #f8f9fa; /* Light background color */
+}
+
+.slide {
+  display: none;
+  padding: 20px;
+  text-align: center;
+}
+
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+  padding: 16px;
+  color: #8d5d5d; /* Matching theme button color */
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  user-select: none;
+  background-color: #f8f9fa; /* Light background color */
+  border: 1px solid #ddd; /* Subtle border */
+}
+
+.next {
+  right: 0;
+}
+
+.prev:hover, .next:hover {
+  background-color: #7a4c4c; /* Darker shade for hover effect */
+  color: #ffffff;
+}
+
+.slide-content a, .slide-content a:visited {
+  color: #8d5d5d; /* Button color for consistency */
+  text-decoration: none; /* No underline to match minimalist theme */
+}
+
+.slide-content a:hover {
+  text-decoration: underline; /* Underline on hover to indicate interactivity */
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+/* Continue from your existing styles */
+
+.top-plans h2 {
+  text-align: center;
+  margin: 40px 0 20px; /* Adjust spacing around the heading */
+}
+
+.view-all-plans {
+  text-align: center;
+  margin-top: 20px; /* Space below the slideshow */
+}
+
+.view-all-plans a {
+  display: inline-block;
+  background-color: #8d5d5d; /* Button color */
+  color: #ffffff; /* Text color */
+  border: none;
+  padding: 10px 20px; /* Adjust padding as needed */
+  border-radius: 5px; /* Rounds the corners */
+  font-size: 16px; /* Adjusts font size */
+  text-decoration: none; /* No underline */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.view-all-plans a:hover {
+  background-color: #7a4c4c; /* Darker shade for hover effect */
+}
+

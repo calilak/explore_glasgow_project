@@ -102,26 +102,18 @@ class Plan(models.Model):
         schedule = json.loads(self.schedule)
         schedule.append({'type': 'event', 'data': event.id})
         self.schedule = json.dumps(schedule)
+        self.events.add(event)
         self.save()
 
     def add_activity(self, activity, start_time):
         schedule = json.loads(self.schedule)
         schedule.append({'type': 'activity', 'data': activity.id, 'start_time': str(start_time)})
         self.schedule = json.dumps(schedule)
+        self.activities.add(activity)
         self.save()
 
     def get_schedule(self):
-        schedule_details = []
-        schedule = json.loads(self.schedule)
-        for item in schedule:
-            if item['type'] == 'event':
-                event = Event.objects.get(id=item['data'])
-                schedule_details.append({'type': 'event', 'data': event})
-            elif item['type'] == 'activity':
-                activity = Activity.objects.get(id=item['data'])
-                start_time = item['start_time']
-                schedule_details.append({'type': 'activity', 'data': activity, 'start_time': start_time})
-        return schedule_details
+        return self.schedule
 
     def __str__(self):
         return f"{self.user.username}'s Plan on {self.date}"

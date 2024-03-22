@@ -2,13 +2,20 @@ let addedEventIds = [];
 let addedActivities = []; // Holds IDs of added activities
 
 function addNewPlan() {
-    document.getElementById("overlay").style.display = "flex";
-    const inputTitle = document.getElementById('new-plan-title').value;
-    const inputDate = document.getElementById('new-plan-date').value;
-    document.getElementById("inputted-title").innerHTML = "New Plan: " + inputTitle;
-    document.getElementById("inputted-date").innerHTML = inputDate;
+    $("#overlay").css("display", "flex");
+    const inputTitle = $('#new-plan-title').val();
+    const inputDate = $('#new-plan-date').val();
+    // Only update the text if the input is not empty
+    if (inputTitle.trim() !== "") {
+        $("#inputted-title").text(inputTitle);
+    }
+    if (inputDate.trim() !== "") {
+        $("#inputted-date").text(inputDate);
+    }
     setTimeout(scrollTo9AM, 500); // Adjust delay as needed
 }
+
+
 
 function closeOverlay() {
     document.getElementById("overlay").style.display = "none";
@@ -193,18 +200,24 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function postPlan() {
-    console.log(addedActivities);
+    var titleId = $('#inputted-title');
+    var title = titleId.text();
+    console.log(title);
+    var dateId = $('#inputted-date');
+    var date = dateId.val();
     $.ajax({
         url: '/app/process-plans/', // Adjust this URL to your endpoint
         type: 'POST',
         data: {
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            title : title,
+            date : date,
             event_ids: JSON.stringify(addedEventIds), // Send event IDs as a JSON string
             activity_ids: JSON.stringify(addedActivities), // Send activity IDs as a JSON string
         },
         success: function(response) {
             console.log("Plan submitted successfully.", response);
-            // Additional success handling...
+            $("#overlay").fadeOut();
         },
         error: function(error) {
             console.error("Error submitting plan:", error);

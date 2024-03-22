@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse
 from app.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login
@@ -13,6 +13,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from django.contrib.auth.forms import AuthenticationForm
+from datetime import datetime,timedelta
 
 def aboutus(request):
     return render(request,'aboutus.html')
@@ -22,6 +23,49 @@ def activities(request):
 
 def account(request):
     return render(request,'account.html')
+
+def get_schedule_details(schedule_json):
+    schedule_details = []
+    for item in schedule_json:
+        if item['type'] == 'event':
+            event = Event.objects.get(id=item['data'])
+            item_detail = {
+                'type': 'event',
+                'title': event.title,
+                'time': event.start_time
+            }
+        elif item['type'] == 'activity':
+            activity = Activity.objects.get(id=item['data'])
+            start_time_str = item['start_time']
+            start_time = datetime.fromisoformat(start_time_str.replace('Z', '+00:00'))
+            item_detail = {
+                'type': 'activity',
+                'title': activity.title,
+                'time': start_time  # Now a datetime object, consistent with event.start_time
+            }
+        schedule_details.append(item_detail)
+    return schedule_details
+
+def browsePlans(request):
+    plans = Plan.objects.all()
+    for plan in plans:
+        schedule_json = json.loads(plan.schedule)
+        plan.schedule_details = get_schedule_details(schedule_json)  # Use the utility function
+    context = {
+        'plans': plans
+    }
+    return render(request, 'app/browsePlans.html', context)
+
+def specificPlan(request, plan_id):
+    plan = get_object_or_404(Plan, pk=plan_id)
+    schedule_json = json.loads(plan.schedule)
+    plan.schedule_details = get_schedule_details(schedule_json)  # Use the utility function
+    context = {
+        'plan': plan,
+        'schedule_details': plan.schedule_details,
+    }
+    return render(request, 'app/specificPlan.html', context)
+
 
 def chosenEvent(request):
     return render(request,"chosenEvent.html")
@@ -40,7 +84,9 @@ def learnMore(request):
     return render(request,'learnMore.html')
 
 def index(request):
-    return render(request,'app/index.html')
+    top_plans = Plan.objects.all()[:10]  # Adjust this query according to your criteria
+    print (top_plans)
+    return render(request, 'app/index.html', {'top_plans': top_plans})
 
 def register(request):
     registered = False
@@ -117,39 +163,39 @@ def about_us(request):
         },
         {
             'name': 'Liao',
-            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
-            'image': 'images/profile-pics/liao.jpg', # Path under your static directory
+            'bio': 'Liao is a a university student who is passionate about taking photos to record the scenery.',
+            'image': 'images/profile-pics/liao.png', # Path under your static directory
             'account_link': '#',
-            'instagram_link': 'https://www.instagram.com/',
-            'linkedin_link': '#',
-            'email': '#',
+            'instagram_link': 'https://www.instagram.com/anorising_l?igsh=MWZkdzR0cGV6dXdicw%3D%3D&utm_source=qr',
+            'linkedin_link': 'https://www.linkedin.com/in/anor-liao-10a938247/',
+            'email': 'Anorliao@gmail.com',
         },
         {
             'name': 'Kalila',
-            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'bio': 'Kalila is a university student who loves going to the best new restaurants in Glasgow.',
             'image': 'images/profile-pics/kalila.jpg', # Path under your static directory
             'account_link': '#',
             'instagram_link': 'https://www.instagram.com/',
-            'linkedin_link': '#',
-            'email': '#',
+            'linkedin_link': 'https://www.linkedin.com/in/kalila-chand-4a0798243/',
+            'email': 'kalilachand@gmail.com',
         },
         {
             'name': 'Matty',
-            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'bio': 'Matty is a year 2 student at Glasgow University who has a passion for coding.',
             'image': 'images/profile-pics/matty.jpg', # Path under your static directory
             'account_link': '#',
-            'instagram_link': 'https://www.instagram.com/',
-            'linkedin_link': '#',
-            'email': '#',
+            'instagram_link': 'https://www.instagram.com/mattyhughes67/',
+            'linkedin_link': 'n/a',
+            'email': '#2774512h@student.gla.ac.uk',
         },
         {
             'name': 'Oli',
-            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'bio': 'Oli is a university student who loves exploring Glasgow.',
             'image': 'images/profile-pics/chan.jpg', # Path under your static directory
             'account_link': '#',
-            'instagram_link': 'https://www.instagram.com/',
-            'linkedin_link': '#',
-            'email': '#',
+            'instagram_link': 'https://www.instagram.com/reviio/',
+            'linkedin_link': 'https://www.linkedin.com/in/oliver-chan-b94090226/',
+            'email': 'olivercwchan@gmail.com',
         },
         # Add other team members in the same way
     ]
@@ -173,7 +219,7 @@ def map(request):
     return render(request, "app/map.html")
 
 def places(request):
-    print("PLaces requested!")
+    print("Places requested!")
     places_objects = Place.objects.all()
     categories_objects = Category.objects.all()
     tags_objects = Tag.objects.all()
@@ -225,11 +271,20 @@ def search_activities(request):
 @csrf_exempt
 def process_plan(request):
     user = request.user  # Or however you get your user object
+    title = request.POST.get('title','')
+    date_str = request.POST.get('date', None)
+    
+    # Default to tomorrow if no date provided
+    if date_str:
+        date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    else:
+        date = datetime.now().date() + timedelta(days=1)
+        
     event_ids = json.loads(request.POST.get('event_ids', '[]'))
     activities_data = json.loads(request.POST.get('activity_ids', '[{}]'))
     print(activities_data)
 
-    plan = Plan.objects.create(user=user, date="2023-01-01")  # Example, adjust accordingly
+    plan = Plan.objects.create(user=user,title=title, date=date)  # Example, adjust accordingly
 
     # Add events to plan
     for event_id in event_ids:
@@ -242,7 +297,7 @@ def process_plan(request):
         start_time = activity_data['start']
         plan.add_activity(activity, start_time)
 
-    print(plan.get_schedule())
+    print(plan.schedule)
 
     return JsonResponse({
         'status': 'success',

@@ -58,8 +58,8 @@
             </div>
             <div id="overlay">
                 <span class="close-overlay" onclick="closeOverlay()">&times;</span>
-                <h1 id="inputted-title">New Plan</h1>
-                <h4 id="inputted-date">Today</h4>
+                <h1 id="inputted-title" contenteditable="true">INSERT PLAN TITLE</h1>
+                <h4 id="inputted-date" contenteditable="true">YYYY-MM-DD</h4>
                 <div class="columns">
                   <div class="column">
                     <!-- Search Events with Plus Button -->
@@ -75,7 +75,7 @@
                     
                     <!-- Search Activities with Plus Button -->
                     <div class="input-group">
-                        <input type="text" class="search-database" id="search-activities" name="add-activities-to-plan" placeholder="Search activities..." oninput="activity_autocomplete()">
+                        <input type="text" class="search-database" id="search-activities" name="add-activities-to-plan" placeholder="Search activities..." autocomplete="off" oninput="activity_autocomplete()">
                         <button onclick="addActivity()"><i class="fas fa-plus"></i></button>
                         <div id="autocomplete-results-activities" class="autocomplete-results"></div>  <!-- Container for displaying activity suggestions -->
                     </div>

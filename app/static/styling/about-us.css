@@ -8,6 +8,9 @@
 }
 
 .profile-card {
+    display: flex; /* Changed to flex */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: space-between; /* Space between top and bottom */
     width: 300px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     border-radius: 5px;
@@ -22,7 +25,7 @@
     border-radius: 50%; /* Makes the image circular */
     object-fit: cover; /* Ensures the image covers the circle nicely */
     display: block;
-    margin: 0 auto 20px; /* Center the image horizontally and add some space below */
+    margin: 20px auto; /* Center the image horizontally and add some space */
 }
 
 .profile-card h2 {
@@ -30,7 +33,7 @@
 }
 
 .profile-card p {
-    margin: 10px 20px;
+    margin: 0 20px; /* Removed top and bottom margins */
 }
 
 .social-links {
