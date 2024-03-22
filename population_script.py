@@ -230,7 +230,7 @@ def create_reviews():
     users = User.objects.all()
     places = Place.objects.all()
     plans = Plan.objects.all()
-    reviewContent = ['Absolute joke!!','Disgusting!', 'Meh', 'Very good!', 'Amazing!!', 'Overrated af', 'Horrorendous', 'Fab!', 'Lovely experience <3', 'Beyond brilliant!', 'Could be better...', 'Underrated spot', 'Ok', 'Appalling', 'Decent!', 'Very interesting!', 'Welcoming and friendly', 'Hard to get to', 'Worth the trip!', 'WOW']
+    reviewContent = ['Absolute joke!!','Disgusting!', 'Meh', 'Very good!', 'Amazing!!', 'Overrated af', 'Horrendous', 'Fab!', 'Lovely experience <3', 'Beyond brilliant!', 'Could be better...', 'Underrated spot', 'Ok', 'Appalling', 'Decent!', 'Very interesting!', 'Welcoming and friendly', 'Hard to get to', 'Worth the trip!', 'WOW']
     reviews_data = [
         {'user': users[i], 'content': reviewContent[i], 'rating': (i%5)+1, 'content_type': ContentType.objects.get_for_model(Place), 'object_id': places[j].id} for j in range(20) for i in range(20)
     ] + [

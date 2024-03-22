@@ -30,7 +30,8 @@
             {% for event in events %}
             <!--List all upcoming events at the place-->
               <dt style="color: #7a0000">{{ event.title }}</dt>
-              <dd><a href="/app/places/{{ event.slug }}/"></dd> <!--Need to make sure this works-->
+              <!--Could add a href link to the event here-->
+              <dd><strong>{{ event.start_time }}</strong> to <strong>{{ event.end_time }}</strong></dd> <!--Need to make sure this works-->
             {% endfor %}
           </dl><br>
           {% else %}

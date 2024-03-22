@@ -8,9 +8,6 @@
 {% block additional_styles %}
     <link rel="stylesheet" href="{% static 'styling/map.css' %}">
 {% endblock %}
-{% block additional_js %}
-  <script src = "{% static 'javascript/maps.js' %}"></script>
-{% endblock %}
 
 {% block body_block %}
 <body>
@@ -23,29 +20,7 @@
     <button class="button">Find Places</button>
     <button class="button">Find Events</button>
     <div class="dropdown">
-      <button onclick="showDropdown()" class="dropbtn">Filter by category</button>
-      <div id="categoryDropdown">
-        <div id="place" class="dropdown-content">
-          <a href="#">Restaurants</a>
-          <a href="#">Pubs</a>
-          <a href="#">Caf&eacutes</a>
-          <a href="#">Cinemas and Theatres</a>
-          <a href="#">Nature</a>
-          <a href="#">Sport</a>
-          <a href="#">Landmarks</a>
-          <a href="#">Art and Museums</a>
-        </div>
-
-        <div id="event" class="dropdown-content">
-          <a href="#">Food and Drink</a>
-          <a href="#">Arts and Culture</a>
-          <a href="#">Music</a>
-          <a href="#">Nature</a>
-          <a href="#">Sport</a>
-          <a href="#">Tours</a>
-          <a href="#">Nightlife</a>
-        </div>
-      </div>
+      <button class="dropbtn">Filter by category</button>
     </div>
   </div>
   <iframe 
