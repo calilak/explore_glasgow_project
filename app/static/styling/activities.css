@@ -34,8 +34,6 @@ border: 1px solid #ccc;
 background-color: #f8f8f8;
 text-align: center; 
 }
-
-
 #autocomplete-results-activities{
     position: absolute;
     min-height: fit-content;
@@ -47,19 +45,34 @@ text-align: center;
     box-shadow: 0 4px 6px rgba(0,0,0,.1);
     z-index: 1000; /* Ensure it's above other items */
 }
-.autocomplete-results .activity-item {
-padding: 30px;
-cursor: pointer; 
-border-bottom: 1px solid #eee; 
-}
-.autocomplete-results .activity-item:last-child {
-border-bottom: none; 
-}
-.autocomplete-results .activity-item:hover,
-.autocomplete-results .activity-item:focus {
-background-color: #f8f8f8; 
-}
 
 #searchedActivitiesContainer {
-    flex: 1;
+  flex: 1;
+}
+#user-activities{
+    flex : 1
+}
+
+.autocomplete-results {
+    position: absolute;
+    z-index: 10;
+    background: white;
+    width: 100%;
+    top: 100%; /* Aligns just below the input field */
+    left: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 0 0 5px 5px;
+  }
+  
+  .autocomplete-results div {
+    display: flex;
+    justify-content: space-between; /* Aligns title on the left, times on the right */
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .autocomplete-results div:hover {
+    background-color: #f8f9fa;
   }

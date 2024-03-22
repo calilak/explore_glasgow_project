@@ -136,12 +136,12 @@ def about_us(request):
         },
         {
             'name': 'Matty',
-            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'bio': 'Matthew is a second year student at the University of Glasgow.',
             'image': 'images/profile-pics/matty.jpg', # Path under your static directory
             'account_link': '#',
-            'instagram_link': 'https://www.instagram.com/',
+            'instagram_link': 'https://www.instagram.com/mattyhughes67/',
             'linkedin_link': '#',
-            'email': '#',
+            'email': '#2774512@student.gla.ac.uk',
         },
         {
             'name': 'Oli',
@@ -226,7 +226,8 @@ def search_activities(request):
    
     activities = activities_query.values('id', 'title', 'duration')[:10]
     activities_data = list(activities)  # Convert QuerySet to list for JSON serialization
-
+    
+    print(activities_data)
     return JsonResponse({'activities': activities_data})
 
 @require_POST
@@ -266,16 +267,23 @@ def add_existing_activity(request):
     except UserProfile.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'User profile does not exist.'})
     
+@require_POST
+@csrf_exempt
 def add_new_activity(request):
+    data = json.loads(request.body)
     user_profile = UserProfile.objects.get(user=request.user)
-    title = request.POST.get('title')
-    description = request.POST.get('description')
-    duration = request.POST.get('duration')
-    location_name = request.POST.get('location')
+    title = data.get('title')
+    description = data.get('description')
+    duration = data.get('duration')
+    location_name = data.get('location')
     
     location = Place.objects.get_or_create(name=location_name)[0] if location_name else None
     
-    activity = Activity.objects.create(user=user_profile, title=title, description=description, duration=duration, location=location)
+    Activity.objects.create(user=user_profile, title=title, description=description, duration=duration, location=location)
     
-    # Return a response indicating success
     return JsonResponse({'status': 'success', 'message': 'Activity added successfully'})
+
+
+
+
+
