@@ -6,7 +6,7 @@ from django.db.models import Avg, Count
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
-
+from django.template.defaultfilters import slugify
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -55,11 +55,26 @@ class Tag(models.Model):
 class Place(models.Model):
     location = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
-    categories = models.ManyToManyField(Category)
-    tags = models.ManyToManyField(Tag)
+    categories = models.ManyToManyField(Category, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
+    slug = models.SlugField(default='', unique=True)
+    img_ref = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        #generate slug based on the name field
+        if not self.slug:  #only generate slug if not provided explicitly
+            self.slug = slugify(self.name)
+
+            #check if the generated slug already exists
+            similar_slugs = Place.objects.filter(slug=self.slug)
+            if similar_slugs.exists():
+                #append a unique identifier to ensure uniqueness
+                self.slug += f"-{similar_slugs.count() + 1}"
+
+        super().save(*args, **kwargs)
 
 class Event(models.Model):
     title = models.CharField(max_length=100)
@@ -67,8 +82,8 @@ class Event(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     location = models.ForeignKey(Place, on_delete=models.CASCADE)
-    categories = models.ManyToManyField(Category)
-    tags = models.ManyToManyField(Tag)
+    categories = models.ManyToManyField(Category, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return self.title
