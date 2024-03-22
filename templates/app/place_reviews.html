@@ -1,0 +1,50 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Reviews for {{ place.name }}
+{% endblock %}
+
+{% block body_block %}
+    <h1 style="display: inline;">Reviews for {{ place.name }}</h1>
+
+    <!--Link to return to chosen place.html-->
+    <a href="{% url 'app:chosen-place' place.slug %}" style="display:inline; margin-left: 20px;">--Back to {{ place.name }}--</a>
+    <hr>
+
+    <div style="display: inline-block; margin-left: 30px;">
+        <h3 style="display: inline;">Average Rating ★: {{ avg_rating|floatformat:"1" }}</h3>
+        <h3 style="display: inline; margin-left: 20px;">Total Reviews: {{ num_reviews }}</h3>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+        <div style="width: 45%; margin-left: 70px;">
+            {% if reviews %}
+            <ul>
+                {% for review in reviews %}
+                <li>
+                    <strong>{{ review.user.username }}: </strong>{{ review.rating }} ★ - {{ review.content }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No reviews yet.</p>
+            {% endif %}
+        </div>
+        <div style="width: 45%;">
+            <div style="margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 10px; margin-right: 50px;">
+            <h3>Leave a review of {{ place.name }}</h3>
+            <form method="POST" action="{% url 'app:submit_place_review' place.slug %}">
+                {% csrf_token %}
+                <label for="content"><strong>Review:</strong></label>
+                <textarea name="content" placeholder="Write your review here" style="width: 100%; height: 100px;" required></textarea>
+                <br>
+                <label for="rating"><strong>Rating ★ (1-5):</strong></label>
+                <input type="number" id="rating" name="rating" min="1" max="5" style="margin-left: 5px;" required>
+                <br>
+                <button type="submit">Submit Review</button>
+            </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
