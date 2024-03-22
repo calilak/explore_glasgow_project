@@ -15,7 +15,7 @@
         <div class="plan-info">
             <h3>{{ plan.title }}</h3>
             <!-- Updated part: Add .username-link class to the username link -->
-            <p>{{ plan.review_rating }} stars - <a href="#" class="username-link">@{{ plan.user.username }}</a></p>
+            <p><a href="#" class="username-link">@{{ plan.user.username }}</a></p>
             <a href="{% url 'app:specific_plan' plan.id %}" class="view-plan-btn">View Full Plan</a>
         </div>
         <div class="plan-schedule">
