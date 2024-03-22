@@ -208,7 +208,10 @@ def events(request):
 
 def event_detail(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    context = {"event": event}
+    img_dir = "images/events/"
+
+    context = {"event": event,
+               "image": img_dir+event.img_ref }
 
     return render(request, "app/event_detail.html", context)
 
