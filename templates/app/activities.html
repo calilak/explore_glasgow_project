@@ -9,7 +9,7 @@
     
 {% block additional_styles %}<link rel="stylesheet" href="{% static 'styling/activities.css' %}">{% endblock %}
     {% block additional_js %}
-    <script src="{% static 'js/activities.js' %}"></script>
+    <script src="{% static 'javascript/activities.js' %}"></script>
     {% endblock %}
     
     {% block body_block %}
@@ -24,12 +24,12 @@
         </div>
         <div class="inner-left-section">
             <div id="activities-list"> 
-                  <li><button onclick="activity_autocomplete('Personal')"> Personal </button></li>
-                  <li><button onclick="activity_autocomplete('Work')"> Work </button></li>
-                  <li><button onclick="activity_autocomplete('fitness')"> Fitness </button></li>
-                  <li><button onclick="activity_autocomplete('Education')"> Education </button></li>
-                  <li><button onclick="activity_autocomplete('Social')"> Social </button></li>
-                  <li><button onclick="activity_autocomplete('Hobbies')"> Hobbies </button></li>
+                  <li><button onclick="get_category_activities('Personal')"> Personal </button></li>
+                  <li><button onclick="get_category_activities('Work')"> Work </button></li>
+                  <li><button onclick="get_category_activities('fitness')"> Fitness </button></li>
+                  <li><button onclick="get_category_activities('Education')"> Education </button></li>
+                  <li><button onclick="get_category_activities('Social')"> Social </button></li>
+                  <li><button onclick="get_category_activities('Hobbies')"> Hobbies </button></li>
                 </ul>
             </div>
             <div class="main-section-left">
@@ -55,14 +55,30 @@
         <input type="range" id="durationSlider" name="duration" min="1" max="24" value="1">
         <span id="durationDisplay">1</span> hours
 
-        <!-- Search Activities with Plus Button -->
+    
         <div class="input-group">
             <input type="text" class="search-database" id="activity-name" name="activity-name" placeholder="Search activities..." oninput="activity_autocomplete()">
             <button onclick="addExistingActivity()"><i class="fas fa-plus"></i></button>
-            <div id="autocomplete-results-activities" class="autocomplete-results"></div>  <!-- Container for displaying activity suggestions -->
+            <div id="autocomplete-results-activities" class="autocomplete-results"></div>
         </div>
         
-    <button onclick="addActivity()">Add New Activity</button>
+        <button onclick="showActivityForm()">Add New Activity</button>
+
+
+<div id="activity-details-popup" style="display:none;">
+    <form id="new-activity-form">
+        {% csrf_token %}
+      <label for="activity-name">Activity Name:</label>
+      <input type="text" id="activity-name" name="activity-name"><br>
+      <label for="description">description</label>
+      <input type="text" id="description" name="description"><br>
+      <label for="location">Location:</label>
+      <input type="text" id="location" name="location"><br>
+      <label for="duration">Duration (hours):</label>
+      <input type="number" id="duration" name="duration"><br>
+      <button type="button" onclick="addNewActivity()"> Submit</button>
+    </form>
+  </div>
 
 
 <div id="activity-details-popup" style="display:none;">

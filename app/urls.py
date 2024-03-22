@@ -34,4 +34,7 @@ urlpatterns = [
     path("language/", views.language, name="language"),
     path("map/", views.map, name="map"),
     path("search-events/",views.search_events,name="search-events"),
+    path("activities/",views.get_category_activities,name='get_category_activities'),
+    path('activities/', views.get_activities_by_category, name='get_activities_by_category'),
+    path('activities/', views.add_activity, name='add_activity')
 ]
