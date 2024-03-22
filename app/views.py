@@ -11,15 +11,11 @@ from django.shortcuts import redirect
 from django.http import JsonResponse, HttpResponseForbidden
 from django.db.models import Q
 from django.views.decorators.http import require_POST
-<<<<<<< HEAD
 from django.views.decorators.csrf import csrf_exempt
-from .models import *
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Activity
-=======
 from .models import *
 from .forms import ReviewForm
->>>>>>> da33c88ef5ddf6b36e97565d144765346edf7aa3
 
 def aboutus(request):
     return render(request,'aboutus.html')
