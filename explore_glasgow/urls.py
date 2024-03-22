@@ -19,6 +19,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from app import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -26,6 +28,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
+    path('account/my_account/', views.my_account, name='my_account'),
+    path('account/upload_profile_picture/', views.upload_profile_picture, name='profile_picture_upload'),
     path("about-us/", views.about_us, name="about-us"),
     path("activities/", views.activities, name="activities"),
     path('events/', views.events, name='events'),
@@ -44,6 +48,6 @@ urlpatterns = [
     path('app/chosen-plan/', include(('app.urls', 'app_chosen_plan'), namespace='app_chosen_plan')),
     path('app/reviews/', include(('app.urls', 'app_reviews'), namespace='app_reviews')),
     path('app/plans/', include(('app.urls', 'app_plans'), namespace='app_plans')),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #path("", include('app.urls', namespace='app')),

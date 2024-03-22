@@ -34,16 +34,23 @@
                     <!-- New Create New Plan Button -->
                     <a onclick="addNewPlan()" class="create-plan-btn"><i class="fas fa-plus-circle"></i> Create New Plan</a>
                     <a href="{% url 'app:map' %}" class="{% if request.resolver_match.url_name == 'map' %}active{% endif %}"><i class="fas fa-map-marked-alt" aria-hidden="true"></i></a> 
-                    <a href="{% url 'app:language' %}" class="{% if request.resolver_match.url_name == 'language' %}active{% endif %}"><i class="fas fa-language" aria-hidden="true"></i></a> 
+                    <a href="{% url 'app:language' %}" class="{% if request.resolver_match.url_name == 'language' %}active{% endif %}"><i class="fas fa-language" aria-hidden="true"></i></a>
                     <!-- Conditional display based on authentication status -->
                     {% if request.user.is_authenticated %}
-                        <a href="{% url 'app:logout' %}"><i class="fas fa-user-circle" aria-hidden="true"></i></a> 
-                        <a href="{% url 'app:delete_account' %}" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');"><i class="fas fa-user-minus" aria-hidden="true"></i> Delete Account</a>
-                    {% else %}
-                    <div class="auth-links">
-                        <a href="{% url 'app:login' %}" class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login</a>
-                        <a href="{% url 'app:register' %}" class="{% if request.resolver_match.url_name == 'register' %}active{% endif %}">Register</a>
-                    </div>
+                    <a href="{% url 'app:my_account' %}" class="{% if request.resolver_match.url_name == 'my_account' %}active{% endif %}">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                    </a>
+                    <!-- Profile Picture Delete Action -->
+                    {% if request.user.userprofile.picture %}
+                        <form action="{% url 'app:profile_picture_delete' %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete your profile picture?');">Delete Profile Picture</button>
+                        </form>
+                    {% endif %}
+                    <a href="{% url 'app:logout' %}"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout</a>
+                {% else %}
+                    <a href="{% url 'app:login' %}" class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}">Login</a>
+                    <a href="{% url 'app:register' %}" class="{% if request.resolver_match.url_name == 'register' %}active{% endif %}">Register</a>
                 {% endif %}
                 </div>
             </nav>

@@ -35,7 +35,6 @@ class UserProfile(models.Model):
         plan_content_type = ContentType.objects.get_for_model(Plan)
         return Review.objects.filter(content_type=plan_content_type, object_id__in=self.user.plan_set.all().values_list('id', flat=True)).count()
 
-
 # Additional models as provided, with minor adjustments if needed
 class Category(models.Model):
     name = models.CharField(max_length=50)

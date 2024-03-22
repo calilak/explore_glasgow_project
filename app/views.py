@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from app.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -8,6 +9,9 @@ from django.contrib import messages
 from django.urls import reverse
 from django.shortcuts import redirect
 from .models import Event
+from .models import UserProfile
+from .forms import ProfilePictureForm
+from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import *
@@ -101,11 +105,14 @@ def user_logout(request):
 
 @login_required
 def delete_account(request):
-    user = request.user
-    user.delete()
-    logout(request)
-    messages.success(request, 'Your account has been successfully deleted.')
-    return redirect('app:index')
+    if request.method == 'POST':
+        user = request.user
+        user.delete()
+        logout(request)
+        messages.success(request, 'Your account has been successfully deleted.')
+        return redirect('index')
+    else:
+        return redirect('my_account')
 
 def about_us(request):
     team_members = [
@@ -224,8 +231,57 @@ def places(request):
 def myPlans(request):
     return render(request, "app/myPlans.html")
 
-def myAccount(request):
-    return render(request, "app/myAccount.html")
+@login_required
+def my_account(request):
+    user = request.user
+    user_profile, created = UserProfile.objects.get_or_create(user=user)
+    followers_count = user_profile.followers
+    public_plans_count = user_profile.public_plans_count
+    average_rating = user_profile.average_rating_for_plans
+    reviews_count = user_profile.reviews_count_for_plans
+
+    star_ratings = range(1, 6)
+
+    context = {
+        'user_profile': user_profile,
+        'followers_count': followers_count,
+        'public_plans_count': public_plans_count,
+        'average_rating': average_rating,
+        'reviews_count': reviews_count,
+        'star_ratings': star_ratings, 
+    }
+
+    return render(request, 'app/my_account.html', context)
+
+def custom_register(request):
+    # 假设这是处理POST请求的代码...
+    new_user = User.objects.create_user(username=username, password=password)
+    UserProfile.objects.create(user=new_user)
+    
+@login_required
+def upload_profile_picture(request):
+    if request.method == 'POST':
+        form = ProfilePictureForm(request.POST, request.FILES, instance=request.user.userprofile)
+        if form.is_valid():
+            user_profile = form.save(commit=False)
+            picture = form.cleaned_data['picture']
+            if picture:
+                user_profile.save()
+                messages.success(request, 'Profile picture updated successfully.')
+                return redirect('my_account')
+            else:
+                messages.error(request, 'Please select a profile picture.')
+    else:
+        form = ProfilePictureForm()
+    return render(request, 'app/upload_profile_picture.html', {'form': form})
+
+@login_required
+@require_POST
+def delete_profile_picture(request):
+    user_profile = request.user.userprofile
+    user_profile.picture.delete()  #delete images
+    user_profile.save()
+    return redirect('my_account')
 
 def privatePolicy(request):
     return render(request, "app/privacyPolicy.html")
