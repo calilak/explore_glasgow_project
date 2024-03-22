@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.template.defaultfilters import slugify
 
+#models here
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     followers = models.IntegerField(default=0)
