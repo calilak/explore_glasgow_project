@@ -68,18 +68,23 @@ def specificPlan(request, plan_id):
     plan = get_object_or_404(Plan, pk=plan_id)
     schedule_json = json.loads(plan.schedule)
     plan.schedule_details = get_schedule_details(schedule_json)  # Use the utility function
+    reviews = Review.objects.filter(content_type=ContentType.objects.get_for_model(Plan), object_id=plan.id)
+    five_reviews = reviews[:5]  # Get the first 5 reviews for the place
+    avg_rating = reviews.aggregate(avg_rating=Avg('rating'))['avg_rating']
+    num_reviews = reviews.count()
+    
     context = {
         'plan': plan,
         'schedule_details': plan.schedule_details,
+        'five_reviews': five_reviews,
+        'avg_rating': avg_rating,
+        'num_reviews': num_reviews
     }
     return render(request, 'app/specificPlan.html', context)
 
 
 def chosenEvent(request):
     return render(request,"chosenEvent.html")
-
-def chosenPlan(request):
-    return(request,"chosenPlan.html")
 
 def chosen_place(request, place_name_slug):
     context_dict = {}
@@ -366,6 +371,45 @@ def submit_place_review(request, place_name_slug):
 
         messages.success(request, 'Your review was submitted successfully!')
         return redirect('app:chosen-place', place_name_slug=place_name_slug)
+    else:
+        return HttpResponse("Invalid request method", status=400)
+    
+def plan_reviews(request, plan_id):
+    plan = get_object_or_404(Plan, id=plan_id)
+    reviews = Review.objects.filter(content_type=ContentType.objects.get_for_model(Plan), object_id=plan.id)
+    avg_rating = reviews.aggregate(avg_rating=Avg('rating'))['avg_rating']
+    num_reviews = reviews.count()
+
+    context = {
+        'plan': plan,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
+        'num_reviews': num_reviews
+    }
+
+    return render(request, 'app/plan_reviews.html', context)
+
+def submit_plan_review(request, plan_id):
+    if not request.user.is_authenticated:
+        return redirect('app:restricted')
+    
+    if request.method == 'POST':
+        user = request.user
+        content = request.POST.get('content')
+        rating = int(request.POST.get('rating'))
+        plan = get_object_or_404(Plan, id=plan_id)
+
+        # Create the review for the plan
+        review = Review.objects.create(
+            user=user,
+            content=content,
+            rating=rating,
+            content_type=ContentType.objects.get_for_model(Plan),
+            object_id=plan.id
+        )
+
+        messages.success(request, 'Your review was submitted successfully!')
+        return redirect("{% url 'app:specific_plan' plan.id %}", plan_id=plan_id)
     else:
         return HttpResponse("Invalid request method", status=400)
     
