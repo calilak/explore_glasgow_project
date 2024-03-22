@@ -136,12 +136,12 @@ def about_us(request):
         },
         {
             'name': 'Matty',
-            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'bio': 'Matty is a year 2 student at Glasgow University who has a passion for coding.',
             'image': 'images/profile-pics/matty.jpg', # Path under your static directory
             'account_link': '#',
-            'instagram_link': 'https://www.instagram.com/',
-            'linkedin_link': '#',
-            'email': '#',
+            'instagram_link': 'https://www.instagram.com/mattyhughes67/',
+            'linkedin_link': 'n/a',
+            'email': '#2774512h@student.gla.ac.uk',
         },
         {
             'name': 'Oli',
