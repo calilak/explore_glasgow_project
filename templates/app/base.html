@@ -40,13 +40,6 @@
                     <a href="{% url 'app:my_account' %}" class="{% if request.resolver_match.url_name == 'my_account' %}active{% endif %}">
                         <i class="fas fa-user" aria-hidden="true"></i>
                     </a>
-                    <!-- Profile Picture Delete Action -->
-                    {% if request.user.userprofile.picture %}
-                        <form action="{% url 'app:profile_picture_delete' %}" method="post" style="display: inline;">
-                            {% csrf_token %}
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete your profile picture?');">Delete Profile Picture</button>
-                        </form>
-                    {% endif %}
                     <a href="{% url 'app:logout' %}"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout</a>
                 {% else %}
                     <a href="{% url 'app:login' %}" class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}">Login</a>
