@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 from app.forms import UserForm, UserProfileForm
@@ -8,9 +8,11 @@ from django.contrib.auth import logout
 from django.contrib import messages
 from django.urls import reverse
 from django.shortcuts import redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.db.models import Q
+from django.views.decorators.http import require_POST
 from .models import *
+from .forms import ReviewForm
 
 def aboutus(request):
     return render(request,'aboutus.html')
@@ -35,13 +37,23 @@ def chosen_place(request, slug):
         events = list(Event.objects.filter(location=chosen_place))
         img_dir = "images/places/"
         #CHANGE IMAGE PATH VALUE
-        context_dict = {'place': chosen_place, 'image': img_dir+chosen_place.img_ref, 'events': events}
-        print(chosen_place.slug)
+        
+        reviews = Review.objects.filter(content_type=ContentType.objects.get_for_model(Place), object_id=chosen_place.id)
+        five_reviews = reviews[:5]  # Get the first 5 reviews for the place
+        avg_rating = reviews.aggregate(avg_rating=Avg('rating'))['avg_rating']
+        num_reviews = reviews.count()
+
+        context_dict = {'place': chosen_place, 'image': img_dir+chosen_place.img_ref, 'events': events, 'five_reviews': five_reviews, 'avg_rating': avg_rating, 'num_reviews': num_reviews}
+
     except Place.DoesNotExist:
         # the template will display the "no place" message for us.
         context_dict['place'] = None
         context_dict['image'] = None
         context_dict['events'] = None
+        context_dict['reviews'] = None 
+        context_dict['avg_rating'] = None
+        context_dict['num_reviews'] = None
+
     return render(request,"app/chosen_place.html", context_dict)
 
 def events(request):
@@ -240,7 +252,46 @@ def get_category_places(category):
                                 "categories": place.categories.all(), "tags": place.tags.all()})
     
     return places_list
+    
+def place_reviews(request, place_name_slug):
+    place = get_object_or_404(Place, slug=place_name_slug)
+    reviews = Review.objects.filter(content_type=ContentType.objects.get_for_model(Place), object_id=place.id)
+    avg_rating = reviews.aggregate(avg_rating=Avg('rating'))['avg_rating']
+    num_reviews = reviews.count()
 
+    context = {
+        'place': place,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
+        'num_reviews': num_reviews
+    }
+
+    return render(request, 'app/place_reviews.html', context)
+
+def submit_place_review(request, place_name_slug):
+    if not request.user.is_authenticated:
+        return redirect('app:restricted')
+    
+    if request.method == 'POST':
+        user = request.user
+        content = request.POST.get('content')
+        rating = int(request.POST.get('rating'))
+        place = get_object_or_404(Place, slug=place_name_slug)
+
+        # Create the review for the place
+        review = Review.objects.create(
+            user=user,
+            content=content,
+            rating=rating,
+            content_type=ContentType.objects.get_for_model(Place),
+            object_id=place.id
+        )
+
+        messages.success(request, 'Your review was submitted successfully!')
+        return redirect('app:chosen-place', place_name_slug=place_name_slug)
+    else:
+        return HttpResponse("Invalid request method", status=400)
+    
 def myPlans(request):
     return render(request, "app/myPlans.html")
 
