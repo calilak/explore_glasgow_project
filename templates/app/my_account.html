@@ -27,7 +27,7 @@ My Account
                 <!-- Delete Profile Picture Form -->
                 <form action="{% url 'app:profile_picture_delete' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit" style="cursor: pointer;">Delete Image</button>
+                    <button type="submit" style="text-decoration: none; color: black; background-color: #ccc; padding: 10px; border-radius: 5px; width: 150px; display: block; margin: 10px auto; text-align: center; cursor: pointer;">Delete Image</button>
                 </form>
             {% endif %}
 
@@ -62,7 +62,19 @@ My Account
     <!-- Main Content Area -->
     <div style="flex: 2; padding: 20px;">
         <!-- Main content goes here -->
-    </div>
-
+        {% if schedule_details %}
+            <h3>Next Plan - {{ next_plan.date|date:"l d M Y" }}</h3>
+            <div class="timeline">
+                {% for item in schedule_details %}
+                    <div class="timeline-item">
+                        <span class="time">{{ item.start_time }}</span>
+                        <span class="activity">{{ item.data.title }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No upcoming plans.</p>
+        {% endif %}
+    </div> 
 </div>
 {% endblock %}

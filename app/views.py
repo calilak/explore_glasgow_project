@@ -295,16 +295,23 @@ def my_account(request):
     public_plans_count = user_profile.public_plans_count
     average_rating = user_profile.average_rating_for_plans
     reviews_count = user_profile.reviews_count_for_plans
+    next_plan = Plan.objects.filter(user=user, date__gte=timezone.now()).order_by('date').first()
 
     star_ratings = range(1, 6)
 
+    if next_plan:
+        schedule_details = next_plan.get_schedule()
+    else:
+        schedule_details = None
+        
     context = {
         'user_profile': user_profile,
         'followers_count': followers_count,
         'public_plans_count': public_plans_count,
         'average_rating': average_rating,
         'reviews_count': reviews_count,
-        'star_ratings': star_ratings, 
+        'star_ratings': star_ratings,
+        'schedule_details': schedule_details,
     }
 
     return render(request, 'app/my_account.html', context)
