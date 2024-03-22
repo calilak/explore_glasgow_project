@@ -240,52 +240,26 @@ function addNewActivity() {
         'location': document.getElementById('location').value,
     };
 
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; // Correct way to get CSRF token
+    const csrfToken = $('input[name=csrfmiddlewaretoken]').val(); 
 
-    fetch('/app/activities/user/', { // Adjust this URL to your endpoint
-        method: 'POST',
+    $.ajax({
+        url: '/app/activities/', 
+        type: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrfToken,
         },
-        body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data.message);
-        // form.reset();
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-        // Additional error handling
+        data: JSON.stringify(formData),
+        success: function(response) {
+            console.log(response);
+            
+        },
+        error: function(error) {
+            console.error('Error:', error);
+            // Additional error handling
+        }
     });
 }
-
-function addExistingActivity(){
-    var activityName = document.getElementById('activity-name').value;
-    var csrfToken = getCookie('csrftoken');
-
-    fetch('/app/activities/user/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;',
-            'X-CSRFToken': csrfToken
-        },
-        body: 'activity_name=' + encodeURIComponent(activityName)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Update the UI to reflect the added activity
-            console.log("Activity added successfully");
-        } else {
-            // Handle errors
-            console.error(data.error);
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
-
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('add-activity-form').addEventListener('submit', function(e) {

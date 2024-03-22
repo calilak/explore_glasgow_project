@@ -231,7 +231,7 @@ def search_activities(request):
     return JsonResponse({'activities': activities_data})
 
 @require_POST
-@csrf_exempt  # Only use csrf_exempt for testing purposes or where absolutely necessary
+@csrf_exempt  
 def process_plan(request):
     # Parsing the JSON string from the request
     event_ids = json.loads(request.POST.get('event_ids', '[]'))
@@ -249,23 +249,6 @@ def process_plan(request):
 def user_activities(request):
     activities = Activity.objects.filter(user=request.user) 
     return render(request, 'activitied.html', {'activities':activities})
-
-def add_existing_activity(request):
-    activity_name = request.POST.get('activity_name')
-
-    try: 
-        activity = Activity.objects.get(title=activity_name)
-        
-        user_profile = UserProfile.objects.get(user=request.user)
-        
-        user_profile.activities.add(activity)
-        
-        return JsonResponse({'success': True})
-    
-    except Activity.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Activity does not exist.'})
-    except UserProfile.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'User profile does not exist.'})
     
 @require_POST
 @csrf_exempt

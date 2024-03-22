@@ -75,7 +75,7 @@ class Event(models.Model):
         return self.title
 
 class Activity(models.Model):
-    #user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     duration = models.IntegerField(default=1)
