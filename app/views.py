@@ -222,17 +222,29 @@ def search_activities(request):
     return JsonResponse({'activities': activities_data})
 
 @require_POST
-@csrf_exempt  # Only use csrf_exempt for testing purposes or where absolutely necessary
+@csrf_exempt
 def process_plan(request):
-    # Parsing the JSON string from the request
+    user = request.user  # Or however you get your user object
     event_ids = json.loads(request.POST.get('event_ids', '[]'))
-    print("Parsed Event IDs:", event_ids)
+    activities_data = json.loads(request.POST.get('activity_ids', '[{}]'))
+    print(activities_data)
 
-    
-    # Retrieve event titles based on IDs
-    event_titles = list(Event.objects.filter(id__in=event_ids).values_list('title', flat=True))
-    
-    # For testing: Print titles to the Python console
-    print("Event Titles:", event_titles)
-    
-    return JsonResponse({'status': 'success', 'event_titles': event_titles})
+    plan = Plan.objects.create(user=user, date="2023-01-01")  # Example, adjust accordingly
+
+    # Add events to plan
+    for event_id in event_ids:
+        event = Event.objects.get(id=event_id)
+        plan.add_event(event)
+
+    # Add activities to plan
+    for activity_data in activities_data:
+        activity = Activity.objects.get(id=activity_data['id'])
+        start_time = activity_data['start']
+        plan.add_activity(activity, start_time)
+
+    print(plan.get_schedule())
+
+    return JsonResponse({
+        'status': 'success',
+        'message': plan.schedule
+    })

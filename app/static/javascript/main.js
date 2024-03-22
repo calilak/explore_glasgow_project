@@ -1,4 +1,5 @@
 let addedEventIds = [];
+let addedActivities = []; // Holds IDs of added activities
 
 function addNewPlan() {
     document.getElementById("overlay").style.display = "flex";
@@ -71,7 +72,7 @@ function activity_autocomplete() {
                     
                     div.on('click', function() {
                         input.val(activity.title);  // Update input with activity title
-                        $('#search-activities').data('selected-activity', {id: activity.id, duration: activity.duration}); // Store activity ID and duration
+                        $('#search-activities').data('selected-activity', {id: activity.id,title: activity.title, duration: activity.duration}); // Store activity ID and duration
                         resultsContainer.empty();
                     });
                     
@@ -192,20 +193,22 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function postPlan() {
+    console.log(addedActivities);
     $.ajax({
-        url: '/app/process-plans/', // Adjust this URL to the correct endpoint
+        url: '/app/process-plans/', // Adjust this URL to your endpoint
         type: 'POST',
         data: {
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-            event_ids: JSON.stringify(addedEventIds), // Send the IDs as a JSON string
+            event_ids: JSON.stringify(addedEventIds), // Send event IDs as a JSON string
+            activity_ids: JSON.stringify(addedActivities), // Send activity IDs as a JSON string
         },
         success: function(response) {
             console.log("Plan submitted successfully.", response);
-            // Further success handling
+            // Additional success handling...
         },
         error: function(error) {
             console.error("Error submitting plan:", error);
-            // Error handling
+            // Additional error handling...
         }
     });
 }
@@ -234,9 +237,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
         if (selectedActivity && pickedTime) {
             // Construct a Date object for the start time based on the picked time
-            const startTime = new Date(`1970-01-01T${pickedTime}:00Z`);
+            const startTime = new Date(`1970-01-01T${pickedTime}`);
             // Calculate the end time based on the duration
-            const endTime = new Date(startTime.getTime() + (selectedActivity.duration * 3600 * 1000));
     
             // Add the activity to the calendar with the correct name, start time, end time, and ID
             addActivityToCalendar(selectedActivity.title, startTime, selectedActivity.duration, selectedActivity.id);
@@ -261,7 +263,59 @@ function formatTime(date) {
 }
 
 function addActivityToCalendar(activityName, pickedTime, duration, activityId) {
-    
+    const eventsContainer = document.querySelector('.events');
+    const startDate = new Date(pickedTime);
+
+    // Convert duration from hours to milliseconds (1 hour = 3600000 milliseconds)
+    const durationInMilliseconds = duration * 3600000;
+
+    // Calculate the endDate by adding the duration to the startDate
+    const endDate = new Date(startDate.getTime() + durationInMilliseconds);
+
+    // Calculate the grid row start. Multiply the hour by 2 (for 30-minute increments), 
+    // add 1 more if the minutes are 30 or above, since CSS grid rows are 1-indexed.
+    let gridRowStart = (startDate.getHours() * 2)+1; // Start at the correct hour
+    if (startDate.getMinutes() >= 30) {
+        gridRowStart += 1; // Adjust for half-hour
+    }
+
+    // Calculate the grid row end using the same logic as for the gridRowStart
+    let gridRowEnd = (endDate.getHours() * 2)+1; // Start at the correct hour
+    if (endDate.getMinutes() > 0) {
+        gridRowEnd += 1; // Adjust if minutes are past the hour
+    }
+
+    const eventDurationRows = gridRowEnd - gridRowStart + 1; // Calculate duration in rows
+
+    const activityDiv = document.createElement('div');
+    activityDiv.className = 'event';
+    activityDiv.style.backgroundColor = "#ecc4c4";
+    activityDiv.style.gridRowStart = gridRowStart;
+    activityDiv.style.gridRowEnd = `span ${eventDurationRows}`;
+    activityDiv.innerHTML = `${activityName} - ${formatTime(startDate)} to ${formatTime(endDate)}
+                            <i class="fas fa-trash delete-icon" onclick="deleteActivity(this, ${activityId})"></i>`;
+
+    // Add to the DOM
+    eventsContainer.appendChild(activityDiv);
+
+    // Update the activity addition logic to accommodate the dictionary
+    if (!addedActivities.some(activity => activity.id === activityId)) {
+        console.log("added activity");
+        addedActivities.push({
+            id: activityId,
+            start: startDate.toISOString(),
+        });
+        console.log(addedActivities);
+    }
 }
+
+function deleteActivity(icon, activityId) {
+    const activityDiv = icon.parentNode;
+    activityDiv.remove(); // Remove the activity from the DOM
+
+    // Adjust filtering to work with objects {id, start}
+    addedActivities = addedActivities.filter(activity => activity.id !== activityId);
+}
+
 
 

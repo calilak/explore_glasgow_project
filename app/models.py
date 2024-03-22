@@ -112,7 +112,8 @@ class Plan(models.Model):
 
     def get_schedule(self):
         schedule_details = []
-        for item in self.schedule:
+        schedule = json.loads(self.schedule)
+        for item in schedule:
             if item['type'] == 'event':
                 event = Event.objects.get(id=item['data'])
                 schedule_details.append({'type': 'event', 'data': event})
