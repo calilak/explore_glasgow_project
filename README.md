@@ -8,3 +8,4 @@ See [Notion page](https://www.notion.so/Code-Team-Project-cdfe6133fbc54501878e0a
 
 ## Sources used
 Images for places and events were taken from [Unsplash](https://unsplash.com)
+Google Maps API documentation: [Embed](https://developers.google.com/maps/documentation/embed) and [URLs](https://developers.google.com/maps/documentation/urls)
