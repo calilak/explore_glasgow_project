@@ -11,7 +11,7 @@
 <div class="plan-page-container">
     <div class="plan-detail-container">
         <h1>{{ plan.title }}</h1>
-        <p>{{ plan.review_rating }} stars - <a href="#" class="username-link">@{{ plan.user.username }}</a></p>
+        <p><a href="#" class="username-link">@{{ plan.user.username }}</a></p>
         <h2>Schedule</h2>
         <ul>
             {% for item in schedule_details %}
@@ -25,7 +25,7 @@
     <div style="display: flex; justify-content: space-between;">
         <div style="width: 50%; margin-left: 30px;">
           <div style="margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
-            <h2>Reviews for {{ plan.name }}</h2>
+            <h2>Reviews for {{ plan.title }}</h2>
             {% if five_reviews %}
             <ul>
                 {% for review in five_reviews %}

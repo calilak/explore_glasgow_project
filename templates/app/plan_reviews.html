@@ -33,7 +33,7 @@
         </div>
         <div style="width: 45%;">
             <div style="margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-radius: 10px; margin-right: 50px;">
-            <h3>Leave a review of {{ plan.name }}</h3>
+            <h3>Leave a review for {{ plan.title }}</h3>
             <form method="POST" action="{% url 'app:submit_plan_review' plan.id %}">
                 {% csrf_token %}
                 <label for="content"><strong>Review:</strong></label>
