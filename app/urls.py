@@ -37,5 +37,5 @@ urlpatterns = [
     path("process-plans/",views.process_plan,name="process-plans"),
     path('activities/search-activities/', views.search_activities, name='search-activities'),
     #path('activities/user/', views.add_existing_activity, name='add_existing_activity'),
-    path('activities/', views.add_new_activity, name='add_new_activity'),
+    #path('activities/', views.add_new_activity, name='add_new_activity'),
 ]

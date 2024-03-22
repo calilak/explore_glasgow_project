@@ -232,34 +232,6 @@ function addActivity() {
     // Optional: Any other logic you want to execute when adding an activity
 }
 
-function addNewActivity() {
-    const formData = {
-        'title': document.getElementById('activity-name').value,
-        'description': document.getElementById('description').value,
-        'duration': document.getElementById('duration').value,
-        'location': document.getElementById('location').value,
-    };
-
-    const csrfToken = $('input[name=csrfmiddlewaretoken]').val(); 
-
-    $.ajax({
-        url: '/app/activities/', 
-        type: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken,
-        },
-        data: JSON.stringify(formData),
-        success: function(response) {
-            console.log(response);
-            
-        },
-        error: function(error) {
-            console.error('Error:', error);
-            // Additional error handling
-        }
-    });
-}
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('add-activity-form').addEventListener('submit', function(e) {
