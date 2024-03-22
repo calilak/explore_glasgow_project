@@ -1,0 +1,96 @@
+/* Container for the form to center and add shadow */
+.form-container {
+    max-width: 400px; /* Adjust width as needed */
+    margin: 50px auto; /* Center the form on the page vertically and horizontally */
+    padding: 20px;
+    background-color: #f8f9fa; /* Light grey background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    border-radius: 8px; /* Rounded corners */
+}
+
+/* Styling for form elements */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between form elements */
+}
+
+/* Unified styling for input fields */
+form input[type=text], form input[type=password], form input[type=submit] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px; /* Space below each input */
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 5px; /* Rounded corners for inputs */
+    font-size: 16px;
+}
+
+/* Styling for the custom file upload button */
+.custom-file-upload {
+    border: 1px solid #ccc; /* Light grey border, similar to input fields */
+    display: inline-block;
+    padding: 6px 12px; /* Smaller padding compared to input fields */
+    cursor: pointer;
+    border-radius: 5px; /* Consistent rounded corners */
+    background-color: #e7e9eb; /* Slightly different grey than inputs for distinction */
+    font-size: 16px;
+    margin-bottom: 20px; /* Space below the custom upload button */
+    text-align: center; /* Center the text on the button */
+    width: auto; /* Auto width to fit content */
+}
+
+/* Change background color on hover for the file upload button */
+.custom-file-upload:hover {
+    background-color: #d0d3d4; /* Slightly darker grey on hover */
+}
+
+/* Special styling for the submit button */
+form input[type=submit] {
+    background-color: #8d5d5d; /* Maroon background */
+    color: white; /* White text */
+    cursor: pointer;
+    border: none; /* No border */
+    transition: background-color 0.3s; /* Smooth transition on hover */
+}
+
+/* Darken the submit button on hover */
+form input[type=submit]:hover {
+    background-color: #7a4c4c; /* Darker shade of maroon */
+}
+
+/* Text and link styling within the form */
+form p, form a {
+    font-size: 16px;
+    color: #686868; /* Dark grey text */
+    text-align: center; /* Center the text and links */
+}
+
+/* Hover effect for links */
+form a:hover {
+    color: #505050; /* Darker grey on hover */
+}
+
+/* Hide the default file input and trigger it via the custom button */
+#id_picture {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+/* Style the label as a button for file input */
+label[for="id_picture"] {
+    background-color: #e7e9eb; /* Light grey background, same as custom file upload button */
+    color: #686868; /* Dark grey text for contrast */
+    padding: 6px 12px; /* Padding to match custom file upload button */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    display: inline-block; /* Allow for width adjustment */
+    width: auto; /* Adjust width to content */
+    border: 1px solid #ccc; /* Light grey border */
+}
+
+/* Darken label/button background on hover */
+label[for="id_picture"]:hover {
+    background-color: #d0d3d4; /* Slightly darker grey on hover */
+}
+

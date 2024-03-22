@@ -38,15 +38,20 @@
 }
 
 .timeline, .events {
-    display: grid;
-    grid-template-rows: repeat(24, 1fr); /* Adjust based on the number of hours you want to display */
-    width:100%;
+  display: grid;
+  grid-template-rows: repeat(48, 1fr); /* 24 hours * 2 slots per hour */
+  width: 100%;
 }
 
 .time-marker {
-    height: 60px; /* Ensures consistent height for each time marker */
-    line-height: 60px; /* Centers text vertically */
+  height: 30px; /* Adjusted for 30-minute increments */
+  line-height: 30px; /* Adjust line height to fit the new height */
+  font-size: 1em; /* Optional: Adjust font size if it looks too large for the new height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
 .event {
   display: flex;
@@ -244,29 +249,38 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-/* Updated Autocomplete Results Styling */
+/* Autocomplete item styling */
+
 .autocomplete-results {
-  border: none;
   position: absolute;
   z-index: 10;
   background: white;
-  width: 100%; /* Matches the .input-group width */
-  top: calc(100% + 2px); /* Positions just below the input field */
+  width: 100%;
+  top: 100%; /* Aligns just below the input field */
   left: 0;
   max-height: 200px;
   overflow-y: auto;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: Adds depth */
-  border-radius: 0 0 5px 5px; /* Continuation of the input's border-radius */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 0 0 5px 5px;
 }
 
 .autocomplete-results div {
-  padding: 5px 10px; /* Slightly larger padding for better touch target */
+  display: flex;
+  justify-content: space-between; /* Aligns title on the left, times on the right */
+  padding: 5px 10px;
   cursor: pointer;
 }
 
 .autocomplete-results div:hover {
-  background-color: #f8f9fa; /* A light hover color */
+  background-color: #f8f9fa;
 }
+
+/* Style for the event times */
+.autocomplete-results .event-times {
+  color: #777; /* Optional: different color for times */
+  margin-left: 10px;
+}
+
 
 
 /* time picker pop up */

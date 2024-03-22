@@ -29,9 +29,9 @@ urlpatterns = [
     path("about-us/", views.about_us, name="about-us"),
     path("activities/", views.activities, name="activities"),
     path("events/", views.events, name="events"),
-    path("language/", views.language, name="language"),
     path("map/", views.map, name="map"),
     path("places/", views.places, name="places"),
+    path("browsePlans/",views.browsePlans,name="browsePlans"),
 ]
 
 #path("", include('app.urls', namespace='app')),

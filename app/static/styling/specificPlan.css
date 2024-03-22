@@ -1,0 +1,107 @@
+.plan-page-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    gap: 20px;
+}
+
+.plan-detail-container, .review-container {
+    flex: 1;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.plan-detail-container ul, .review-container form {
+    list-style: none;
+    padding: 0;
+}
+
+.plan-detail-container li {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.username-link, .submit-review-btn {
+    color: #8d5d5d; /* Maroon-like color */
+}
+
+.username-link:hover, .submit-review-btn:hover {
+    text-decoration: underline;
+}
+
+.submit-review-btn {
+    padding: 10px 20px;
+    background-color: #8d5d5d; /* Button color matching the site's theme */
+    color: #ffffff; /* White text for contrast */
+    text-align: center;
+    text-decoration: none; /* Removes underline from links */
+    border-radius: 5px; /* Rounds the button corners */
+    display: block; /* Enables padding and margin */
+    width: 100%;
+    margin-top: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.submit-review-btn:hover {
+    background-color: #7a4c4c; /* Slightly darker on hover */
+}
+
+/* Additional styling for form elements */
+#review-form label {
+    display: block;
+    margin-top: 10px;
+}
+
+#review-form input, #review-form select, #review-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-sizing: border-box; /* Ensures padding does not add to the width */
+}
+
+#review-form textarea {
+    resize: vertical; /* Allows only vertical resizing */
+}
+
+.plan-detail-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.plan-detail-container li {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Alternating background colors for list items */
+.plan-detail-container li:nth-child(odd) {
+    background-color: #e0e0e0;
+}
+
+.plan-detail-container li:nth-child(even) {
+    background-color: #f0f0f0;
+}
+
+.schedule-time {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.schedule-title {
+    font-size: 16px;
+}
+

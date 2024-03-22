@@ -1,0 +1,44 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title_block %}{{ plan.title }}{% endblock %}
+
+{% block additional_styles %}
+<link rel="stylesheet" href="{% static 'styling/specificPlan.css' %}">
+{% endblock %}
+
+{% block body_block %}
+<div class="plan-page-container">
+    <div class="plan-detail-container">
+        <h1>{{ plan.title }}</h1>
+        <p>{{ plan.review_rating }} stars - <a href="#" class="username-link">@{{ plan.user.username }}</a></p>
+        <h2>Schedule</h2>
+        <ul>
+            {% for item in schedule_details %}
+            <li>
+                <span class="schedule-time">{{ item.time|date:"H:i" }}</span>
+                <span class="schedule-title">{{ item.title }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="review-container">
+        <h2>Write a Review</h2>
+        <form id="review-form">
+            <label for="rating">Rating:</label>
+            <select name="rating" id="rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <label for="review-title">Title:</label>
+            <input type="text" id="review-title" name="review-title">
+            <label for="review-body">Review:</label>
+            <textarea id="review-body" name="review-body"></textarea>
+            <button type="submit" class="submit-review-btn">Submit Review</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title_block %}Browse Plans{% endblock %}
+
+{% block additional_styles %}
+<link rel="stylesheet" href="{% static 'styling/browsePlans.css' %}">
+{% endblock %}
+
+{% block body_block %}
+<h1>Browse All Plans</h1>
+<div class="plans-container">
+    {% for plan in plans %}
+    <div class="plan-card">
+        <div class="plan-info">
+            <h3>{{ plan.title }}</h3>
+            <!-- Updated part: Add .username-link class to the username link -->
+            <p>{{ plan.review_rating }} stars - <a href="#" class="username-link">@{{ plan.user.username }}</a></p>
+            <a href="{% url 'app:specific_plan' plan.id %}" class="view-plan-btn">View Full Plan</a>
+        </div>
+        <div class="plan-schedule">
+            <h4>Schedule</h4>
+            <ul>
+                {% for item in plan.schedule_details %}
+                <li>{{ item.title }} at {{ item.time|date:"H:i" }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% empty %}
+    <p>No plans available.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+
