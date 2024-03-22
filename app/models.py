@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.template.defaultfilters import slugify
 
+#models here
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     followers = models.IntegerField(default=0)
@@ -77,14 +78,17 @@ class Place(models.Model):
         super().save(*args, **kwargs)
 
 class Event(models.Model):
+    name = models.CharField(max_length=255, default='Default Event Name')
+    date = models.DateField(default=timezone.now)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    location = models.ForeignKey(Place, on_delete=models.CASCADE)
-    categories = models.ManyToManyField(Category, blank=True)
-    tags = models.ManyToManyField(Tag, blank=True)
-
+    location = models.CharField(max_length=255)
+    categories = models.ManyToManyField(Category)
+    tags = models.ManyToManyField(Tag)
+    img_ref = models.CharField(max_length=100, default="")
+    
     def __str__(self):
         return self.title
 
