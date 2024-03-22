@@ -241,8 +241,8 @@ class PlaceViewTests(TestCase):
 
     def test_places_exist(self):
         # Create some sample places
-        place1 = Place.objects.create(name='Test Place 1', location='Test Location 1 ID')
-        place2 = Place.objects.create(name='Test Place 2', location='Test Location 2 ID')
+        place1 = Place.objects.create(name='Test Place 1', location='Test Location 1 ID', img_ref='st-enoch-centre.jpg') #using st enoch image for this test place
+        place2 = Place.objects.create(name='Test Place 2', location='Test Location 2 ID', img_ref='st-enoch-centre.jpg')
         category = Category.objects.get_or_create(name="Test Category")[0]
         tag = Tag.objects.get_or_create(name="Test Tag")[0]
         place1.categories.add(category)
