@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render
+from django.template.loader import render_to_string
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from app.forms import UserForm, UserProfileForm
@@ -33,8 +34,21 @@ def chosenEvent(request):
 def chosenPlan(request):
     return(request,"chosenPlan.html")
 
-def chosenPlace(request):
-    return render(request,"chosenPlace.html")
+def chosen_place(request, place_name_slug):
+    context_dict = {}
+    try:
+        # The .get() method returns one model instance or raises an exception.
+        chosen_place = Place.objects.get(slug=place_name_slug)
+        events = list(Event.objects.filter(location=chosen_place))
+        img_dir = "images/places/"
+        #CHANGE IMAGE PATH VALUE
+        context_dict = {'place': chosen_place, 'image': img_dir+chosen_place.img_ref, 'events': events}
+    except Place.DoesNotExist:
+        # the template will display the "no place" message for us.
+        context_dict['place'] = None
+        context_dict['image'] = None
+        context_dict['events'] = None
+    return render(request,"app/chosen_place.html", context_dict)
 
 def learnMore(request):
     return render(request,'learnMore.html')
@@ -177,6 +191,11 @@ def events(request):
     all_events = Event.objects.all()
     tags = Tag.objects.all()
     month_names = [calendar.month_abbr[i] for i in range(1, 13)]
+    month = request.GET.get('month')
+
+    if month:
+        month_number = month_names.index(month) + 1
+        all_events = all_events.filter(date__month=month_number)
 
     context = {
         'events': all_events,
@@ -214,19 +233,56 @@ def language(request):
 def map(request):
     return render(request, "app/map.html")
 
+#changes to make here
 def places(request):
-    print("PLaces requested!")
+    category = request.GET.get('category','') #gets the value of 'category' from the request QueryDict
     places_objects = Place.objects.all()
     categories_objects = Category.objects.all()
     tags_objects = Tag.objects.all()
 
-    #List of dictionaries containing all Place object names, categories and tags
-    places = [{"name": place.name, "categories": place.categories.all(), 
-               "tags": place.tags.all()} for place in places_objects]
+    if category != "":
+        category_places = get_category_places(category)
+        places = category_places
+        print(places)
+    else:
+        #List of dictionaries containing all Place object names, categories and tags
+        img_dir = "images/places/"
+        places = [{"name": place.name, "slug": place.slug, "image": img_dir+place.img_ref, "categories": place.categories.all(), 
+                "tags": place.tags.all()} for place in places_objects]
+        category_places = places
+
     categories = [{"name": category.name} for category in categories_objects]
     tags = [{"name": tag.name} for tag in tags_objects]
-    context = {"places": places, "categories": categories, "tags": tags}
-    return render(request, "app/places.html", context)
+    context = {"places": places, "chosen_category_places": category_places, "categories": categories, "tags": tags}
+
+    is_ajax_request = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax_request:
+        #If AJAX request, return JSON response with places HTML content
+        places_html = render_to_string('app/places_partial.html', context)
+        partial_context = {"places_html": places_html}
+        return JsonResponse(partial_context)
+
+    #get all the required HTML content for places.html
+    places_html = render_to_string('app/places_partial.html', context)
+    context["places_html"] = places_html
+    #render the page
+    return render(request, 'app/places.html', context)
+
+#get all places of a particular category
+def get_category_places(category):
+    cat_obj = Category.objects.get(name=category)
+    print(cat_obj)
+    places_objects = Place.objects.all()
+
+    #List of dictionaries containing all Place object names, categories and tags
+    img_dir = "images/places/"
+    places_list = []
+    for place in places_objects: #go through every place
+        if cat_obj in place.categories.all(): #if the required category is one of the place's categories
+            places_list.append({"name": place.name, "slug": place.slug, "image": img_dir+place.img_ref,
+                                "categories": place.categories.all(), "tags": place.tags.all()})
+    
+    return places_list
 
 def myPlans(request):
     return render(request, "app/myPlans.html")
@@ -253,11 +309,6 @@ def my_account(request):
 
     return render(request, 'app/my_account.html', context)
 
-def custom_register(request):
-    # 假设这是处理POST请求的代码...
-    new_user = User.objects.create_user(username=username, password=password)
-    UserProfile.objects.create(user=new_user)
-    
 @login_required
 def upload_profile_picture(request):
     if request.method == 'POST':

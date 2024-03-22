@@ -1,8 +1,8 @@
 '''
-Terminal commands to populate database:
-$ python manage.py makemigrations
+Terminal commands to populate database (delete db.sqlite3 first):
+$ python manage.py makemigrations app
 $ python manage.py migrate
-$ python populate.py
+$ python population_script.py
 
 To create superuser:
 $ python manage.py createsuperuser
@@ -90,26 +90,26 @@ def create_places():
     categories = Category.objects.all()
     tags = Tag.objects.all()
     places_data = [
-        {'location': 'ChIJhaMk16FGiEgRQAbI6P-65X8', 'name': 'Paesano Pizza', 'categories': ['Restaurant', 'Social'], 'tags': ['Under £20', 'Highly rated']},
-        {'location': 'ChIJ6WIzTaJGiEgRbfXxsDb9zB8', 'name': 'Shawarma King', 'categories': ['Restaurant', 'Social'], 'tags': ['Under £20', 'Highly rated']},
-        {'location': 'ChIJswdENyZEiEgRhmpBkAxhdrU', 'name': 'Firewater', 'categories': ['Nightclub', 'Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated', 'Live music']},
-        {'location': 'ChIJ2abQECZEiEgRBwy30iZwok0', 'name': 'Cineworld Cinema', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
-        {'location': 'ChIJM3t6lihEiEgRHgsmDC2DCz0', 'name': 'The Garage', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated', 'Live music']},
-        {'location': 'ChIJx8oQk6FGiEgRO7odNdW2hXg', 'name': 'Grosvenor Casino', 'categories': ['Social', 'Entertainment'], 'tags': ['Highly rated']},
-        {'location': 'ChIJ7zFC8tBFiEgRA1AWs9n2fAs', 'name': 'Riverside Museum', 'categories': ['Hobbies', 'Education', 'Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
-        {'location': 'ChIJ8cF-6MtFiEgRwMvh3DDvPDY', 'name': 'Glasgow Botanic Gardens', 'categories': ['Social', 'Entertainment', 'Hobbies'], 'tags': ['Good for large groups', 'Under £20', 'Highly rated']},
-        {'location': 'ChIJi8Q4pSlEiEgRbkvS7hUgqhY', 'name': 'The Bon Accord', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
-        {'location': 'ChIJaYl4oCBEiEgRGROD01mT8jo', 'name': 'The Society Room', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
-        {'location': 'ChIJHbP1jvpFiEgRwQl6Mop1zek', 'name': 'Maki & Ramen', 'categories': ['Restaurant', 'Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
-        {'location': 'ChIJpzaZb6BGiEgRScmAJ9zJgI8', 'name': 'The Ark Glasgow', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
-        {'location': 'ChIJjc5Tnp9GiEgRYSkWPUevw6c', 'name': 'Wunderbar', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
-        {'location': 'ChIJdzq8LZ9GiEgRLJ7c2pFX6ik', 'name': 'St. Enoch Centre', 'categories': ['Social', 'Entertainment', 'Shopping'], 'tags': ['Highly rated']},
-        {'location': 'ChIJ3y1BBCBEiEgRD_hQU3qAgNo', 'name': 'Buchanan Galleries', 'categories': ['Social', 'Entertainment', 'Shopping'], 'tags': ['Highly rated']},
-        {'location': 'ChIJIcchPwFHiEgR7DY8Exrxwu0', 'name': 'Vue Cinema Glasgow St. Enoch', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
-        {'location': 'ChIJtdW_wShEiEgRCy9Sn99Xk3k', 'name': 'Genting Casino Glasgow', 'categories': ['Social', 'Entertainment'], 'tags': ['Highly rated']},
-        {'location': 'ChIJrz4aDSlEiEgRANNqj9MoUQk', 'name': 'The Mitchell Library', 'categories': ['Education'], 'tags': ['Under £20', 'Highly rated']},
-        {'location': 'ChIJ6ZTla9FFiEgR_p_K8XyyWFI', 'name': 'Kelvingrove Art Gallery and Museum', 'categories': ['Hobbies'], 'tags': ['Under £20', 'Highly rated']},
-        {'location': 'ChIJ4d_MFsxFiEgRfvixuazun6c', 'name': 'The Gym Group Glasgow West End', 'categories': ['Personal', 'Fitness'], 'tags': ['Under £20', 'Highly rated']}
+        {'location': 'ChIJhaMk16FGiEgRQAbI6P-65X8', 'name': 'Paesano Pizza', 'img_ref': 'paesano-pizza.jpg', 'categories': ['Restaurant', 'Social'], 'tags': ['Under £20', 'Highly rated']},
+        {'location': 'ChIJ6WIzTaJGiEgRbfXxsDb9zB8', 'name': 'Shawarma King', 'img_ref': 'shawarma-king.jpg', 'categories': ['Restaurant', 'Social'], 'tags': ['Under £20', 'Highly rated']},
+        {'location': 'ChIJswdENyZEiEgRhmpBkAxhdrU', 'name': 'Firewater', 'img_ref': 'firewater.jpg', 'categories': ['Nightclub', 'Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated', 'Live music']},
+        {'location': 'ChIJ2abQECZEiEgRBwy30iZwok0', 'name': 'Cineworld Cinema', 'img_ref': 'cineworld-cinema.jpg', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
+        {'location': 'ChIJM3t6lihEiEgRHgsmDC2DCz0', 'name': 'The Garage', 'img_ref': 'the-garage.jpg', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated', 'Live music']},
+        {'location': 'ChIJx8oQk6FGiEgRO7odNdW2hXg', 'name': 'Grosvenor Casino', 'img_ref': 'grosvenor-casino.jpg', 'categories': ['Social', 'Entertainment'], 'tags': ['Highly rated']},
+        {'location': 'ChIJ7zFC8tBFiEgRA1AWs9n2fAs', 'name': 'Riverside Museum', 'img_ref': 'riverside-museum.jpg', 'categories': ['Hobbies', 'Education', 'Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
+        {'location': 'ChIJ8cF-6MtFiEgRwMvh3DDvPDY', 'name': 'Glasgow Botanic Gardens', 'img_ref': 'botanic-gardens.jpg', 'categories': ['Social', 'Entertainment', 'Hobbies'], 'tags': ['Good for large groups', 'Under £20', 'Highly rated']},
+        {'location': 'ChIJi8Q4pSlEiEgRbkvS7hUgqhY', 'name': 'The Bon Accord', 'img_ref': 'the-bon-accord.jpg', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
+        {'location': 'ChIJaYl4oCBEiEgRGROD01mT8jo', 'name': 'The Society Room', 'img_ref': 'the-society-room.jpg', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
+        {'location': 'ChIJHbP1jvpFiEgRwQl6Mop1zek', 'name': 'Maki & Ramen', 'img_ref': 'maki-and-ramen.jpg', 'categories': ['Restaurant', 'Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
+        {'location': 'ChIJpzaZb6BGiEgRScmAJ9zJgI8', 'name': 'The Ark Glasgow', 'img_ref': 'the-ark.jpg', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
+        {'location': 'ChIJjc5Tnp9GiEgRYSkWPUevw6c', 'name': 'Wunderbar', 'img_ref': 'wunderbar.jpg', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
+        {'location': 'ChIJdzq8LZ9GiEgRLJ7c2pFX6ik', 'name': 'St. Enoch Centre', 'img_ref': 'st-enoch-centre.jpg', 'categories': ['Social', 'Entertainment', 'Shopping'], 'tags': ['Highly rated']},
+        {'location': 'ChIJ3y1BBCBEiEgRD_hQU3qAgNo', 'name': 'Buchanan Galleries', 'img_ref': 'buchanan-galleries.jpg', 'categories': ['Social', 'Entertainment', 'Shopping'], 'tags': ['Highly rated']},
+        {'location': 'ChIJIcchPwFHiEgR7DY8Exrxwu0', 'name': 'Vue Cinema Glasgow St. Enoch', 'img_ref': 'vue-cinema.jpg', 'categories': ['Social', 'Entertainment'], 'tags': ['Under £20', 'Highly rated']},
+        {'location': 'ChIJtdW_wShEiEgRCy9Sn99Xk3k', 'name': 'Genting Casino Glasgow', 'img_ref': 'genting-casino.jpg', 'categories': ['Social', 'Entertainment'], 'tags': ['Highly rated']},
+        {'location': 'ChIJrz4aDSlEiEgRANNqj9MoUQk', 'name': 'The Mitchell Library', 'img_ref': 'mitchell-library.jpg', 'categories': ['Education'], 'tags': ['Under £20', 'Highly rated']},
+        {'location': 'ChIJ6ZTla9FFiEgR_p_K8XyyWFI', 'name': 'Kelvingrove Art Gallery and Museum', 'img_ref': 'kelvingrove-museum.jpg', 'categories': ['Hobbies'], 'tags': ['Under £20', 'Highly rated']},
+        {'location': 'ChIJ4d_MFsxFiEgRfvixuazun6c', 'name': 'The Gym Group Glasgow West End', 'img_ref': 'gym-group-west-end.jpg', 'categories': ['Personal', 'Fitness'], 'tags': ['Under £20', 'Highly rated']}
     ]
 
     print("Adding places...")

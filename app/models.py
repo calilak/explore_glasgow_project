@@ -6,6 +6,7 @@ from django.db.models import Avg, Count
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
+from django.template.defaultfilters import slugify
 
 
 class UserProfile(models.Model):
@@ -35,6 +36,7 @@ class UserProfile(models.Model):
         plan_content_type = ContentType.objects.get_for_model(Plan)
         return Review.objects.filter(content_type=plan_content_type, object_id__in=self.user.plan_set.all().values_list('id', flat=True)).count()
 
+
 # Additional models as provided, with minor adjustments if needed
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -54,8 +56,14 @@ class Tag(models.Model):
 class Place(models.Model):
     location = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
+    slug = models.SlugField(default="default-slug")
+    img_ref = models.CharField(max_length=100, default="")
     categories = models.ManyToManyField(Category)
     tags = models.ManyToManyField(Tag)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Place, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name

@@ -17,9 +17,9 @@
     <div class="header">
       <ul class="inline">
         {% for month in month_names %}
-        <li><a href="#">{{ month }}</a></li>
+        <li><a href="{% url 'app:events' %}?month={{ month }}">{{ month }}</a></li>
         {% endfor %}
-        <li><a href="#">All</a></li>
+        <li><a href="{% url 'app:events' %}">All</a></li>
       </ul>
     </div>
   {% endblock %}
