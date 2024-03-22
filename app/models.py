@@ -115,7 +115,7 @@ class Plan(models.Model):
 
     def add_event(self, event):
         schedule = json.loads(self.schedule)
-        schedule.append({'type': 'event', 'data': event.id})
+        schedule.append({'type': 'event', 'data': event.id, 'start_time': str(event.start_time)})
         self.schedule = json.dumps(schedule)
         self.events.add(event)
         self.save()
@@ -128,7 +128,9 @@ class Plan(models.Model):
         self.save()
 
     def get_schedule(self):
-        return self.schedule
+        schedule = json.loads(self.schedule)
+        sorted_schedule = sorted(schedule, key=lambda x: x['start_time'])
+        return json.dumps(sorted_schedule)
 
     def __str__(self):
         return f"{self.user.username}'s Plan on {self.date}"
