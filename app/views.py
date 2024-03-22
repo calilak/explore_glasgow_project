@@ -218,6 +218,8 @@ def places(request):
                 "tags": place.tags.all()} for place in places_objects]
         category_places = places
 
+    print("places:")
+    print(place["slug"] for place in places)
     categories = [{"name": category.name} for category in categories_objects]
     tags = [{"name": tag.name} for tag in tags_objects]
     context = {"places": places, "chosen_category_places": category_places, "categories": categories, "tags": tags}

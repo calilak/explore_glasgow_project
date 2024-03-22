@@ -124,3 +124,12 @@ nav {
 .auth-links a:hover {
   color: #505050; /* Darker color on hover */
 }
+
+.text-link {
+  color: #7a0000;
+  text-decoration: underline;
+}
+
+.text-link :hover {
+  color: #8a60ca;
+}
