@@ -10,6 +10,8 @@ from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import *
+from .models import Activity, Category
+from django.views.decorators.csrf import csrf_exempt
 
 def aboutus(request):
     return render(request,'aboutus.html')
@@ -211,3 +213,70 @@ def search_events(request):
     else:
         suggestions = []
     return JsonResponse(suggestions, safe=False)
+
+
+def get_category_activities(category_name):
+
+    cat_obj = Category.objects.get(name=category_name)
+    
+    activities_objects = Activity.objects.filter(categories=cat_obj)
+
+    activities_list = []
+    for activity in activities_objects:
+        
+        activity_dict = {
+            "title": activity.title,
+            "description": activity.description,
+            "duration": activity.duration,
+            "location": activity.location.name if activity.location else None, 
+            "categories": [category.name for category in activity.categories.all()], 
+            "tags": [tag.name for tag in activity.tags.all()]  
+        }
+        activities_list.append(activity_dict)
+
+    return activities_list
+
+def get_activities_by_category(request):
+    category_name = request.GET.get('category', None)
+    
+    if category_name:
+        category = Category.objects.get(name=category_name)
+        activities = Activity.objects.filter(categories=category)
+    else:
+        activities = Activity.objects.all()
+
+    activities_data = [{
+        'title': activity.title,
+        'duration': activity.duration,
+        'location': activity.location
+
+    } for activity in activities]
+
+    return JsonResponse({'activities': activities_data})
+
+def add_activity(request):
+    if request.method == "POST":
+        user = User.objects.first()  # Example: Assign to the first user, replace with your user retrieval logic
+        title = request.POST.get('activity-name')
+        description = request.POST.get('description')
+        duration = request.POST.get('duration')
+        location_name = request.POST.get('location')
+        categories_names = request.POST.get('categories').split(',')  
+        tags_names = request.POST.get('tags').split(',')  
+
+        
+        location, _ = Place.objects.get_or_create(name=location_name)
+        activity = Activity(user=user, title=title, description=description, duration=int(duration), location=location)
+        activity.save()
+        
+        for cat_name in categories_names:
+            category, _ = Category.objects.get_or_create(name=cat_name.strip())
+            activity.categories.add(category)
+        
+        for tag_name in tags_names:
+            tag, _ = Tag.objects.get_or_create(name=tag_name.strip())
+            activity.tags.add(tag)
+
+        return JsonResponse({"success": True, "message": "Activity added successfully!"})
+    
+    return JsonResponse({"success": False, "message": "Invalid request"}, status=400)

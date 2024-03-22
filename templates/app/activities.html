@@ -1,10 +1,90 @@
 {% extends 'app/base.html' %}
+{% load app_template_tags %}
+
 {% load static %}
 
 {% block title_block %}
     Activities
 {% endblock %}
+    
+{% block additional_styles %}<link rel="stylesheet" href="{% static 'styling/activities.css' %}">{% endblock %}
+    {% block additional_js %}
+    <script src="{% static 'javascript/activities.js' %}"></script>
+    {% endblock %}
+    
+    {% block body_block %}
 
-{% block body_block %}
-<h1>Your activities</h1>
-{% endblock %}
+<body>
+
+<div class="container">
+    <div class="left-section">
+        <div id="left-header">
+            <h1>Your Activities</h1>
+        </div>
+        <div class="inner-left-section">
+            <div id="activities-list"> 
+                  <li><button onclick="get_categories_activities('Personal')"> Personal </button></li>
+                  <li><button onclick="get_categories_activities('Work')"> Work </button></li>
+                  <li><button onclick="get_categories_activities('fitness')"> Fitness </button></li>
+                  <li><button onclick="get_categories_activities('Education')"> Education </button></li>
+                  <li><button onclick="get_categories_activities('Social')"> Social </button></li>
+                  <li><button onclick="get_categories_activities('Hobbies')"> Hobbies </button></li>
+                </ul>
+            </div>
+            <div class="main-section-left">
+                <div id="user-activities">
+                    <ul>
+                      {% for activity in activities %}
+                        <li>{{ activity.title }} - {{ activity.description }}</li>
+                      {% empty %}
+                        <li>No activities found.</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-section">
+        <div id="right-header">
+            <h1>New Activity</h1>
+        </div>
+        <div class="main-section-right" id="main-section-right">
+        </div>
+        <label for="durationSlider">Event Duration (hours): </label>
+        <input type="range" id="durationSlider" name="duration" min="1" max="24" value="1">
+        <span id="durationDisplay">1</span> hours
+
+        <!-- Search Activities with Plus Button -->
+        <div class="input-group">
+            <input type="text" class="search-database" id="activity-name" name="activity-name" placeholder="Search activities..." oninput="activity_autocomplete()">
+            <button onclick=""><i class="fas fa-plus"></i></button>
+            <div id="autocomplete-results-activities" class="autocomplete-results"></div>  <!-- Container for displaying activity suggestions -->
+        </div>
+        
+    <button onclick="addActivity()">Add New Activity</button>
+
+<div id="activity-details-popup" style="display:none;">
+    <form id="new-activity-form">
+        {% csrf_token %}
+      <label for="activity-name">Activity Name:</label>
+      <input type="text" id="activity-name" name="activity-name"><br>
+      <label for="description">description</label>
+      <input type="text" id="description" name="description"><br>
+      <label for="duration">Duration (hours):</label>
+      <input type="number" id="duration" name="duration"><br>
+      <label for="location">Location:</label>
+      <input type="text" id="location" name="location"><br>
+      <label for="categories">Categories (hours):</label>
+      <input type="text" id="categories" name="categories"><br>
+      <label for="tags">Tags (hours):</label>
+      <input type="text" id="tags" name="tags"><br>
+      <button type="button" onclick="addNewActivity()"> Submit</button>
+    </form>
+  </div>
+  
+       
+   </div>
+</div>
+</body>
+    {% endblock %}
+</html>
