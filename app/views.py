@@ -118,21 +118,21 @@ def about_us(request):
         },
         {
             'name': 'Liao',
-            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'bio': 'Liao is a a university student who is passionate about taking photos to record the scenery.',
             'image': 'images/profile-pics/liao.jpg', # Path under your static directory
             'account_link': '#',
-            'instagram_link': 'https://www.instagram.com/',
-            'linkedin_link': '#',
-            'email': '#',
+            'instagram_link': 'https://www.instagram.com/anorising_l?igsh=MWZkdzR0cGV6dXdicw%3D%3D&utm_source=qr',
+            'linkedin_link': 'https://www.linkedin.com/in/anor-liao-10a938247/',
+            'email': 'Anorliao@gmail.com',
         },
         {
             'name': 'Kalila',
-            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'bio': 'Kalila is a university student who loves going to the best new restaurants in Glasgow.',
             'image': 'images/profile-pics/kalila.jpg', # Path under your static directory
             'account_link': '#',
             'instagram_link': 'https://www.instagram.com/',
-            'linkedin_link': '#',
-            'email': '#',
+            'linkedin_link': 'https://www.linkedin.com/in/kalila-chand-4a0798243/',
+            'email': 'kalilachand@gmail.com',
         },
         {
             'name': 'Matty',
@@ -145,12 +145,12 @@ def about_us(request):
         },
         {
             'name': 'Oli',
-            'bio': 'Ollie is a front-end developer with a passion for creating intuitive user interfaces.',
+            'bio': 'Oli is a university student who loves exploring Glasgow.',
             'image': 'images/profile-pics/chan.jpg', # Path under your static directory
             'account_link': '#',
-            'instagram_link': 'https://www.instagram.com/',
-            'linkedin_link': '#',
-            'email': '#',
+            'instagram_link': 'https://www.instagram.com/reviio/',
+            'linkedin_link': 'https://www.linkedin.com/in/oliver-chan-b94090226/',
+            'email': 'olivercwchan@gmail.com',
         },
         # Add other team members in the same way
     ]
