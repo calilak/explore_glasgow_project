@@ -34,8 +34,10 @@
       <input type="text" placeholder="Search places..." id="searchbar"><br>
       <!--Checkbox for every defined Tag object-->
       {% for tag in tags %}
+      <div style="margin-bottom: 10px;">
         <input type="checkbox" id="{{ tag.id }}" name="{{ tag.name }}" value="{{ tag.name }}">
         <label for="{{ tag.id }}">{{ tag.name }}</label><br>
+      </div>
       {% endfor %}
       <input onclick="" type="submit" value="Submit">
     </form>

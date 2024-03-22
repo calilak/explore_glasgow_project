@@ -1,0 +1,30 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    {{ event.title }}
+{% endblock %}
+
+{% block body_block %}
+    {% if event %}
+        <h1 style="display: inline;">{{ event.title }}</h1>
+        
+        <!--Link to return to event.html-->
+        <a href="{% url 'app:events' %}" style="display:inline; margin-left: 20px;">--Back to all events--</a>
+        <hr>
+
+        <!--Image of event-->
+        <div style="text-align: left;">
+            <img src="{% static image %}" alt="Picture of {{ event.title }}" style="display: block; width: 80%;"> <!--Add path to image as src-->
+        </div><br>
+
+        <h2>Event Details</h2>
+        <p><strong>Description:</strong> {{ event.description }}</p>
+        <p><strong>Start Time:</strong> {{ event.start_time|date:"D, d M Y H:i" }}</p>
+        <p><strong>End Time:</strong> {{ event.end_time|date:"D, d M Y H:i" }}</p>
+        <p><strong>Location:</strong> {{ event.location }}</p>
+
+    {% else %}
+        <p>The specified event does not exist.</p>
+    {% endif %}
+{% endblock %}

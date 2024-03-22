@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from app.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -9,6 +10,9 @@ from django.contrib import messages
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.http import JsonResponse, HttpResponseForbidden
+from .forms import ProfilePictureForm
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
@@ -16,6 +20,8 @@ from .models import *
 from django.contrib.auth.forms import AuthenticationForm
 from datetime import datetime,timedelta
 from .forms import ReviewForm
+import calendar
+
 
 def aboutus(request):
     return render(request,'aboutus.html')
@@ -102,10 +108,6 @@ def chosen_place(request, place_name_slug):
 
     return render(request,"app/chosen_place.html", context_dict)
 
-def events(request):
-    events = Event.objects.all().order_by('start_time')  # Get all events, ordered by start time
-    return render(request, 'app/events.html', {'events': events})
-
 def learnMore(request):
     return render(request,'learnMore.html')
 
@@ -125,6 +127,7 @@ def register(request):
             user = user_form.save()
             user.set_password(user.password)
             user.save()
+
             profile = profile_form.save(commit=False)
             profile.user = user
 
@@ -134,17 +137,19 @@ def register(request):
             profile.save()
             registered = True
 
-        else:
-            print(user_form.errors, profile_form.errors)
+            new_user = authenticate(username=user_form.cleaned_data['username'],
+                                    password=user_form.cleaned_data['password'])
+            login(request, new_user)
+
+            return redirect('app:index')
+
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
 
-    return render(request,'app/register.html',
-                  context = {'user_form': user_form,
-                             'profile_form': profile_form,
-                             'registered': registered})
-
+    return render(request, 'app/register.html',
+                  {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+ 
 def user_login(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
@@ -170,11 +175,14 @@ def user_logout(request):
 
 @login_required
 def delete_account(request):
-    user = request.user
-    user.delete()
-    logout(request)
-    messages.success(request, 'Your account has been successfully deleted.')
-    return redirect('app:index')
+    if request.method == 'POST':
+        user = request.user
+        user.delete()
+        logout(request)
+        messages.success(request, 'Your account has been successfully deleted.')
+        return redirect('index')
+    else:
+        return redirect('my_account')
 
 def about_us(request):
     team_members = [
@@ -236,7 +244,32 @@ def activities(request):
     return render(request, "app/activities.html")
 
 def events(request):
-    return render(request, "app/events.html")
+    all_events = Event.objects.all()
+    tags = Tag.objects.all()
+    month_names = [calendar.month_abbr[i] for i in range(1, 13)]
+    month = request.GET.get('month')
+
+    if month:
+        month_number = month_names.index(month) + 1
+        all_events = all_events.filter(date__month=month_number)
+    img_dir = "images/events/"
+    events = [{"id": event.id,"title": event.title, "image": img_dir+event.img_ref, "location": event.location, "date": event.start_time, "categories": event.categories.all(), "tags": event.tags.all()} for event in all_events]
+
+    context = {
+        'events': events,
+        'month_names': month_names,
+        'tags':tags,
+    }
+    return render(request, 'app/events.html', context)
+
+def event_detail(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    img_dir = "images/events/"
+
+    context = {"event": event,
+               "image": img_dir+event.img_ref }
+
+    return render(request, "app/event_detail.html", context)
 
 def language(request):
     return render(request, "app/language.html")
@@ -339,8 +372,59 @@ def submit_place_review(request, place_name_slug):
 def myPlans(request):
     return render(request, "app/myPlans.html")
 
-def myAccount(request):
-    return render(request, "app/myAccount.html")
+@login_required
+def my_account(request):
+    user = request.user
+    user_profile, created = UserProfile.objects.get_or_create(user=user)
+    followers_count = user_profile.followers
+    public_plans_count = user_profile.public_plans_count
+    average_rating = user_profile.average_rating_for_plans
+    reviews_count = user_profile.reviews_count_for_plans
+    next_plan = Plan.objects.filter(user=user, date__gte=timezone.now()).order_by('date').first()
+
+    star_ratings = range(1, 6)
+
+    if next_plan:
+        schedule_details = next_plan.get_schedule()
+    else:
+        schedule_details = None
+        
+    context = {
+        'user_profile': user_profile,
+        'followers_count': followers_count,
+        'public_plans_count': public_plans_count,
+        'average_rating': average_rating,
+        'reviews_count': reviews_count,
+        'star_ratings': star_ratings,
+        'schedule_details': schedule_details,
+    }
+
+    return render(request, 'app/my_account.html', context)
+
+@login_required
+def upload_profile_picture(request):
+    if request.method == 'POST':
+        form = ProfilePictureForm(request.POST, request.FILES, instance=request.user.userprofile)
+        if form.is_valid():
+            user_profile = form.save(commit=False)
+            picture = form.cleaned_data['picture']
+            if picture:
+                user_profile.save()
+                messages.success(request, 'Profile picture updated successfully.')
+                return redirect('my_account')
+            else:
+                messages.error(request, 'Please select a profile picture.')
+    else:
+        form = ProfilePictureForm()
+    return render(request, 'app/upload_profile_picture.html', {'form': form})
+
+@login_required
+@require_POST
+def delete_profile_picture(request):
+    user_profile = request.user.userprofile
+    user_profile.picture.delete()  #delete images
+    user_profile.save()
+    return redirect('my_account')
 
 def privatePolicy(request):
     return render(request, "app/privacyPolicy.html")

@@ -1,0 +1,80 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+My Account
+{% endblock %}
+
+{% block body_block %}
+<div style="display: flex; min-height: 100vh;">
+
+    <!-- Left Sidebar occupying one third -->
+    <div style="flex: 1; width: 33.3333%; background: #f4f4f4; display: flex; flex-direction: column; justify-content: space-around; padding: 20px; box-sizing: border-box;">
+        <div style="text-align: center; display: flex; flex-direction: column; justify-content: space-around; height: 100%;">
+            <div style="width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 10px; background-color: #ccc; display: flex; align-items: center; justify-content: center;">
+                {% if user_profile.picture %}
+                    <!-- Display the profile picture if uploaded -->
+                    <img src="{{ user_profile.picture.url }}" alt="{{ user_profile.user.username }}'s profile picture" style="width: 100%; height: auto; border-radius: 50%;">
+                {% else %}
+                    <!-- Placeholder when no profile picture is uploaded -->
+                    <span style="color: white;">Image</span>
+                {% endif %}
+            </div>
+            
+            {% if not user_profile.picture %}
+            <a href="{% url 'app:profile_picture_upload' %}" style="text-decoration: none; color: black; background-color: #ccc; padding: 10px; border-radius: 5px; width: 150px; display: block; margin: 10px auto; text-align: center; cursor: pointer;">Upload Image</a>
+            {% else %}
+                <!-- Delete Profile Picture Form -->
+                <form action="{% url 'app:profile_picture_delete' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" style="text-decoration: none; color: black; background-color: #ccc; padding: 10px; border-radius: 5px; width: 150px; display: block; margin: 10px auto; text-align: center; cursor: pointer;">Delete Image</button>
+                </form>
+            {% endif %}
+
+            <!-- User Info -->
+            <h2 style="font-size: 24px;">@{{ user_profile.user.username }}</h2>
+            <p style="font-size: 18px;">{{ user_profile.followers }} followers</p>
+            <p style="font-size: 18px;">{{ user_profile.public_plans_count }} public plans</p>
+            <p style="font-size: 18px;">{{ user_profile.reviews_count_for_plans }} reviews</p>
+            <p style="font-size: 24px; color: gold;">
+                {% for star in star_ratings %}
+                    {% if star <= user_profile.average_rating_for_plans %}
+                        ★ <!-- Filled star -->
+                    {% else %}
+                        ☆ <!-- Empty star -->
+                    {% endif %}
+                {% endfor %}
+
+            </p>
+
+            <!-- Delete Account Form -->
+            <div style="margin-top: 20px;">
+                <form action="{% url 'app:delete_account' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');" style="cursor: pointer; color: red;">
+                        Delete Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div style="flex: 2; padding: 20px;">
+        <!-- Main content goes here -->
+        {% if schedule_details %}
+            <h3>Next Plan - {{ next_plan.date|date:"l d M Y" }}</h3>
+            <div class="timeline">
+                {% for item in schedule_details %}
+                    <div class="timeline-item">
+                        <span class="time">{{ item.start_time }}</span>
+                        <span class="activity">{{ item.data.title }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No upcoming plans.</p>
+        {% endif %}
+    </div> 
+</div>
+{% endblock %}
