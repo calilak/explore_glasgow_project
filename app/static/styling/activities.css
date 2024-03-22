@@ -1,0 +1,78 @@
+.container {
+    display: flex;
+}
+.left-section, .right-section {
+    flex: 1; 
+}
+#left-header, #right-header{
+    display:flex;
+    justify-content: center;
+}
+.inner-left-section {
+    display: flex;
+    flex: 1; 
+}
+.activities-list {
+    flex: 1; 
+}
+.activities {
+    flex: 1; 
+}
+#main-section-right{
+    flex: 1;
+    justify-content: center;
+}
+button {
+width: 150px;       
+height: 50px;      
+font-size: 16px;   
+padding: 10px;  
+box-sizing: border-box; 
+display: block;  
+cursor: pointer; 
+border: 1px solid #ccc; 
+background-color: #f8f8f8;
+text-align: center; 
+}
+#autocomplete-results-activities{
+    position: absolute;
+    min-height: fit-content;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+    z-index: 1000; /* Ensure it's above other items */
+}
+
+#searchedActivitiesContainer {
+  flex: 1;
+}
+#user-activities{
+    flex : 1
+}
+
+.autocomplete-results {
+    position: absolute;
+    z-index: 10;
+    background: white;
+    width: 100%;
+    top: 100%; /* Aligns just below the input field */
+    left: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 0 0 5px 5px;
+  }
+  
+  .autocomplete-results div {
+    display: flex;
+    justify-content: space-between; /* Aligns title on the left, times on the right */
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .autocomplete-results div:hover {
+    background-color: #f8f9fa;
+  }
