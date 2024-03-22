@@ -197,8 +197,8 @@ def events(request):
         month_number = month_names.index(month) + 1
         all_events = all_events.filter(date__month=month_number)
     img_dir = "images/events/"
-    events = [{"title": event.title, "image": img_dir+event.img_ref, "location": event.location, "date": event.start_time, "categories": event.categories.all(), "tags": event.tags.all()} for event in all_events]
-    print(events)
+    events = [{"id": event.id,"title": event.title, "image": img_dir+event.img_ref, "location": event.location, "date": event.start_time, "categories": event.categories.all(), "tags": event.tags.all()} for event in all_events]
+
     context = {
         'events': events,
         'month_names': month_names,
@@ -208,24 +208,7 @@ def events(request):
 
 def event_detail(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    categories = event.categories.all()
-    tags = event.tags.all()
-    img_path = "images/events/"
-    context = {
-        "event": {
-            "id": event.id,
-            "name": event.name,
-            "date": event.date,
-            "title": event.title,
-            "description": event.description,
-            "start_time": event.start_time,
-            "end_time": event.end_time,
-            "location": event.location,
-            "categories": categories, 
-            "tags": tags,
-            "image": img_path + event.img_ref if event.img_ref else None,
-        }
-    }
+    context = {"event": event}
 
     return render(request, "app/event_detail.html", context)
 

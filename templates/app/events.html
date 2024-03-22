@@ -46,20 +46,21 @@
   <div class="right" style="padding: 20px;">
     <div class="event-cards" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start;">
       {% for event in events %}
-        <!-- Each event card has a width set to calc(33.333% - 10px) to keep three in a row -->
-        <div class="event-card" style="border: 1px solid #ccc; padding: 10px; flex: 0 0 calc(33.333% - 10px); box-sizing: border-box; margin-bottom: 10px;">
+      <!-- Each event card has a width set to calc(33.333% - 10px) to keep three in a row -->
+      <div class="event-card" style="border: 1px solid #ccc; padding: 10px; flex: 0 0 calc(33.333% - 10px); box-sizing: border-box; margin-bottom: 10px;">
+        <a href="{% url 'event_detail' event.id %}" style="text-decoration: none; color: inherit;">
           <div style="height: 200px; background-color: #f3f3f3; margin-bottom: 10px;">
             {% if event.image %}
               <img src="{% static event.image %}" alt="{{ event.title }}" style="max-height: 200px; width: 100%; object-fit: cover;">
             {% else %}
-              <!-- Display a placeholder image or leave it empty -->
               <img src="{% static 'path/to/placeholder-image.jpg' %}" alt="No image available" style="max-height: 200px; width: 100%; object-fit: cover;">
             {% endif %}
           </div>
           <h3 style="margin: 0;">{{ event.title }}</h3>
           <p style="margin: 0;">{{ event.location }}</p>
           <p style="margin: 0;">{{ event.date|date:"D, d M Y" }}</p>
-        </div>
+        </a>
+      </div>
         <!-- Clearfix after every third event card -->
         {% if forloop.counter|divisibleby:3 %}
           <div style="width: 100%;"></div>
