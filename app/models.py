@@ -78,7 +78,7 @@ class Event(models.Model):
     location = models.CharField(max_length=255)
     categories = models.ManyToManyField(Category)
     tags = models.ManyToManyField(Tag)
-    image = models.ImageField(upload_to='events_images/', blank=True, null=True) 
+    img_ref = models.CharField(max_length=100, default="")
     
     def __str__(self):
         return self.title
